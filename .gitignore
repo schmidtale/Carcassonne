@@ -45,3 +45,4 @@ project/.sbtserver
 
 # Application
 yourgame.log
+.bsp
