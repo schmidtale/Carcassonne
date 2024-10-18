@@ -1,0 +1,5 @@
+package karteSpec
+
+class scala {
+
+}
