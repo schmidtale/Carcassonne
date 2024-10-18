@@ -12,3 +12,7 @@ def print(): Unit = {
 }
 
 print()
+
+def test1(): Unit = {
+  printf("Test123\n")
+}
