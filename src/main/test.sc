@@ -12,3 +12,8 @@ def print(): Unit = {
 }
 
 print()
+
+def test(): Int = {
+  printf("\n asdf_jklö")
+  val ret = 0
+}
