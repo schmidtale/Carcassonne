@@ -16,7 +16,9 @@ print()
 def test1(): Unit = {
   printf("Test123\n")
 }
+
 def test(): Int = {
   printf("\n asdf_jklö")
-  val ret = 0
+  val ret : Int = 0
+  ret
 }
