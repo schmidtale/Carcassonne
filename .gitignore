@@ -46,3 +46,4 @@ project/.sbtserver
 # Application
 yourgame.log
 .bsp
+/project/build.properties
