@@ -4,6 +4,9 @@ enum Orientation:
 enum BorderType:
   case road, pasture, town
 
+enum Field:
+  case upperLeft, upperRight, lowerRight, lowerLeft
+
 class Card(val monastery: Boolean = false, val borders: Array[BorderType]) {
 
   def borderType(o: Orientation): BorderType = {
@@ -12,6 +15,11 @@ class Card(val monastery: Boolean = false, val borders: Array[BorderType]) {
       case Orientation.eastern => borders(1)
       case Orientation.southern => borders(2)
       case Orientation.western => borders(3)
+  }
+
+  def fieldConnections(f: Field): Array[Boolean] = {
+    val fc = Array(true, false, true, false)
+    fc
   }
 
 

@@ -12,5 +12,9 @@ class CardSpec extends AnyWordSpec {
     "return a boolean when asked for the presence of a monastery" in {
       assert(!card.monastery | card.monastery)
     }
+    "return how its inner fields are connected" in {
+      assert(card.fieldConnections(Field.upperLeft).isInstanceOf[Array[Boolean]])
+      assert(card.fieldConnections(Field.upperLeft).length == 4)
+    }
   }
 }
