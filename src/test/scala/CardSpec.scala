@@ -2,10 +2,12 @@ import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers._
 import Orientation._
 import BorderType._
+import LiegemanType._
+import LiegemanPosition._
 
 class CardSpec extends AnyWordSpec {
   val card = new Card(borders = Array(road, town, road, pasture))
-  val card2 = new Card(borders = Array(town, pasture, pasture, town))
+  val card2 = new Card(borders = Array(town, pasture, pasture, town), knight, north)
   val card3 = new Card(false, borders = Array(road, road, road, pasture))
 
   "A card" should {
@@ -23,6 +25,14 @@ class CardSpec extends AnyWordSpec {
       assert(card.fieldConnections sameElements Array(false, true, false, true))
       assert(card2.fieldConnections sameElements Array(true, true, true, true))
       assert(card3.fieldConnections sameElements Array(false, false, false, true))
+    }
+    "return the type of the possibly present liegeman" in {
+      assert(card.liegeman == none | card.liegeman == waylayer |
+        card.liegeman == monk | card.liegeman == knight | card.liegeman == peasant)
+      assert(card2.liegeman == knight)
+    }
+    "return the position of a present liegeman" in {
+      assert(card2.position == north)
     }
   }
 }
