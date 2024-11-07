@@ -5,7 +5,7 @@ import LiegemanPosition.north
 import LiegemanType.knight
 
 class TextProviderSpec extends AnyWordSpec {
-  val card2 = new Card(false, true, borders = Array(town, pasture, pasture, town), (knight, north))
+  val card2 = new Card(false, true, borders = Vector(town, pasture, pasture, town), (knight, north))
 
   "A TextProvider" should {
     "translate the data of a card to Strings used by the TUI" in {

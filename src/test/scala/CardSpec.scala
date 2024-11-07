@@ -6,9 +6,9 @@ import LiegemanType._
 import LiegemanPosition._
 
 class CardSpec extends AnyWordSpec {
-  val card = new Card(borders = Array(road, town, road, pasture))
-  val card2 = new Card(false, true, borders = Array(town, pasture, pasture, town), knight, north)
-  val card3 = new Card(false, borders = Array(road, road, road, pasture))
+  val card = new Card(borders = Vector(road, town, road, pasture))
+  val card2 = new Card(false, true, borders = Vector(town, pasture, pasture, town), (knight, north))
+  val card3 = new Card(false, borders = Vector(road, road, road, pasture))
 
   "A card" should {
     "return the type of its northern border" in {
@@ -20,11 +20,11 @@ class CardSpec extends AnyWordSpec {
       assert(!card.monastery | card.monastery)
     }
     "return how its inner fields are connected" in {
-      assert(card.fieldConnections.isInstanceOf[Array[Boolean]])
+      assert(card.fieldConnections.isInstanceOf[Vector[Boolean]])
       assert(card.fieldConnections.length == 4)
-      assert(card.fieldConnections sameElements Array(false, true, false, true))
-      assert(card2.fieldConnections sameElements Array(true, true, true, true))
-      assert(card3.fieldConnections sameElements Array(false, false, false, true))
+      assert(card.fieldConnections == Vector(false, true, false, true))
+      assert(card2.fieldConnections == Vector(true, true, true, true))
+      assert(card3.fieldConnections == Vector(false, false, false, true))
     }
     "return if town borders are connected (boolean) which must be false when < 2 town borders are present" in {
       assert(card.townConnection == false)
@@ -32,12 +32,12 @@ class CardSpec extends AnyWordSpec {
       assert(card3.townConnection == false)
     }
     "return the type of the possibly present liegeman" in {
-      assert(card.liegeman == none | card.liegeman == waylayer |
-        card.liegeman == monk | card.liegeman == knight | card.liegeman == peasant)
-      assert(card2.liegeman == knight)
+      assert(card.liegeman(0) == none | card.liegeman(0) == waylayer |
+        card.liegeman(0) == monk | card.liegeman(0) == knight | card.liegeman(0) == peasant)
+      assert(card2.liegeman(0) == knight)
     }
     "return the position of a present liegeman" in {
-      assert(card2.position == north)
+      assert(card2.liegeman(1) == north)
     }
     "return a card with suitably shifted borders and structures (90° clockwise)" in {
       val cardRotated = card.rotate
