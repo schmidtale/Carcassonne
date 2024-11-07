@@ -14,5 +14,11 @@ class TabletopSpec extends AnyWordSpec {
         )
       assert(tabletop.constructTabletop() == expectedOutput)
     }
+    "construct 15*15 tabletop grid from a map" in {
+      val expectedOutput = (
+        ""
+        )
+      assert(tabletop.constructTabletopFromMap() == expectedOutput)
+    }
   }
 }
