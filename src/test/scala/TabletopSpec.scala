@@ -12,7 +12,6 @@ class TabletopSpec extends AnyWordSpec {
           "\n\n   2 0       2 1       2 2       2 3    \n\n\n" +
           "\n\n   3 0       3 1       3 2       3 3    \n\n\n"
         )
-
       assert(tabletop.constructTabletop() == expectedOutput)
     }
   }
