@@ -17,8 +17,8 @@ import Orientation._
 import BorderType._
 import LiegemanType._
 import LiegemanPosition._
-class Card(monastery: Boolean = false, townConnection: Boolean = false, borders: Vector[BorderType],
-           liegeman: (LiegemanType, LiegemanPosition) = (none, nowhere)) {
+class Card(val monastery: Boolean = false, val townConnection: Boolean = false, val borders: Vector[BorderType],
+           val liegeman: (LiegemanType, LiegemanPosition) = (none, nowhere)) {
   def borderType(o: Orientation): BorderType = {
     o match
       case Orientation.northern => borders(0)
