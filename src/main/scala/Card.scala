@@ -17,7 +17,7 @@ import Orientation._
 import BorderType._
 import LiegemanType._
 import LiegemanPosition._
-class Card(val monastery: Boolean = false, val borders: Array[BorderType],
+class Card(val monastery: Boolean = false, val townConnection: Boolean = false, val borders: Array[BorderType],
            val liegeman: LiegemanType = none, val position: LiegemanPosition = nowhere) {
   def borderType(o: Orientation): BorderType = {
     o match
@@ -36,5 +36,12 @@ class Card(val monastery: Boolean = false, val borders: Array[BorderType],
     fc
   }
 
+  def rotate: Card = {
+    val newBorders = Array(this.borderType(western), this.borderType(northern),
+      this.borderType(eastern),this.borderType(southern))
+    val newCard = new Card(this.monastery, this.townConnection, newBorders
+      /* other arguments must be on default if rotation is possible */ )
+    newCard
+  }
 
 }

@@ -7,7 +7,7 @@ import LiegemanPosition._
 
 class CardSpec extends AnyWordSpec {
   val card = new Card(borders = Array(road, town, road, pasture))
-  val card2 = new Card(borders = Array(town, pasture, pasture, town), knight, north)
+  val card2 = new Card(false, true, borders = Array(town, pasture, pasture, town), knight, north)
   val card3 = new Card(false, borders = Array(road, road, road, pasture))
 
   "A card" should {
@@ -26,6 +26,11 @@ class CardSpec extends AnyWordSpec {
       assert(card2.fieldConnections sameElements Array(true, true, true, true))
       assert(card3.fieldConnections sameElements Array(false, false, false, true))
     }
+    "return if town borders are connected (boolean) which must be false when < 2 town borders are present" in {
+      assert(card.townConnection == false)
+      assert(card2.townConnection == true)
+      assert(card3.townConnection == false)
+    }
     "return the type of the possibly present liegeman" in {
       assert(card.liegeman == none | card.liegeman == waylayer |
         card.liegeman == monk | card.liegeman == knight | card.liegeman == peasant)
@@ -34,5 +39,23 @@ class CardSpec extends AnyWordSpec {
     "return the position of a present liegeman" in {
       assert(card2.position == north)
     }
+    "return a card with suitably shifted borders and structures (90° clockwise)" in {
+      val cardRotated = card.rotate
+      assert(cardRotated.borderType(northern) == pasture)
+      assert(cardRotated.borderType(eastern) == road)
+      assert(cardRotated.borderType(southern) == town)
+      assert(cardRotated.borderType(western) == road)
+      val card2Rotated = card2.rotate
+      assert(card2Rotated.borderType(northern) == town)
+      assert(card2Rotated.borderType(eastern) == town)
+      assert(card2Rotated.borderType(southern) == pasture)
+      assert(card2Rotated.borderType(western) == pasture)
+      val cardRotatedTwice = cardRotated.rotate
+      assert(cardRotatedTwice.borderType(northern) == road)
+      assert(cardRotatedTwice.borderType(eastern) == pasture)
+      assert(cardRotatedTwice.borderType(southern) == road)
+      assert(cardRotatedTwice.borderType(western) == town)
+    }
   }
 }
+
