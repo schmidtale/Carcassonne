@@ -1,15 +1,14 @@
-import Orientation._
-import BorderType._
-import LiegemanType._
-import LiegemanPosition._
 
 
 class TextProvider {
   private val prototype = "* a A a *|d e i f b|D l M j B|d h k g b|* c C c *"
 
+  def line(c: Card, l: Int & 0 | 1 | 2 | 3 | 4): String = {
+    toText(c).split("\n")(l)
+  }
+  
   def toText(c: Card): String = {
     val cardString = prototype.map(char => replaceChar(char, c))
-    println(cardString) // Outputs the modified string
     cardString
   }
 
@@ -17,6 +16,7 @@ class TextProvider {
     (char, c.borders(0), c.borders(1), c.borders(2), c.borders(3), c.townConnection, c.monastery) match {
 
       case ('|', _, _, _, _, _, _) => '\n'
+      case ('*', _, _, _, _, _, _) => '*'
 
       /* border tile cases and inner roads */
       case ('a', BorderType.town, _, _, _, _, _) => 'B'
@@ -57,33 +57,35 @@ class TextProvider {
       case ('j'|'g'|'k'|'h'|'l'|'M', _, BorderType.town, BorderType.town, BorderType.town, _, _) => 'B'
 
       /* two town inner corner cases */
-      case ('e', _, BorderType.town, _, BorderType.town, true, _) => 'B'
-      case ('e', _, BorderType.town, _, BorderType.town, false, _) => '.'
+      case ('e', BorderType.town, _, _, BorderType.town, true, _) => 'B'
+      case ('e', BorderType.town, _, _, BorderType.town, false, _) => '.'
       case ('f', BorderType.town, BorderType.town, _, _, true, _) => 'B'
       case ('f', BorderType.town, BorderType.town, _, _, false, _) => '.'
       case ('g', _, BorderType.town, BorderType.town, _, true, _) => 'B'
       case ('g', _, BorderType.town, BorderType.town, _, false, _) => '.'
       case ('h', _, _, BorderType.town, BorderType.town, true, _) => 'B'
       case ('h', _, _, BorderType.town, BorderType.town, false, _) => '.'
-
-
-
+      
       /* monastery cases */
       case ('M', _, _, _, _, false, true) => 'M'
       case ('e'|'f'|'g'|'h'|'i'|'j'|'k'|'l', BorderType.pasture, BorderType.pasture,
         BorderType.pasture, BorderType.pasture, false, true) => '.'
 
-      /* print # to indicate missed cases, but not like this or we will lose the whitespace */
-      //case other => '#'
+      /* middle road cases */
+      case ('M', BorderType.road, BorderType.road, _, _, _, _) => 'H'
+      case ('M', _, BorderType.road, BorderType.road, _, _, _) => 'H'
+      case ('M', _, _, BorderType.road, BorderType.road, _, _) => 'H'
+      case ('M', BorderType.road, _, _, BorderType.road, _, _) => 'H'
+
+      /* once all special cases are handled remaining inner letters can become grass */
+      case ('e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'M', _, _, _, _, _, _) => '.'
+
+      /* print # to indicate missed cases */
+      case (' ', _, _, _, _, _, _) => ' '
+      
+      /* print # to indicate missed cases */
+      case (_, _, _, _, _, _, _) => '#'
     }
-  }
-
-
-
-
-
-  def line(c: Card, l: Int & 0 | 1 | 2 | 3 | 4): String = {
-    "x x x x x"
   }
 
 
