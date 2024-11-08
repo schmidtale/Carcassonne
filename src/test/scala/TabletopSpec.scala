@@ -1,9 +1,14 @@
 
 import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.should.Matchers._
+import org.scalatest.matchers.should.Matchers.*
+
+import scala.collection.immutable.SortedMap
 
 class TabletopSpec extends AnyWordSpec {
   val tabletop = new Tabletop
+  private val card = CardStack().starting_card
+  private val emptyCard = Option.empty[Card]
+
   "A tabletop" should {
     "construct the correct tabletop grid as a String" in {
       val expectedOutput = (
@@ -19,6 +24,17 @@ class TabletopSpec extends AnyWordSpec {
         ""
         )
       assert(tabletop.constructTabletopFromMap() == expectedOutput)
+    }
+    "let a card be added to the card map" in {
+      val newMap = tabletop.addCardToMap(Index(8), Index(8), card)
+      assert(newMap.isInstanceOf[SortedMap[(Index, Index), Option[Card]]])
+      val cardFromMap = newMap((Index(8), Index(8))).get
+      assert(cardFromMap.equals(card))
+    }
+    "return an empty Card when none is in the map" in {
+      val newMap = tabletop.addCardToMap(Index(8), Index(8), card)
+      val cardFromMap = newMap((Index(0), Index(0)))
+      assert(cardFromMap == emptyCard)
     }
   }
 }

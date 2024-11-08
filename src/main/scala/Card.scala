@@ -43,4 +43,17 @@ class Card(val monastery: Boolean = false, val townConnection: Boolean = false, 
     newCard
   }
 
+  // Rotated cards are different cards
+  override def equals(obj: Any): Boolean = {
+    obj match {
+      case that: Card =>
+        this.monastery == that.monastery &&
+        this.townConnection == that.townConnection &&
+        this.borders == that.borders &&
+        this.liegeman == that.liegeman &&
+        this.coat_of_arms == that.coat_of_arms
+      case _ => false
+    }
+  }
+
 }

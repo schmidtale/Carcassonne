@@ -18,10 +18,6 @@ class Tabletop {
     j <- 0 to 14
   } yield ((Index(i), Index(j)) -> Option.empty[Card])).toSeq: _*)   // unpack sequence
 
-  // Add Card:
-  // val newCard = Card(...)
-  // val updatedCardMap = cardMap + ((Index(5), Index(5)) -> Some(newCard))
-
   def constructTabletop(): String = {
     val strBuilder = new StringBuilder()
     for (i <- 0 to 3) {
@@ -38,9 +34,33 @@ class Tabletop {
     val strBuilder = new StringBuilder()
 
     // Iterate through the whole map
-    cardMap.foreach { case ((index1, index2), value) =>
-      println(s"Key: (${index1.value}, ${index2.value}), Value: $value")
+    //cardMap.foreach { case ((index1, index2), value) =>
+    //  println(s"Key: (${index1.value}, ${index2.value}), Value: $value")
+    //}
+    // Loop 5 times for every line in a card
+    for (i <- 0 to 4) {
+      for (j <- 0 to 14) {
+        cardMap.get((Index(0), Index(j))) match {
+          case Some(card) =>
+          // Process card
+          case None =>
+            if (i == 2) {
+              strBuilder.append(" " * 3 + i + " " + j + " " * 4)
+            }
+            strBuilder.append(" " * 9)
+        }
     }
+
+    }
+
     strBuilder.toString()
+  }
+
+  // Add Card:
+  // val newCard = Card(...)
+  // val updatedCardMap = cardMap + ((Index(5), Index(5)) -> Some(newCard))
+  def addCardToMap(index1 : Index, index2: Index, card : Card): SortedMap[(Index, Index), Option[Card]] = {
+    val updatedCardMap = cardMap + ((index1, index2) -> Some(card))
+    updatedCardMap
   }
 }
