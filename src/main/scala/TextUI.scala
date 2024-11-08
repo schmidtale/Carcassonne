@@ -1,38 +1,50 @@
+import scala.collection.immutable.SortedMap
 import scala.io.StdIn.readLine
 
 def startTUI(): Unit = {
+  val tabletop = new Tabletop
+  val cardStack = new CardStack
   //construct Queue
-  val cardStack = construct()
+  val stack = cardStack.construct()
   //initialize Tabletop
-
+  val initialMap = tabletop.addCardToMap(Index(7),Index(7),cardStack.starting_card)
   //printMap
+  print(tabletop.constructTabletopFromMap(initialMap))
   //get and printCard from Queue
   val i = 0
-  val drawnCard = cardStack(i)
+  val drawnCard = stack(i)
   val helpStr0 = "enter desired card placement in the following format:\n" +
     "rotation line column\n" +
     "[0-3]   [0-14][0-14]\n"
   print(helpStr0)
-  val placementInfo = readPlacement
-  print(placementInfo._1)
 
-  //rotate aufrufen
-  val cardToPlace = rotate(placementInfo._2)
+  val placementInfo = readPlacement
+  val cardToPlace = drawnCard.rotate(placementInfo._2)
+
   //---liegeman
   //---check legality
-  //addCardToMap aufrufen
-  addCardToMap()
-  //move on in Queue
+
+  val updatedMap = updateMap(placementInfo._1, placementInfo._3, placementInfo._4, cardToPlace, tabletop)
+  //move on in Queue, repeat process...
+  print(tabletop.constructTabletopFromMap(updatedMap))
 }
 
-//einlesen readLine().split(" ") und parsen
-def readPlacement: (String, Int, Int, Int) = {
+
+def readPlacement: (Boolean, Int, Index, Index) = {
   val commandSet = readLine.split(" ")
   val rotationCount = commandSet(0).toIntOption
   val line = commandSet(1).toIntOption
   val column = commandSet(2).toIntOption
+  
   if (rotationCount.isEmpty | line.isEmpty | column.isEmpty) {
-    => ""
+    (false, 0, Index(0), Index(0))
+  } else {
+    (true, rotationCount.get, Index(line.get), Index(column.get))
   }
+}
+
+def updateMap(b: Boolean, line: Index, column: Index, card: Card, t: Tabletop): SortedMap[(Index, Index), Option[Card]] = {
+  print(b)
+  t.addCardToMap(line, column, card)
 }
 
