@@ -42,6 +42,15 @@ class Card(val monastery: Boolean = false, val townConnection: Boolean = false, 
       /* other arguments must be on default if rotation is possible */ )
     newCard
   }
+  def rotate(r: Int): Card = {
+    val n = r % 4
+    n match
+      case 0 => this
+      case 1 => this.rotate
+      case 2 => this.rotate.rotate
+      case 3 => this.rotate.rotate.rotate
+      case other => this
+  }
 
   // Rotated cards are different cards
   override def equals(obj: Any): Boolean = {
