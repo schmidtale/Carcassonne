@@ -2,7 +2,9 @@
 def main(): Unit = {
   val tabletop = new Tabletop
   print(tabletop.constructTabletop())
-  tabletop.constructTabletopFromMap()
+
+  val emptyMap = tabletop.emptyMap()
+  print(tabletop.constructTabletopFromMap(emptyMap))
 }
 
   

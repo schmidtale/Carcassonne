@@ -16,7 +16,7 @@ class Tabletop {
   private val cardMap: SortedMap[(Index, Index), Option[Card]] = SortedMap((for {
     i <- 0 to 14
     j <- 0 to 14
-  } yield ((Index(i), Index(j)) -> Option.empty[Card])).toSeq: _*)   // unpack sequence
+  } yield ((Index(i), Index(j)) -> Option.empty[Card])).toSeq: _*) // unpack sequence
 
   def constructTabletop(): String = {
     val strBuilder = new StringBuilder()
@@ -30,36 +30,45 @@ class Tabletop {
     strBuilder.toString()
   }
 
-  def constructTabletopFromMap(): String = {
-    val strBuilder = new StringBuilder()
+  def constructTabletopFromMap(map: SortedMap[(Index, Index), Option[Card]]): String = {
+    val strBuilder = new StringBuilder
+    val provider = new TextProvider
 
-    // Iterate through the whole map
-    //cardMap.foreach { case ((index1, index2), value) =>
-    //  println(s"Key: (${index1.value}, ${index2.value}), Value: $value")
-    //}
-    // Loop 5 times for every line in a card
-    for (i <- 0 to 4) {
-      for (j <- 0 to 14) {
-        cardMap.get((Index(0), Index(j))) match {
-          case Some(card) =>
-          // Process card
-          case None =>
-            if (i == 2) {
-              strBuilder.append(" " * 3 + i + " " + j + " " * 4)
-            }
-            strBuilder.append(" " * 9)
+    // Loop through all rows
+    for (i <- 0 to 14) {
+      // Loop through every column 5 times for every line in a card
+      for (l <- 0 to 4) {
+        // Loop through all columns in the i th row
+        for (j <- 0 to 14) {
+          map.get((Index(i), Index(j))).flatten match {
+            case Some(card) =>
+              // Append i th line of column to String
+              strBuilder.append(provider.line(card, l.asInstanceOf[Int & (0 | 1 | 2 | 3 | 4)]))
+            // Print empty card (index)
+            case None =>
+              if (l == 2) {
+                strBuilder.append(" " * 3 + i.toHexString + " " + j.toHexString + " " * 4)
+              } else {
+                strBuilder.append(" " * 9)
+              }
+          }
         }
+        strBuilder.append("\n")
+      }
     }
+    val tabletopString = strBuilder.toString()
+    tabletopString
+  }
 
-    }
-
-    strBuilder.toString()
+  // return an empty with empty Values
+  def emptyMap() : SortedMap[(Index, Index), Option[Card]] = {
+    cardMap
   }
 
   // Add Card:
   // val newCard = Card(...)
   // val updatedCardMap = cardMap + ((Index(5), Index(5)) -> Some(newCard))
-  def addCardToMap(index1 : Index, index2: Index, card : Card): SortedMap[(Index, Index), Option[Card]] = {
+  def addCardToMap(index1: Index, index2: Index, card: Card): SortedMap[(Index, Index), Option[Card]] = {
     val updatedCardMap = cardMap + ((index1, index2) -> Some(card))
     updatedCardMap
   }
