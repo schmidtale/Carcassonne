@@ -44,6 +44,7 @@ class Tabletop {
             case Some(card) =>
               // Append i th line of column to String
               strBuilder.append(provider.line(card, l.asInstanceOf[Int & (0 | 1 | 2 | 3 | 4)]))
+              strBuilder.append(" ")
             // Print empty card (index)
             case None =>
               if (l == 2) {
