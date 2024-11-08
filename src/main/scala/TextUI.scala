@@ -4,10 +4,9 @@ import scala.io.StdIn.readLine
 def startTUI(): Unit = {
   val tabletop = new Tabletop
   val cardStack = new CardStack
-  //construct Queue
   val stack = cardStack.construct()
-  //initialize Tabletop
   val initialMap = tabletop.addCardToMap(Index(7),Index(7),cardStack.starting_card)
+  
   //printMap
   print(tabletop.constructTabletopFromMap(initialMap))
   //get and printCard from Queue
