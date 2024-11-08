@@ -50,7 +50,7 @@ class Tabletop {
               if (l == 2) {
                 strBuilder.append(" " * 3 + i.toHexString + " " + j.toHexString + " " * 4)
               } else {
-                strBuilder.append(" " * 9)
+                strBuilder.append(" " * 10)
               }
           }
         }
