@@ -67,7 +67,7 @@ class TextProvider {
       case ('h', _, _, BorderType.town, BorderType.town, false, _) => '.'
       
       /* monastery cases */
-      case ('M', _, _, _, _, false, true) => 'M'
+      case ('M', _, _, _, _, false, true) => 'C'
       case ('e'|'f'|'g'|'h'|'i'|'j'|'k'|'l', BorderType.pasture, BorderType.pasture,
         BorderType.pasture, BorderType.pasture, false, true) => '.'
 
@@ -76,6 +76,8 @@ class TextProvider {
       case ('M', _, BorderType.road, BorderType.road, _, _, _) => 'H'
       case ('M', _, _, BorderType.road, BorderType.road, _, _) => 'H'
       case ('M', BorderType.road, _, _, BorderType.road, _, _) => 'H'
+      case ('M', _, BorderType.road, _, BorderType.road, _, _) => 'H'
+      case ('M', BorderType.road, _, BorderType.road, _, _, _) => 'H'
 
       /* once all special cases are handled remaining inner letters can become grass */
       case ('e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'M', _, _, _, _, _, _) => '.'

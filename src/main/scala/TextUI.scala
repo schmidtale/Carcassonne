@@ -6,7 +6,7 @@ def startTUI(): Unit = {
   val tabletop = new Tabletop
   val cardStack = new CardStack
   val stack = cardStack.construct()
-  val initialMap = tabletop.addCardToMap(Index(7),Index(7),cardStack.starting_card)
+  val initialMap = tabletop.addCardToMap(Index(7),Index(7),cardStack.starting_card, tabletop.emptyMap())
 
   //printMap
   print(tabletop.constructTabletopFromMap(initialMap))
