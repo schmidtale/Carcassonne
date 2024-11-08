@@ -60,6 +60,10 @@ class CardSpec extends AnyWordSpec {
       assert(card.equals(card))
       assert(!card.equals(card2))
     }
+    "return false if you compare a card to something else" in {
+      val that = "empty"
+      assert(!card.equals(that))
+    }
   }
 }
 
