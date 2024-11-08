@@ -69,8 +69,8 @@ class Tabletop {
   // Add Card:
   // val newCard = Card(...)
   // val updatedCardMap = cardMap + ((Index(5), Index(5)) -> Some(newCard))
-  def addCardToMap(index1: Index, index2: Index, card: Card): SortedMap[(Index, Index), Option[Card]] = {
-    val updatedCardMap = cardMap + ((index1, index2) -> Some(card))
+  def addCardToMap(index1: Index, index2: Index, card: Card, oldMap: SortedMap[(Index, Index), Option[Card]]): SortedMap[(Index, Index), Option[Card]] = {
+    val updatedCardMap = oldMap + ((index1, index2) -> Some(card))
     updatedCardMap
   }
 }

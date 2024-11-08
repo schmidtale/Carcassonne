@@ -42,13 +42,13 @@ class TabletopSpec extends AnyWordSpec {
       assert (tabletop.constructTabletopFromMap(emptyMap) == expectedOutput)
     }*/
     "let a card be added to the card map" in {
-      val newMap = tabletop.addCardToMap(Index(7), Index(7), card)
+      val newMap = tabletop.addCardToMap(Index(7), Index(7), card, emptyMap)
       assert(newMap.isInstanceOf[SortedMap[(Index, Index), Option[Card]]])
       val cardFromMap = newMap((Index(7), Index(7))).get
       assert(cardFromMap.equals(card))
     }
     "return an empty Card when none is in the map" in {
-      val newMap = tabletop.addCardToMap(Index(8), Index(8), card)
+      val newMap = tabletop.addCardToMap(Index(8), Index(8), card, emptyMap)
       val cardFromMap = newMap((Index(0), Index(0)))
       assert(cardFromMap == emptyCard)
     }
