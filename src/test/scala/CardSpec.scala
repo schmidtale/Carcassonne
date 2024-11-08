@@ -56,6 +56,10 @@ class CardSpec extends AnyWordSpec {
       assert(cardRotatedTwice.borderType(southern) == road)
       assert(cardRotatedTwice.borderType(western) == town)
     }
+    "check if two cards are equal" in {
+      assert(card.equals(card))
+      assert(!card.equals(card2))
+    }
   }
 }
 
