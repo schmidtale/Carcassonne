@@ -6,7 +6,7 @@ import LiegemanPosition._
 
 import scala.collection.immutable.Queue
 
-class CardStack(val starting_card: Card = new Card(borders = Vector(road, town, road, pasture))) {
+class TileStack(val starting_card: Card = new Card(borders = Vector(road, town, road, pasture))) {
 
   // Create all Carcassonne Cards A-X
   // Referenz: https://brettspiele-report.de/images/carcassonne/Spielanleitung_Carcassonne.pdf

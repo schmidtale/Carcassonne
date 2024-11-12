@@ -5,9 +5,9 @@ import org.scalatest.wordspec.AnyWordSpec
 import scala.collection.immutable.Queue
 
 
-class CardStackSpec extends AnyWordSpec {
+class TileStackSpec extends AnyWordSpec {
 
-  val stack = new CardStack()
+  val stack = new TileStack()
 
   "A model.CardStack" should {
     "return a Queue of all cards" in {

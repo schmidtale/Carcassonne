@@ -1,6 +1,6 @@
 package _view
 import controller.TextProvider
-import model.CardStack
+import model.TileStack
 import model.Card
 import controller.Tabletop
 import controller.Index
@@ -11,7 +11,7 @@ import scala.io.StdIn.readLine
 def startTUI(): Unit = {
   val textProvider = new TextProvider
   val tabletop = new Tabletop
-  val cardStack = new CardStack
+  val cardStack = new TileStack
   val stack = cardStack.construct()
   val initialMap = tabletop.addCardToMap(Index(7),Index(7),cardStack.starting_card, tabletop.emptyMap())
 

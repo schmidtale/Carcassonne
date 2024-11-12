@@ -7,7 +7,7 @@ import Orientation.*
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 
-class CardSpec extends AnyWordSpec {
+class TileSpec extends AnyWordSpec {
   val card = new Card(borders = Vector(road, town, road, pasture))
   val card2 = new Card(false, true, borders = Vector(town, pasture, pasture, town), (knight, north))
   val card3 = new Card(false, borders = Vector(road, road, road, pasture))

@@ -1,7 +1,7 @@
 package controller
 
 import model.Card
-import model.CardStack
+import model.TileStack
 import org.scalatest.matchers.should.Matchers.*
 
 import org.scalatest.wordspec.AnyWordSpec
@@ -10,7 +10,7 @@ import scala.collection.immutable.SortedMap
 
 class TabletopSpec extends AnyWordSpec {
   val tabletop = new Tabletop
-  val cardStack = new CardStack
+  val cardStack = new TileStack
   private val card = cardStack.starting_card
   private val emptyCard = Option.empty[Card]
   private val emptyMap = tabletop.emptyMap()
