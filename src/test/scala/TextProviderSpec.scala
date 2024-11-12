@@ -1,8 +1,9 @@
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers.*
-import BorderType._
-import LiegemanPosition.north
-import LiegemanType.knight
+import model.Card
+import model.BorderType._
+import model.LiegemanPosition.north
+import model.LiegemanType.knight
 
 class TextProviderSpec extends AnyWordSpec {
   val card2 = new Card(false, true, borders = Vector(town, pasture, pasture, town), (knight, north))

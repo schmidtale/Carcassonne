@@ -1,4 +1,6 @@
 
+import model.CardStack
+import model.Card
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers.*
 

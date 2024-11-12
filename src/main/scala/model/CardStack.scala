@@ -1,7 +1,9 @@
+package model
 import Orientation._
 import BorderType._
 import LiegemanType._
 import LiegemanPosition._
+
 import scala.collection.immutable.Queue
 
 class CardStack(val starting_card: Card = new Card(borders = Vector(road, town, road, pasture))) {

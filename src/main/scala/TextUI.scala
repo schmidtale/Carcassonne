@@ -1,3 +1,6 @@
+import model.CardStack
+import model.Card
+
 import scala.collection.immutable.SortedMap
 import scala.io.StdIn.readLine
 

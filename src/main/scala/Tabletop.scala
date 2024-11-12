@@ -1,4 +1,4 @@
-import BorderType.road
+import model.Card
 import scala.collection.immutable.SortedMap
 
 case class Index(value: Int) {

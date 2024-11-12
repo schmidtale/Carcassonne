@@ -1,3 +1,5 @@
+package model
+
 enum Orientation:
   case northern, eastern, southern, western
 
