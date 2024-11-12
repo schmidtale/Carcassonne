@@ -1,5 +1,6 @@
-import model.{BorderType, Card}
+package controller
 
+import model.{BorderType, Card}
 
 class TextProvider {
   private val prototype = "* a A a *|d e i f b|D l M j B|d h k g b|* c C c *"

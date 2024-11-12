@@ -1,5 +1,5 @@
-import model.CardStack
-import model.Card
+package model
+
 import org.scalatest.wordspec.AnyWordSpec
 
 import scala.collection.immutable.Queue

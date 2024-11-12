@@ -1,3 +1,5 @@
+import _view.startTUI
+
 @main
 def main(): Unit = {
 //  val tabletop = new Tabletop

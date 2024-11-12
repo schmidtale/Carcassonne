@@ -1,8 +1,10 @@
+package controller
 
-import model.CardStack
 import model.Card
-import org.scalatest.wordspec.AnyWordSpec
+import model.CardStack
 import org.scalatest.matchers.should.Matchers.*
+
+import org.scalatest.wordspec.AnyWordSpec
 
 import scala.collection.immutable.SortedMap
 

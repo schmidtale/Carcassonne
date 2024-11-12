@@ -1,11 +1,15 @@
-import org.scalatest.wordspec.AnyWordSpec
+package _view
+
+import controller.{Index, Tabletop}
+import model.BorderType.*
+import model.Card
+import model.LiegemanPosition.*
+import model.LiegemanType.*
 import org.scalatest.matchers.should.Matchers.*
-import Orientation.*
-import BorderType.*
-import LiegemanType.*
-import LiegemanPosition.*
-import scala.collection.immutable.SortedMap
+import org.scalatest.wordspec.AnyWordSpec
+
 import java.io.{ByteArrayInputStream, InputStream}
+import scala.collection.immutable.SortedMap
 
 class TextUISpec extends AnyWordSpec {
   val card2 = new Card(false, true, borders = Vector(town, pasture, pasture, town), (knight, north))

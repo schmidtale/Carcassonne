@@ -1,5 +1,9 @@
+package _view
+import controller.TextProvider
 import model.CardStack
 import model.Card
+import controller.Tabletop
+import controller.Index
 
 import scala.collection.immutable.SortedMap
 import scala.io.StdIn.readLine

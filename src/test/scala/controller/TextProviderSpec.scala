@@ -1,7 +1,9 @@
+package controller
+
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers.*
+import model.BorderType.*
 import model.Card
-import model.BorderType._
 import model.LiegemanPosition.north
 import model.LiegemanType.knight
 
@@ -10,7 +12,7 @@ class TextProviderSpec extends AnyWordSpec {
   val textProvider = new TextProvider
   val expectedStringCard2 = "* B B B *\nB B . . .\nB . . . .\nB . . . .\n* . . . *"
 
-  "A TextProvider" should {
+  "A controller.TextProvider" should {
     "provide a string representation of a whole Card" in {
       assert(textProvider.toText(card2) == expectedStringCard2)
     }

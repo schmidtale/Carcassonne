@@ -1,10 +1,11 @@
+package model
+
+import BorderType.*
+import LiegemanPosition.*
+import LiegemanType.*
+import Orientation.*
+import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.should.Matchers._
-import model.Orientation._
-import model.BorderType._
-import model.LiegemanType._
-import model.LiegemanPosition._
-import model.Card
 
 class CardSpec extends AnyWordSpec {
   val card = new Card(borders = Vector(road, town, road, pasture))
