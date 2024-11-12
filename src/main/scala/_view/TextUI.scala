@@ -2,8 +2,9 @@ package _view
 import controller.TextProvider
 import model.TileStack
 import model.Card
+import model.TileMap
 import controller.Tabletop
-import controller.Index
+import model.Index
 
 import scala.collection.immutable.SortedMap
 import scala.io.StdIn.readLine
@@ -51,7 +52,7 @@ def readPlacement: (Boolean, Int, Index, Index) = {
   }
 }
 
-def updateMap(b: Boolean, line: Index, column: Index, card: Card, t: Tabletop, oldMap: SortedMap[(Index, Index), Option[Card]]): SortedMap[(Index, Index), Option[Card]] = {
+def updateMap(b: Boolean, line: Index, column: Index, card: Card, t: Tabletop, oldMap: TileMap): TileMap = {
   print(b)
   t.addCardToMap(line, column, card, oldMap)
 }

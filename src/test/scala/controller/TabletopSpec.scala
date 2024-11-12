@@ -2,6 +2,8 @@ package controller
 
 import model.Card
 import model.TileStack
+import model.TileMap
+import model.Index
 import org.scalatest.matchers.should.Matchers.*
 
 import org.scalatest.wordspec.AnyWordSpec
@@ -46,18 +48,18 @@ class TabletopSpec extends AnyWordSpec {
 //      assert (tabletop.constructTabletopFromMap(emptyMap) == expectedOutput)
 //    }
     "be able to return a map with empty values" in {
-      assert(tabletop.emptyMap().isInstanceOf[SortedMap[(Index, Index), Option[Card]]])
-      assert(emptyMap(Index(0), Index(0)).isEmpty)
+      assert(tabletop.emptyMap().isInstanceOf[TileMap])
+      assert(emptyMap.data(Index(0), Index(0)).isEmpty)
     }
-    "let a card be added to the card map" in {
+    "let a tile be added to the tile map" in {
       val newMap = tabletop.addCardToMap(Index(7), Index(7), card, emptyMap)
-      assert(newMap.isInstanceOf[SortedMap[(Index, Index), Option[Card]]])
-      val cardFromMap = newMap((Index(7), Index(7))).get
+      assert(newMap.isInstanceOf[TileMap])
+      val cardFromMap = newMap.data((Index(7), Index(7))).get
       assert(cardFromMap.equals(card))
     }
     "return an empty Card when none is in the map" in {
       val newMap = tabletop.addCardToMap(Index(8), Index(8), card, emptyMap)
-      val cardFromMap = newMap((Index(0), Index(0)))
+      val cardFromMap = newMap.data((Index(0), Index(0)))
       assert(cardFromMap == emptyCard)
     }
   }
