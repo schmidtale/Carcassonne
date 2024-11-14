@@ -8,63 +8,63 @@ import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 
 class TileSpec extends AnyWordSpec {
-  val card = new Card(borders = Vector(road, town, road, pasture))
-  val card2 = new Card(false, true, borders = Vector(town, pasture, pasture, town), (knight, north))
-  val card3 = new Card(false, borders = Vector(road, road, road, pasture))
+  val tile = new Tile(borders = Vector(road, town, road, pasture))
+  val tile2 = new Tile(false, true, borders = Vector(town, pasture, pasture, town), (knight, north))
+  val tile3 = new Tile(false, borders = Vector(road, road, road, pasture))
 
-  "A card" should {
+  "A tile" should {
     "return the type of its northern border" in {
-      assert(card.borderType(northern) == road |
-        card.borderType(northern) == pasture |
-        card.borderType(northern) == town)
+      assert(tile.borderType(northern) == road |
+        tile.borderType(northern) == pasture |
+        tile.borderType(northern) == town)
     }
     "return a boolean when asked for the presence of a monastery" in {
-      assert(!card.monastery | card.monastery)
+      assert(!tile.monastery | tile.monastery)
     }
     "return how its inner fields are connected" in {
-      assert(card.fieldConnections.isInstanceOf[Vector[Boolean]])
-      assert(card.fieldConnections.length == 4)
-      assert(card.fieldConnections == Vector(false, true, false, true))
-      assert(card2.fieldConnections == Vector(true, true, true, true))
-      assert(card3.fieldConnections == Vector(false, false, false, true))
+      assert(tile.fieldConnections.isInstanceOf[Vector[Boolean]])
+      assert(tile.fieldConnections.length == 4)
+      assert(tile.fieldConnections == Vector(false, true, false, true))
+      assert(tile2.fieldConnections == Vector(true, true, true, true))
+      assert(tile3.fieldConnections == Vector(false, false, false, true))
     }
     "return if town borders are connected (boolean) which must be false when < 2 town borders are present" in {
-      assert(card.townConnection == false)
-      assert(card2.townConnection == true)
-      assert(card3.townConnection == false)
+      assert(tile.townConnection == false)
+      assert(tile2.townConnection == true)
+      assert(tile3.townConnection == false)
     }
     "return the type of the possibly present liegeman" in {
-      assert(card.liegeman(0) == none | card.liegeman(0) == waylayer |
-        card.liegeman(0) == monk | card.liegeman(0) == knight | card.liegeman(0) == peasant)
-      assert(card2.liegeman(0) == knight)
+      assert(tile.liegeman(0) == none | tile.liegeman(0) == waylayer |
+        tile.liegeman(0) == monk | tile.liegeman(0) == knight | tile.liegeman(0) == peasant)
+      assert(tile2.liegeman(0) == knight)
     }
     "return the position of a present liegeman" in {
-      assert(card2.liegeman(1) == north)
+      assert(tile2.liegeman(1) == north)
     }
-    "return a card with suitably shifted borders and structures (90° clockwise)" in {
-      val cardRotated = card.rotate
-      assert(cardRotated.borderType(northern) == pasture)
-      assert(cardRotated.borderType(eastern) == road)
-      assert(cardRotated.borderType(southern) == town)
-      assert(cardRotated.borderType(western) == road)
-      val card2Rotated = card2.rotate
-      assert(card2Rotated.borderType(northern) == town)
-      assert(card2Rotated.borderType(eastern) == town)
-      assert(card2Rotated.borderType(southern) == pasture)
-      assert(card2Rotated.borderType(western) == pasture)
-      val cardRotatedTwice = cardRotated.rotate
-      assert(cardRotatedTwice.borderType(northern) == road)
-      assert(cardRotatedTwice.borderType(eastern) == pasture)
-      assert(cardRotatedTwice.borderType(southern) == road)
-      assert(cardRotatedTwice.borderType(western) == town)
+    "return a tile with suitably shifted borders and structures (90° clockwise)" in {
+      val tileRotated = tile.rotate
+      assert(tileRotated.borderType(northern) == pasture)
+      assert(tileRotated.borderType(eastern) == road)
+      assert(tileRotated.borderType(southern) == town)
+      assert(tileRotated.borderType(western) == road)
+      val tile2Rotated = tile2.rotate
+      assert(tile2Rotated.borderType(northern) == town)
+      assert(tile2Rotated.borderType(eastern) == town)
+      assert(tile2Rotated.borderType(southern) == pasture)
+      assert(tile2Rotated.borderType(western) == pasture)
+      val tileRotatedTwice = tileRotated.rotate
+      assert(tileRotatedTwice.borderType(northern) == road)
+      assert(tileRotatedTwice.borderType(eastern) == pasture)
+      assert(tileRotatedTwice.borderType(southern) == road)
+      assert(tileRotatedTwice.borderType(western) == town)
     }
-    "check if two cards are equal" in {
-      assert(card.equals(card))
-      assert(!card.equals(card2))
+    "check if two tiles are equal" in {
+      assert(tile.equals(tile))
+      assert(!tile.equals(tile2))
     }
-    "return false if you compare a card to something else" in {
+    "return false if you compare a tile to something else" in {
       val that = "empty"
-      assert(!card.equals(that))
+      assert(!tile.equals(that))
     }
   }
 }

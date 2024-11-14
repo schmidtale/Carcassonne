@@ -12,8 +12,8 @@ object Index {
 }
 
 class TileMap(// Create a Map with keys 0 0 to 14 14 and None as values
-              val data: SortedMap[(Index, Index), Option[Card]] = SortedMap((for {
+              val data: SortedMap[(Index, Index), Option[Tile]] = SortedMap((for {
                 i <- 0 to 14
                 j <- 0 to 14
-              } yield ((Index(i), Index(j)) -> Option.empty[Card])).toSeq: _*))// unpack sequence)
+              } yield ((Index(i), Index(j)) -> Option.empty[Tile])).toSeq: _*))// unpack sequence)
 

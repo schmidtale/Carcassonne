@@ -1,4 +1,4 @@
-import _view.startTUI
+import _view.TextUI
 
 @main
 def main(): Unit = {
@@ -8,7 +8,7 @@ def main(): Unit = {
 //  val emptyMap = tabletop.emptyMap()
 //  print(tabletop.constructTabletopFromMap(emptyMap))
 
-    startTUI()
+    TextUI.exec()
 }
 
   

@@ -19,7 +19,7 @@ import Orientation._
 import BorderType._
 import LiegemanType._
 import LiegemanPosition._
-class Card(val monastery: Boolean = false, val townConnection: Boolean = false, val borders: Vector[BorderType],
+class Tile(val monastery: Boolean = false, val townConnection: Boolean = false, val borders: Vector[BorderType],
            val liegeman: (LiegemanType, LiegemanPosition) = (none, nowhere), val coat_of_arms: Boolean = false) {
   def borderType(o: Orientation): BorderType = {
     o match
@@ -37,14 +37,14 @@ class Card(val monastery: Boolean = false, val townConnection: Boolean = false, 
       fc
   }
 
-  def rotate: Card = {
+  def rotate: Tile = {
     val newBorders = Vector(this.borderType(western), this.borderType(northern),
       this.borderType(eastern),this.borderType(southern))
-    val newCard = new Card(this.monastery, this.townConnection, newBorders
+    val newCard = new Tile(this.monastery, this.townConnection, newBorders
       /* other arguments must be on default if rotation is possible */ )
     newCard
   }
-  def rotate(r: Int): Card = {
+  def rotate(r: Int): Tile = {
     val n = r % 4
     n match
       case 0 => this
@@ -57,7 +57,7 @@ class Card(val monastery: Boolean = false, val townConnection: Boolean = false, 
   // Rotated cards are different cards
   override def equals(obj: Any): Boolean = {
     obj match {
-      case that: Card =>
+      case that: Tile =>
         this.monastery == that.monastery &&
         this.townConnection == that.townConnection &&
         this.borders == that.borders &&

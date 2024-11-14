@@ -1,10 +1,20 @@
 package controller
 
 import model.Index
-import model.Card
+import model.Tile
 import model.TileMap
+import model.TileStack
+
+import scala.collection.immutable.Queue
 
 class Tabletop {
+  private val stack = new TileStack
+  def tileStack(): Queue[Tile] = {
+    stack.construct()
+  }
+  def startingTile(): Tile = {
+    stack.startingTile
+  }
   def constructTabletop(): String = {
     val strBuilder = new StringBuilder()
     for (i <- 0 to 3) {
@@ -53,10 +63,10 @@ class Tabletop {
     TileMap()
   }
 
-  // Add Card:
-  // val newCard = Card(...)
+  // Add Tile:
+  // val newCard = Tile(...)
   // val updatedCardMap = cardMap + ((Index(5), Index(5)) -> Some(newCard))
-  def addCardToMap(index1: Index, index2: Index, card: Card, oldMap: TileMap): TileMap = {
+  def addTileToMap(index1: Index, index2: Index, card: Tile, oldMap: TileMap): TileMap = {
     val updatedCardMap = oldMap.data + ((index1, index2) -> Some(card))
     TileMap(updatedCardMap)
   }

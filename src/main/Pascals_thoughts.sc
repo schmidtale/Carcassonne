@@ -32,9 +32,9 @@ val desiredColum: Index = Index(6)
 val proceed = isLegalPlacement(desiredRow, desiredColum)
 
 //The cardAt(x, y) method above hints at the thought of a data
-//structure which maps an Optional[Card] (value) to an index pair (key).
+//structure which maps an Optional[Tile] (value) to an index pair (key).
 //Maybe a TreeMap (a sorted Map)?
-//Then, cardAt(x, y) should return None or Some(Card) from
+//Then, cardAt(x, y) should return None or Some(Tile) from
 //that data structure.
-//The Card itself contains the information about its borders etc.
+//The Tile itself contains the information about its borders etc.
 

@@ -1,6 +1,6 @@
 package controller
 
-import model.Card
+import model.Tile
 import model.TileStack
 import model.TileMap
 import model.Index
@@ -12,9 +12,9 @@ import scala.collection.immutable.SortedMap
 
 class TabletopSpec extends AnyWordSpec {
   val tabletop = new Tabletop
-  val cardStack = new TileStack
-  private val card = cardStack.starting_card
-  private val emptyCard = Option.empty[Card]
+  val tileStack = new TileStack
+  private val tile = tileStack.startingTile
+  private val emptyTile = Option.empty[Tile]
   private val emptyMap = tabletop.emptyMap()
 
   "A tabletop" should {
@@ -52,15 +52,15 @@ class TabletopSpec extends AnyWordSpec {
       assert(emptyMap.data(Index(0), Index(0)).isEmpty)
     }
     "let a tile be added to the tile map" in {
-      val newMap = tabletop.addCardToMap(Index(7), Index(7), card, emptyMap)
+      val newMap = tabletop.addTileToMap(Index(7), Index(7), tile, emptyMap)
       assert(newMap.isInstanceOf[TileMap])
-      val cardFromMap = newMap.data((Index(7), Index(7))).get
-      assert(cardFromMap.equals(card))
+      val tileFromMap = newMap.data((Index(7), Index(7))).get
+      assert(tileFromMap.equals(tile))
     }
-    "return an empty Card when none is in the map" in {
-      val newMap = tabletop.addCardToMap(Index(8), Index(8), card, emptyMap)
-      val cardFromMap = newMap.data((Index(0), Index(0)))
-      assert(cardFromMap == emptyCard)
+    "return an empty Tile when none is in the map" in {
+      val newMap = tabletop.addTileToMap(Index(8), Index(8), tile, emptyMap)
+      val tileFromMap = newMap.data((Index(0), Index(0)))
+      assert(tileFromMap == emptyTile)
     }
   }
 }

@@ -11,7 +11,7 @@ class TileStackSpec extends AnyWordSpec {
 
   "A model.CardStack" should {
     "return a Queue of all cards" in {
-      assert(stack.construct().isInstanceOf[Queue[Card]])
+      assert(stack.construct().isInstanceOf[Queue[Tile]])
     }
     "have a size of 71 cards" in {
       assert(stack.construct().size == 71)

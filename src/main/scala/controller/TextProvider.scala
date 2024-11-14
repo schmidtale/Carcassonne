@@ -1,20 +1,20 @@
 package controller
 
-import model.{BorderType, Card}
+import model.{BorderType, Tile}
 
 class TextProvider {
   private val prototype = "* a A a *|d e i f b|D l M j B|d h k g b|* c C c *"
 
-  def line(c: Card, l: Int & 0 | 1 | 2 | 3 | 4): String = {
+  def line(c: Tile, l: Int & 0 | 1 | 2 | 3 | 4): String = {
     toText(c).split("\n")(l)
   }
   
-  def toText(c: Card): String = {
+  def toText(c: Tile): String = {
     val cardString = prototype.map(char => replaceChar(char, c))
     cardString
   }
 
-  private def replaceChar(char: Char, c: Card): Char = {
+  private def replaceChar(char: Char, c: Tile): Char = {
     (char, c.borders(0), c.borders(1), c.borders(2), c.borders(3), c.townConnection, c.monastery) match {
 
       case ('|', _, _, _, _, _, _) => '\n'
@@ -112,7 +112,7 @@ private def row(i: Int, l: Int): String = {
 private def spot(i: Int, l: Int): String = {
   " "
 }
-def line(c: Card, l: Int & 0 | 1 | 2 | 3 | 4): String = {
+def line(c: Tile, l: Int & 0 | 1 | 2 | 3 | 4): String = {
 
 
   row(0, l) + spot(0, l) + row(1, l) + spot(1, l) + row(2, l) + spot(2, l) + row(3, l) + spot(3, l) + row(4, l)
