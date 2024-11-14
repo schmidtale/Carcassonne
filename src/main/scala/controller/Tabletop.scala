@@ -9,6 +9,7 @@ import scala.collection.immutable.Queue
 
 class Tabletop {
   private val stack = new TileStack
+  
   def tileStack(): Queue[Tile] = {
     stack.construct()
   }
@@ -69,5 +70,9 @@ class Tabletop {
   def addTileToMap(index1: Index, index2: Index, card: Tile, oldMap: TileMap): TileMap = {
     val updatedCardMap = oldMap.data + ((index1, index2) -> Some(card))
     TileMap(updatedCardMap)
+  }
+
+  def initialMap(): TileMap = {
+    addTileToMap(Index(7), Index(7), startingTile(), emptyMap())
   }
 }

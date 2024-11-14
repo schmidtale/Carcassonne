@@ -6,41 +6,41 @@ import model.TileMap
 import controller.Tabletop
 import model.Index
 
-import scala.collection.immutable.SortedMap
+import scala.collection.immutable.{Queue, SortedMap}
 import scala.io.StdIn.readLine
 
 object TextUI {
   private val textProvider = new TextProvider
   private val tabletop = new Tabletop
-  private val stack = tabletop.tileStack()
-  private val initialMap = tabletop.addTileToMap(Index(7), Index(7), tabletop.startingTile(), tabletop.emptyMap())
 
   //printMap
-  print(tabletop.constructTabletopFromMap(initialMap))
-  def exec(): Unit = {
-    
+  print(tabletop.constructTabletopFromMap(tabletop.initialMap()))
+  def exec(parameters: (TileMap, Int), stack: Queue[Tile]): (TileMap, Int) = {
+
     //get and print Tile from Queue
-    val i = 0
-    val drawnCard = stack(i)
-    print("next card:\n" + textProvider.toText(drawnCard) + "\n")
+    val drawnTile = stack(parameters(1))
+    print("next card:\n" + textProvider.toText(drawnTile) + "\n")
     val helpStr0 = "enter desired card placement in the following format:\n" +
       "rotation line column\n" +
       "[0-3]   [0-14][0-14]\n"
     print(helpStr0)
 
     val placementInfo = readPlacement
-    val cardToPlace = drawnCard.rotate(placementInfo._2)
+    val cardToPlace = drawnTile.rotate(placementInfo._2)
+    // check legality:
+    //while (!isLegalPlacement)...
 
     //---liegeman
     //---check legality
 
-    val updatedMap = updateMap(placementInfo._1, placementInfo._3, placementInfo._4, cardToPlace, tabletop, initialMap)
-    //move on in Queue, repeat process...
+    val updatedMap = updateMap(placementInfo._1, placementInfo._3, placementInfo._4, cardToPlace, tabletop, parameters(0))
+
     print(tabletop.constructTabletopFromMap(updatedMap))
+    (updatedMap, parameters(1) + 1)
   }
 
 
-  def readPlacement: (Boolean, Int, Index, Index) = {
+  private def readPlacement: (Boolean, Int, Index, Index) = {
     val commandSet = readLine.split(" ")
     val rotationCount = commandSet(0).toIntOption
     val line = commandSet(1).toIntOption
