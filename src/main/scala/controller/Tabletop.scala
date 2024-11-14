@@ -4,10 +4,11 @@ import model.Index
 import model.Tile
 import model.TileMap
 import model.TileStack
+import util.Observable
 
 import scala.collection.immutable.Queue
 
-class Tabletop {
+class Tabletop(var tileMap: TileMap) extends Observable {
   private val stack = new TileStack
   
   def tileStack(): Queue[Tile] = {
@@ -28,7 +29,7 @@ class Tabletop {
     strBuilder.toString()
   }
 
-  def constructTabletopFromMap(map: TileMap): String = {
+  def constructTabletopFromMap(): String = {
     val strBuilder = new StringBuilder
     val provider = new TextProvider
 
@@ -38,7 +39,7 @@ class Tabletop {
       for (l <- 0 to 4) {
         // Loop through all columns in the i th row
         for (j <- 0 to 14) {
-          map.data.get((Index(i), Index(j))).flatten match {
+          tileMap.data.get((Index(i), Index(j))).flatten match {
             case Some(card) =>
               // Append i th line of column to String
               strBuilder.append(provider.line(card, l.asInstanceOf[Int & (0 | 1 | 2 | 3 | 4)]))
@@ -67,12 +68,15 @@ class Tabletop {
   // Add Tile:
   // val newCard = Tile(...)
   // val updatedCardMap = cardMap + ((Index(5), Index(5)) -> Some(newCard))
-  def addTileToMap(index1: Index, index2: Index, card: Tile, oldMap: TileMap): TileMap = {
-    val updatedCardMap = oldMap.data + ((index1, index2) -> Some(card))
-    TileMap(updatedCardMap)
+  def addTileToMap(index1: Index, index2: Index, card: Tile): Unit = {
+    tileMap = TileMap(tileMap.data + ((index1, index2) -> Some(card)))
+    notifyObservers()
   }
 
-  def initialMap(): TileMap = {
-    addTileToMap(Index(7), Index(7), startingTile(), emptyMap())
+  def initialMap(): Unit = {
+    tileMap = emptyMap()
+    addTileToMap(Index(7), Index(7), startingTile())
+    notifyObservers()
   }
+  
 }

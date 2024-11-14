@@ -11,7 +11,7 @@ import org.scalatest.wordspec.AnyWordSpec
 import scala.collection.immutable.SortedMap
 
 class TabletopSpec extends AnyWordSpec {
-  val tabletop = new Tabletop
+  val tabletop = new Tabletop(new TileMap)
   val tileStack = new TileStack
   private val tile = tileStack.startingTile
   private val emptyTile = Option.empty[Tile]
@@ -52,14 +52,12 @@ class TabletopSpec extends AnyWordSpec {
       assert(emptyMap.data(Index(0), Index(0)).isEmpty)
     }
     "let a tile be added to the tile map" in {
-      val newMap = tabletop.addTileToMap(Index(7), Index(7), tile, emptyMap)
-      assert(newMap.isInstanceOf[TileMap])
-      val tileFromMap = newMap.data((Index(7), Index(7))).get
+      tabletop.addTileToMap(Index(7), Index(7), tile)
+      val tileFromMap = tabletop.tileMap.data((Index(7), Index(7))).get
       assert(tileFromMap.equals(tile))
     }
     "return an empty Tile when none is in the map" in {
-      val newMap = tabletop.addTileToMap(Index(8), Index(8), tile, emptyMap)
-      val tileFromMap = newMap.data((Index(0), Index(0)))
+      val tileFromMap = tabletop.tileMap.data((Index(0), Index(0)))
       assert(tileFromMap == emptyTile)
     }
   }

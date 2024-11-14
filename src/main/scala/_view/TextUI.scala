@@ -1,24 +1,24 @@
 package _view
 import controller.TextProvider
-import model.TileStack
 import model.Tile
 import model.TileMap
 import controller.Tabletop
 import model.Index
+import util.Observer
 
-import scala.collection.immutable.{Queue, SortedMap}
+import scala.collection.immutable.Queue
 import scala.io.StdIn.readLine
 
-object TextUI {
+class TextUI(tabletop: Tabletop) extends Observer {
+  tabletop.add(this)
   private val textProvider = new TextProvider
-  private val tabletop = new Tabletop
 
   //printMap
-  print(tabletop.constructTabletopFromMap(tabletop.initialMap()))
-  def exec(parameters: (TileMap, Int), stack: Queue[Tile]): (TileMap, Int) = {
+
+  def exec(turn: Int, stack: Queue[Tile]): Int = {
 
     //get and print Tile from Queue
-    val drawnTile = stack(parameters(1))
+    val drawnTile = stack(turn)
     print("next card:\n" + textProvider.toText(drawnTile) + "\n")
     val helpStr0 = "enter desired card placement in the following format:\n" +
       "rotation line column\n" +
@@ -33,10 +33,9 @@ object TextUI {
     //---liegeman
     //---check legality
 
-    val updatedMap = updateMap(placementInfo._1, placementInfo._3, placementInfo._4, cardToPlace, tabletop, parameters(0))
+    updateMap(placementInfo._1, placementInfo._3, placementInfo._4, cardToPlace)
 
-    print(tabletop.constructTabletopFromMap(updatedMap))
-    (updatedMap, parameters(1) + 1)
+    turn + 1
   }
 
 
@@ -53,9 +52,13 @@ object TextUI {
     }
   }
 
-  def updateMap(b: Boolean, line: Index, column: Index, card: Tile, t: Tabletop, oldMap: TileMap): TileMap = {
+  def updateMap(b: Boolean, line: Index, column: Index, card: Tile): Unit = {
     print(b)
-    t.addTileToMap(line, column, card, oldMap)
+    tabletop.addTileToMap(line, column, card)
+  }
+
+  override def update(): Unit = {
+    print(tabletop.constructTabletopFromMap())
   }
 }
 
