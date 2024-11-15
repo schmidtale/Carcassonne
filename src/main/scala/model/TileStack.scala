@@ -1,8 +1,5 @@
 package model
-import Orientation._
 import BorderType._
-import LiegemanType._
-import LiegemanPosition._
 
 import scala.collection.immutable.Queue
 

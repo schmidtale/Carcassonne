@@ -1,7 +1,5 @@
 package _view
-import controller.TextProvider
-import model.Tile
-import model.TileMap
+import model.{TextProvider, Tile}
 import controller.Tabletop
 import model.Index
 import util.Observer

@@ -21,6 +21,8 @@ import LiegemanType._
 import LiegemanPosition._
 class Tile(val monastery: Boolean = false, val townConnection: Boolean = false, val borders: Vector[BorderType],
            val liegeman: (LiegemanType, LiegemanPosition) = (none, nowhere), val coat_of_arms: Boolean = false) {
+
+  private val provider = new TextProvider()
   def borderType(o: Orientation): BorderType = {
     o match
       case Orientation.northern => borders(0)
@@ -65,6 +67,14 @@ class Tile(val monastery: Boolean = false, val townConnection: Boolean = false, 
         this.coat_of_arms == that.coat_of_arms
       case _ => false
     }
+  }
+
+  override def toString: String = {
+    provider.toText(this)
+  }
+
+  def line(l: Int & 0 | 1 | 2 | 3 | 4): String = {
+    provider.toText(this).split("\n")(l)
   }
 
 }

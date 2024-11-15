@@ -1,18 +1,17 @@
-package controller
+package model
 
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.should.Matchers.*
 import model.BorderType.*
-import model.Tile
 import model.LiegemanPosition.north
 import model.LiegemanType.knight
+import org.scalatest.matchers.should.Matchers.*
+import org.scalatest.wordspec.AnyWordSpec
 
 class TextProviderSpec extends AnyWordSpec {
   val tile2 = new Tile(false, true, borders = Vector(town, pasture, pasture, town), (knight, north))
   val textProvider = new TextProvider
   val expectedStringTile2 = "* B B B *\nB B . . .\nB . . . .\nB . . . .\n* . . . *"
 
-  "A controller.TextProvider" should {
+  "A model.TextProvider" should {
     "provide a string representation of a whole Tile" in {
       assert(textProvider.toText(tile2) == expectedStringTile2)
     }
