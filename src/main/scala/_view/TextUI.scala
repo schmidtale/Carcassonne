@@ -33,6 +33,7 @@ class TextUI(tabletop: Tabletop) extends Observer {
 
     updateMap(placementInfo._1, placementInfo._3, placementInfo._4, cardToPlace)
 
+    // TODO if placement correct and legal move and legal liegeman placement
     turn + 1
   }
 
