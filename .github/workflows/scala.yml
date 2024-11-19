@@ -38,6 +38,9 @@ jobs:
           distribution: 'temurin'
           java-version: 21
 
+      - name: Clean previous coverage data
+        run: rm -rf .coverage .history3
+
       - name: Run sbt clean coverage test
         run: sbt clean coverage test
 
