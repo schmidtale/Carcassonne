@@ -19,8 +19,3 @@ object Carcassonne {
         }
     }
 }
-
-
-  
-
-
