@@ -1,1 +1,36 @@
+name: sbt-coverage
 
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code from Carcassonne repo
+        uses: actions/checkout@v4
+
+      - name: Set up sbt
+        uses: sbt/setup-sbt@v1
+
+      - name: Set up JVM
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+
+      - name: Run sbt clean coverage test
+        run: sbt clean coverage test
+
+      - name: Run sbt coverageReport
+        run: sbt coverageReport
