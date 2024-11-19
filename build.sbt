@@ -5,7 +5,7 @@ ThisBuild / scalaVersion := "3.3.4"
 lazy val root = (project in file("."))
   .settings(
     name := "carcassonne",
-    coverageEnabled := true,
+    coverageEnabled := true
   )
   
 libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.19"
