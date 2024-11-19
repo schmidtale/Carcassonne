@@ -45,7 +45,7 @@ jobs:
         run: sbt coverageAggregate
 
       - name: list coverage data
-        run: dir /s /b target\scala-*\scoverage-data
+        run: Get-ChildItem -Recurse -Filter 'scoverage-data' -Path target\scala-* | Select-Object FullName
 
       - name: Run sbt coverageReport
         run: sbt coverageReport
