@@ -10,12 +10,7 @@ on:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 22
@@ -29,12 +24,7 @@ jobs:
       run: sbt test
       
   test:
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
     steps:
       - name: Checkout code from Carcassonne repo
         uses: actions/checkout@v4
