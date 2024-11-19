@@ -34,3 +34,6 @@ jobs:
 
       - name: Run sbt coverageReport
         run: sbt coverageReport
+
+      - name: Submit coverage to Coveralls
+        run: sbt coveralls
