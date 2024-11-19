@@ -13,3 +13,4 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.19" % "test"
 
 enablePlugins(ScoverageSbtPlugin)
 enablePlugins(CoverallsPlugin)
+coverageReportDirectory := baseDirectory.value / "target" / "scala-3.3.4" / "coverage-report"
