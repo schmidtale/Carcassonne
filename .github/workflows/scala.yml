@@ -22,8 +22,6 @@ jobs:
       run: sbt compile
     - name: Run sbt clean coverage test
       run: sbt clean coverage test
-    - name: Check for cobertura.xml in coverage report directory
-      run: ls -l /home/runner/work/Carcassonne/Carcassonne/target/scala-3.3.4/coverage-report
     - name: Run sbt coverageReport
       run: sbt coverageReport
     - name: Submit coverage to Coveralls
