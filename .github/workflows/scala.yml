@@ -41,6 +41,12 @@ jobs:
       - name: Run sbt clean coverage test
         run: sbt clean coverage test
 
+      - name: aggregate coverage
+        run: sbt coverageAggregate
+
+      - name: list coverage data
+        run: dir /s /b target\scala-*\scoverage-data
+
       - name: Run sbt coverageReport
         run: sbt coverageReport
 
