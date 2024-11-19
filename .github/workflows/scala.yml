@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 22
@@ -24,7 +24,7 @@ jobs:
       run: sbt test
       
   test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code from Carcassonne repo
         uses: actions/checkout@v4
@@ -45,7 +45,7 @@ jobs:
         run: sbt coverageAggregate
 
       - name: list coverage data
-        run: Get-ChildItem -Recurse -Filter 'scoverage-data' -Path target\scala-* | Select-Object FullName
+        run: ls -R target/scala-*/scoverage-data
 
       - name: Run sbt coverageReport
         run: sbt coverageReport
