@@ -46,3 +46,6 @@ project/.sbtserver
 yourgame.log
 .bsp
 /project/build.properties
+
+# Exclude all sbt history files but not .history3
+!/.history3
