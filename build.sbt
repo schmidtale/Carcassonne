@@ -6,10 +6,11 @@ lazy val root = (project in file("."))
   .settings(
     name := "carcassonne",
     coverageEnabled := true,
+    enablePlugins(ScoverageSbtPlugin),
+    enablePlugins(CoverallsPlugin),
+    addCommandAlias("coveralls", ";coverageAggregate;coveralls")
   )
   
 libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.19"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.19" % "test"
 
-enablePlugins(ScoverageSbtPlugin)
-enablePlugins(CoverallsPlugin)
