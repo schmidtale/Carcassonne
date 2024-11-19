@@ -6,7 +6,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "carcassonne",
     coverageEnabled := true,
-    addCommandAlias("coveralls", ";coverageAggregate;coveralls")
+    addCommandAlias("coveralls", ";!coverageAggregate;coveralls")
   )
   
 libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.19"
