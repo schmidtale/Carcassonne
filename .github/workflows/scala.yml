@@ -36,10 +36,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: 21
-
-      - name: Clean previous coverage data
-        run: rm -rf .coverage .history3
+          java-version: 22
 
       - name: Run sbt clean coverage test
         run: sbt clean coverage test
