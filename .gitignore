@@ -22,7 +22,6 @@ pom.xml
 
 # sbt
 .cache
-.history
 .lib/
 dist/*
 target/
