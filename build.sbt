@@ -14,5 +14,4 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.19" % "test"
 
 enablePlugins(ScoverageSbtPlugin)
 enablePlugins(CoverallsPlugin)
-
 parallelExecution in Global := false
