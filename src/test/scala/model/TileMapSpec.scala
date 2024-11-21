@@ -11,9 +11,14 @@ class TileMapSpec extends AnyWordSpec{
       assert(map.data.isInstanceOf[SortedMap[(Index, Index), Option[Tile]]])
       assert(map.data(Index(0), Index(0)).isEmpty)
     }
+    "be able to return a string representation of itself" in {
+      val output = map.toString
+      assert(output.isInstanceOf[String])
+    }
   }
 }
 
+// TODO Check String Output if possible, but string is very big
 
 //    "construct 15*15 tabletop grid from an empty map" in {
 //      val expectedOutput = (
