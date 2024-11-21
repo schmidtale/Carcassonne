@@ -1,6 +1,6 @@
 //I'm trying to define a Type "Index" which only allows integer
 // values of 0 to 15 (inclusive) for use in methods which test
-//the legality of card placements.
+//the legality of tile placements.
 //It seems to work well so far, not allowing out of range indices
 //even while typing - even before compile time! I think that is
 //better than the solution ChatGPT suggested to me, so I'm a little

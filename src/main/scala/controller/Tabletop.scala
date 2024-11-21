@@ -27,8 +27,8 @@ class Tabletop(var tileMap: TileMap) extends Observable {
   // Add Tile:
   // val newCard = Tile(...)
   // val updatedCardMap = cardMap + ((Index(5), Index(5)) -> Some(newCard))
-  def addTileToMap(index1: Index, index2: Index, card: Tile): Unit = {
-    tileMap = TileMap(tileMap.data + ((index1, index2) -> Some(card)))
+  def addTileToMap(index1: Index, index2: Index, tile: Tile): Unit = {
+    tileMap = TileMap(tileMap.data + ((index1, index2) -> Some(tile)))
     notifyObservers()
   }
 

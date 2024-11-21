@@ -17,8 +17,8 @@ class TextUI(tabletop: Tabletop) extends Observer {
 
     //get and print Tile from Queue
     val drawnTile = stack(turn)
-    print("next card:\n" + textProvider.toText(drawnTile) + "\n")
-    val helpStr0 = "enter desired card placement in the following format:\n" +
+    print("next tile:\n" + textProvider.toText(drawnTile) + "\n")
+    val helpStr0 = "enter desired tile placement in the following format:\n" +
       "rotation line column\n" +
       "[0-3]   [0-14][0-14]\n"
     print(helpStr0)
@@ -38,17 +38,22 @@ class TextUI(tabletop: Tabletop) extends Observer {
   }
 
 
-  private def readPlacement: (Boolean, Int, Index, Index) = {
-    val commandSet = readLine.split(" ")
-    val rotationCount = commandSet(0).toIntOption
-    val line = commandSet(1).toIntOption
-    val column = commandSet(2).toIntOption
+  def readPlacement: (Boolean, Int, Index, Index) = {
+    try {
+      val commandSet = readLine.split(" ")
+      val rotationCount = commandSet(0).toIntOption
+      val line = commandSet(1).toIntOption
+      val column = commandSet(2).toIntOption
 
-    if (rotationCount.isEmpty | line.isEmpty | column.isEmpty) {
-      (false, 0, Index(0), Index(0))
-    } else {
-      (true, rotationCount.get, Index(line.get), Index(column.get))
+      if (rotationCount.isEmpty | line.isEmpty | column.isEmpty) {
+        (false, 0, Index(0), Index(0))
+      } else {
+        (true, rotationCount.get, Index(line.get), Index(column.get))
+      }
+    } catch {
+      case _: Exception => (false, 0, Index(0), Index(0))
     }
+
   }
 
   def updateMap(b: Boolean, line: Index, column: Index, card: Tile): Unit = {

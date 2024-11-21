@@ -15,10 +15,17 @@ class TileMapSpec extends AnyWordSpec{
       val output = map.toString
       assert(output.isInstanceOf[String])
     }
+    "be able to return a string representation of itself containing cards" in {
+      val startingTile = TileStack().startingTile
+      val emptyMap = TileMap()
+      val mapWithCard = TileMap(emptyMap.data + ((Index(0), Index(0)) -> Some(startingTile)))
+      val expectedOutput = startingTile.line(0)
+      assert(mapWithCard.toString.contains(expectedOutput))
+    }
   }
 }
 
-// TODO Check String Output if possible, but string is very big
+// TODO Check String Output if possible, but big string is hard to test
 
 //    "construct 15*15 tabletop grid from an empty map" in {
 //      val expectedOutput = (
