@@ -55,8 +55,10 @@ class TextUISpec extends AnyWordSpec {
       failAfter(Span(12, Seconds)) {
         val input1 = new ByteArrayInputStream("0 5 14\n".getBytes)
         val input2 = new ByteArrayInputStream("3 15 2\n".getBytes) // Invalid input
+        val input3 = new ByteArrayInputStream("3 f 2\n".getBytes) // Invalid input
         assert(textUI.readPlacement(input1) == (true, 0, Index(5), Index(14)))
         assert(textUI.readPlacement(input2) == (false, 0, Index(0), Index(0)))
+        assert(textUI.readPlacement(input3) == (false, 0, Index(0), Index(0)))
       }
     }
     "return an Int equal to (input + 1)" in {
