@@ -41,15 +41,17 @@ class TabletopSpec extends AnyWordSpec {
     }
     "return its internal TileStack" in {
       val stack = tabletop.tileStack()
-      assert(stack.isInstanceOf[Queue[Tile]] )
+      val stack2 = tileStack.construct()
+      assert(stack == stack2 )
     }
     "return a starting tile" in {
       val starting_tile = tabletop.startingTile()
       assert(starting_tile == tileStack.startingTile)
     }
     "return a string of the tabletop" in {
-      val tabletopString = tabletop.constructTabletopFromMap()
-      assert(tabletopString.isInstanceOf[String])
+      val tabletopString = Tabletop(new TileMap).constructTabletopFromMap()
+      val tileMapString = TileMap().toString
+      assert(tabletopString == tileMapString)
     }
     "change its TileMap to the initial map" in {
       tabletop.initialMap()
