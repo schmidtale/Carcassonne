@@ -3,9 +3,10 @@ import model.{TextProvider, Tile}
 import controller.Tabletop
 import model.Index
 import util.Observer
-
 import scala.collection.immutable.Queue
 import scala.io.StdIn.readLine
+import java.io.InputStream
+import scala.io.Source
 
 class TextUI(tabletop: Tabletop) extends Observer {
   tabletop.add(this)
@@ -23,7 +24,7 @@ class TextUI(tabletop: Tabletop) extends Observer {
       "[0-3]   [0-14][0-14]\n"
     print(helpStr0)
 
-    val placementInfo = readPlacement
+    val placementInfo = readPlacement(System.in)
     val cardToPlace = drawnTile.rotate(placementInfo._2)
     // check legality:
     //while (!isLegalPlacement)...
@@ -38,26 +39,27 @@ class TextUI(tabletop: Tabletop) extends Observer {
   }
 
 
-  def readPlacement: (Boolean, Int, Index, Index) = {
+  def readPlacement(input: InputStream): (Boolean, Int, Index, Index) = {
     try {
-      val commandSet = readLine.split(" ")
+      val line = Source.fromInputStream(input).getLines().next() // Read the first line
+      val commandSet = line.split(" ")
       val rotationCount = commandSet(0).toIntOption
-      val line = commandSet(1).toIntOption
+      val row = commandSet(1).toIntOption
       val column = commandSet(2).toIntOption
 
-      if (rotationCount.isEmpty | line.isEmpty | column.isEmpty) {
+      if (rotationCount.isEmpty || row.isEmpty || column.isEmpty) {
         (false, 0, Index(0), Index(0))
       } else {
-        (true, rotationCount.get, Index(line.get), Index(column.get))
+        (true, rotationCount.get, Index(row.get), Index(column.get))
       }
     } catch {
       case _: Exception => (false, 0, Index(0), Index(0))
     }
-
   }
 
+
   def updateMap(b: Boolean, line: Index, column: Index, card: Tile): Unit = {
-    print(b)
+    //print(b)
     tabletop.addTileToMap(line, column, card)
   }
 
