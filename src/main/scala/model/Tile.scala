@@ -42,7 +42,8 @@ class Tile(val monastery: Boolean = false, val townConnection: Boolean = false, 
   def rotate: Tile = {
     val newBorders = Vector(this.borderType(western), this.borderType(northern),
       this.borderType(eastern),this.borderType(southern))
-    val newCard = new Tile(this.monastery, this.townConnection, newBorders
+    val newCard = new Tile(this.monastery, this.townConnection, newBorders,
+      coat_of_arms = this.coat_of_arms
       /* other arguments must be on default if rotation is possible */ )
     newCard
   }

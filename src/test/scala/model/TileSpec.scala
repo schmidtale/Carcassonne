@@ -12,6 +12,11 @@ class TileSpec extends AnyWordSpec {
   val tile2 = new Tile(false, true, borders = Vector(town, pasture, pasture, town), (knight, north))
   val tile3 = new Tile(false, borders = Vector(road, road, road, pasture))
 
+  val tileR1 = new Tile(false, false, Vector(pasture, road, town, road))
+  val tileOrig = new Tile(false, false, Vector(town, road, road, road), (none, nowhere), true)
+  val tileOrigR2 = new Tile(false, false, Vector(road, road, town, road), (none, nowhere), true)
+  val tileOrigR3 = new Tile(false, false, Vector(road, road, road, town), (none, nowhere), true)
+
   "A tile" should {
     "return the type of its northern border" in {
       assert(tile.borderType(northern) == road |
@@ -58,9 +63,21 @@ class TileSpec extends AnyWordSpec {
       assert(tileRotatedTwice.borderType(southern) == road)
       assert(tileRotatedTwice.borderType(western) == town)
     }
+    "return a suitably rotated tile with shifted borders and structures" in {
+      assert(tile.rotate(0).equals(tile))
+      assert(tile.rotate(4).equals(tile))
+      assert(tile.rotate(1).equals(tileR1))
+      assert(tileOrig.rotate(2).equals(tileOrigR2))
+      assert(tileOrig.rotate(3).equals(tileOrigR3))
+    }
+    "not be required to rotate Liegemen, as this is not possible in game flow" in {
+      true
+    }
     "check if two tiles are equal" in {
+      val sameTile = new Tile(borders = Vector(road, town, road, pasture))
       assert(tile.equals(tile))
       assert(!tile.equals(tile2))
+      assert(tile.equals(sameTile))
     }
     "return false if you compare a tile to something else" in {
       val that = "empty"
