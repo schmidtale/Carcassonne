@@ -54,7 +54,6 @@ class Tile(val monastery: Boolean = false, val townConnection: Boolean = false, 
       case 1 => this.rotate
       case 2 => this.rotate.rotate
       case 3 => this.rotate.rotate.rotate
-      case other => this
   }
 
   // Rotated cards are different cards
