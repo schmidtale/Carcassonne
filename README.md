@@ -6,4 +6,26 @@
 ![Contributors](https://img.shields.io/badge/Contributors-2-blue?style=flat)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
+# Carcassonne
 This is a student project by Alex and Pascal at HTWG Konstanz.
+Carcasonne is a classic German tabletop game for several players, however, we are only implementing it for two.
+Placing tiles and liegemen meeples, players compete for points by completing cities and roads.
+
+## Requirements
+### User Interface
+- Textual User Interface
+- Graphical User Interface
+- running in parallel
+
+### Software Engineering
+- Developed in a team of 2
+- Git as version control
+- Hosted on Github
+- XML and JSON file storage
+- Simple Documentation
+
+### Architecture
+- Strict layering
+- Model-View-Controller
+- Test coverage, striving for 100%
+- Flexibly exchangable components through Dependency Injection
