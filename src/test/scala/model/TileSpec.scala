@@ -83,6 +83,13 @@ class TileSpec extends AnyWordSpec {
       val that = "empty"
       assert(!tile.equals(that))
     }
+    "return the String it receives internally from TextProvider" in {
+      val textProvider = new TextProvider
+      assert(tile.toString.equals(textProvider.toText(tile)))
+    }
+    "return the specified line within the textual representation of a tile" in {
+      assert(tile.line(0).equals("* . H . *"))
+    }
   }
 }
 
