@@ -15,7 +15,7 @@ object Carcassonne {
     def main(): Unit = {
         
         while (true) {
-            currentTurn = tui.exec(currentTurn, shuffledStack)
+            currentTurn = tui.exec(currentTurn, shuffledStack, System.in)
         }
     }
 }

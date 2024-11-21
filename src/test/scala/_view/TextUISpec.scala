@@ -27,6 +27,9 @@ class TextUISpec extends AnyWordSpec {
       textUI.updateMap(true, Index(0), Index(0), tile2)
       assert(tabletop.constructTabletopFromMap().startsWith("* B B B *"))
       assert(tabletop.constructTabletopFromMap().contains("B . . . ."))
+      textUI.updateMap(false, Index(0), Index(1), tile2)
+      assert(tabletop.constructTabletopFromMap().contains("* B B B *          "))
+      //                                                               ^empty slot
     }
     "convert a user's command into placement information" in {
       failAfter(Span(12, Seconds)) {
@@ -49,6 +52,11 @@ class TextUISpec extends AnyWordSpec {
       } finally {
         System.setOut(originalOut)
       }
+    }
+    "return an Int equal to (input + 1)" in {
+      val exampleTurn = 5
+      val input = new ByteArrayInputStream("0 5 8\n".getBytes)
+      assert(textUI.exec(exampleTurn, tabletop.tileStack(), input) == exampleTurn + 1)
     }
   }
 }

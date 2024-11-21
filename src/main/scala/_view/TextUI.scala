@@ -14,7 +14,7 @@ class TextUI(tabletop: Tabletop) extends Observer {
 
   //printMap
 
-  def exec(turn: Int, stack: Queue[Tile]): Int = {
+  def exec(turn: Int, stack: Queue[Tile], inputStream: InputStream): Int = {
 
     //get and print Tile from Queue
     val drawnTile = stack(turn)
@@ -24,7 +24,7 @@ class TextUI(tabletop: Tabletop) extends Observer {
       "[0-3]   [0-14][0-14]\n"
     print(helpStr0)
 
-    val placementInfo = readPlacement(System.in)
+    val placementInfo = readPlacement(inputStream)
     val cardToPlace = drawnTile.rotate(placementInfo._2)
     // check legality:
     //while (!isLegalPlacement)...
@@ -59,8 +59,9 @@ class TextUI(tabletop: Tabletop) extends Observer {
 
 
   def updateMap(b: Boolean, line: Index, column: Index, card: Tile): Unit = {
-    //print(b)
-    tabletop.addTileToMap(line, column, card)
+    if (b) {
+      tabletop.addTileToMap(line, column, card)
+    }
   }
 
   override def update(): Unit = {
