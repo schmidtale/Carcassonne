@@ -8,6 +8,7 @@
 
 # Carcassonne
 This is a student project by Alex and Pascal at HTWG Konstanz.
+
 Carcasonne is a classic German tabletop game for several players, however, we are only implementing it for two.
 Placing tiles and liegemen meeples, players compete for points by completing cities and roads.
 
