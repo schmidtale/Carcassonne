@@ -15,7 +15,7 @@ Placing tiles and liegemen meeples, players compete for points by completing cit
 ### User Interface
 - Textual User Interface
 - Graphical User Interface
-- running in parallel
+- Both running in parallel
 
 ### Software Engineering
 - Developed in a team of 2
