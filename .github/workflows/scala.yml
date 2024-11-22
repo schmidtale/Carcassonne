@@ -13,42 +13,65 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
+
+    - name: Cache sbt dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.ivy2/cache
+          ~/.sbt
+          ~/.coursier
+        key: ${{ runner.os }}-sbt-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('**/*.scala') }}
+        restore-keys: |
+          ${{ runner.os }}-sbt-
+
     - name: Set up JDK 22
       uses: actions/setup-java@v4
       with:
         java-version: '22'
         distribution: 'adopt'
-    - name: compile
+
+    - name: Compile
       run: sbt compile
-    - name: run tests
+
+    - name: Run tests
       run: sbt test
-      
+
   test:
     runs-on: windows-latest
     steps:
-      - name: Checkout code from Carcassonne repo
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-      - name: Set up sbt
-        uses: sbt/setup-sbt@v1
+    - name: Cache sbt dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.ivy2/cache
+          ~/.sbt
+          ~/.coursier
+        key: ${{ runner.os }}-sbt-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('**/*.scala') }}
+        restore-keys: |
+          ${{ runner.os }}-sbt-
 
-      - name: Set up JVM
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: 22
+    - name: Set up sbt
+      uses: sbt/setup-sbt@v1
 
-      - name: Run sbt clean coverage test
-        run: sbt clean coverage test
+    - name: Set up JVM
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: 22
 
-      - name: aggregate coverage
-        run: sbt coverageAggregate
+    - name: Run sbt clean coverage test
+      run: sbt clean coverage test
 
-      - name: Run sbt coverageReport
-        run: sbt coverageReport
+    - name: Aggregate coverage
+      run: sbt coverageAggregate
 
-      - name: Submit coverage to Coveralls
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-        run: sbt coveralls
+    - name: Run sbt coverageReport
+      run: sbt coverageReport
 
+    - name: Submit coverage to Coveralls
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+      run: sbt coveralls
