@@ -14,6 +14,9 @@ class GameState(val map: TileMap, val stack: Queue[Tile], val players: Queue[Pla
   def currentTile(): Tile = {
     stack(turn)
   }
+  def withMap(newMap: TileMap): GameState = {
+    new GameState(newMap, stack, players, turn)
+  }
 }
 
 class PlayerState(val meepleCount: Int = 7 , val color: Color = blue , val points: Int = 0) {}
