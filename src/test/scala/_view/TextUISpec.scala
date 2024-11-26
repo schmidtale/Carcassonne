@@ -1,10 +1,8 @@
 package _view
 
 import controller.Tabletop
-import model.Index
-import model.TileMap
+import model.{GameState, Index, Tile, TileMap}
 import model.BorderType.*
-import model.Tile
 import model.LiegemanPosition.*
 import model.LiegemanType.*
 import org.scalatest.matchers.should.Matchers.*
@@ -18,7 +16,7 @@ import org.scalatest.time.{Seconds, Span}
 
 class TextUISpec extends AnyWordSpec {
   val tile2 = new Tile(false, true, borders = Vector(town, pasture, pasture, town), (knight, north))
-  val tabletop =  new Tabletop(new TileMap)
+  val tabletop =  new Tabletop(GameState())
   val textUI = new TextUI(tabletop)
 
 

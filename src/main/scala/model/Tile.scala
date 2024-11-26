@@ -69,6 +69,8 @@ class Tile(val monastery: Boolean = false, val townConnection: Boolean = false, 
     }
   }
 
+  override def hashCode(): Int = (monastery, townConnection, borders, liegeman, coat_of_arms).##
+
   override def toString: String = {
     provider.toText(this)
   }

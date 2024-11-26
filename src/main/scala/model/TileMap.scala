@@ -4,6 +4,16 @@ import scala.collection.immutable.SortedMap
 
 case class Index(value: Int) {
   require(value >= 0 && value <= 14, "Value must be between 0 and 14")
+
+  override def equals(obj: Any): Boolean = {
+    obj match
+      case that: Index =>
+        this.value == that.value
+
+      case _ => false
+  }
+
+  override def hashCode(): Int = (this.value).##
 }
 
 // Companion Object for Ordering

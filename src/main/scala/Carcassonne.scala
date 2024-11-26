@@ -1,21 +1,17 @@
 import _view.TextUI
 import controller.Tabletop
-import model.TileMap
+import model.GameState
 
-import scala.util.Random
 object Carcassonne {
-    val tabletop = new Tabletop(new TileMap)
-    tabletop.initialMap()
+    val tabletop = new Tabletop(GameState().initialState())
     private val tui = new TextUI(tabletop)
     tabletop.notifyObservers()
-    private val sortedStack = tabletop.tileStack()
-    private val shuffledStack = Random.shuffle(sortedStack)
     private var currentTurn: Int = 0
     @main
     def main(): Unit = {
         
-        while (currentTurn < shuffledStack.size) {
-            currentTurn = tui.exec(currentTurn, shuffledStack, System.in)
+        while (currentTurn < tabletop.gameState.stack.size) {
+            currentTurn = tui.exec(currentTurn, tabletop.gameState.stack, System.in)
         }
         // TODO Call function that calculates resulting points from GUI
     }
