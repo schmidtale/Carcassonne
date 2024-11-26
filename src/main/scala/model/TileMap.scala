@@ -54,5 +54,9 @@ extends Prototype[TileMap]
     val tileMap = TileMap(this.data)
     tileMap
   }
+
+  def add(index1: Index, index2: Index, tile: Option[Tile]): TileMap = {
+    TileMap(data + ((index1, index2) -> tile))
+  }
 }
 
