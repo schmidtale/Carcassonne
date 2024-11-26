@@ -18,11 +18,7 @@ class Tabletop(var gameState: GameState) extends Observable {
   def constructTabletopFromMap(): String = {
     gameState.map.toString
   }
-
-  // return an empty with empty Values
-  def emptyMap(): TileMap = {
-    TileMap()
-  }
+  
 
   // Add Tile:
   // val newCard = Tile(...)
@@ -33,10 +29,8 @@ class Tabletop(var gameState: GameState) extends Observable {
     notifyObservers()
   }
 
-  def initialMap(): Unit = {
-    val newMap = emptyMap()
-    gameState = gameState.withMap(newMap)
-    addTileToMap(Index(7), Index(7), startingTile())
+  def resetGameState(): Unit = {
+    gameState = gameState.initialState()
     notifyObservers()
   }
   
