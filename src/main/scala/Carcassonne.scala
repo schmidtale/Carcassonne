@@ -14,8 +14,9 @@ object Carcassonne {
     @main
     def main(): Unit = {
         
-        while (true) {
+        while (currentTurn < shuffledStack.size) {
             currentTurn = tui.exec(currentTurn, shuffledStack, System.in)
         }
+        // TODO Call function that calculates resulting points from GUI
     }
 }

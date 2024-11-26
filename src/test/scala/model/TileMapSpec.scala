@@ -22,6 +22,12 @@ class TileMapSpec extends AnyWordSpec{
       val expectedOutput = startingTile.line(0)
       assert(mapWithCard.toString.contains(expectedOutput))
     }
+    "provide an unchanging reference to its current data" in {
+      var map = TileMap()
+      val clone = map.deepClone()
+      map = TileMap(map.data + ((Index(1), Index(1)) -> Some(TileStack().startingTile)))
+      assert(map != clone)
+    }
   }
 }
 

@@ -4,7 +4,6 @@ import controller.Tabletop
 import model.Index
 import util.Observer
 import scala.collection.immutable.Queue
-import scala.io.StdIn.readLine
 import java.io.InputStream
 import scala.io.Source
 
