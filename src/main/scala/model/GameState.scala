@@ -24,21 +24,23 @@ class GameState(val map: TileMap = TileMap(),
     new GameState(newMap, stack, players, turn)
   }
   def initialState(): GameState = {
-    val newGameState = new GameState(TileMap(), stack, players, 0)
-    val newMap = TileMap(newGameState.map.data + ((Index(7), Index(7)) -> Some(TileStack().startingTile)))
-    withMap(newMap)
+    val initialMap = TileMap().add(Index(7), Index(7), Some(TileStack().startingTile))
+    val newGameState = GameState(initialMap, stack, players, 0)
+    newGameState
   }
   
   override def equals(obj: Any): Boolean = {
     obj match {
       case that: GameState =>
-        this.map == that.map &&
+          this.map.data == that.map.data &&
           this.stack == that.stack &&
           this.players == that.players &&
           this.turn == that.turn
       case _ => false
     }
   }
+
+  override def hashCode(): Int = (map, stack, players, turn).##
 
   override def deepClone(): GameState = {
     val gameState = GameState(this.map, this.stack, this.players, this.turn)

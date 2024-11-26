@@ -14,12 +14,13 @@ class TabletopSpec extends AnyWordSpec {
   private val emptyState = tabletop.gameState.map
 
   "A tabletop" should {
-//    "be able to return an initial GameState" in {
-//      val tabletop2 = new Tabletop(GameState().initialState())
-//      val oldState = tabletop2.gameState.deepClone()
-//      tabletop2.resetGameState()
-//      assert(tabletop2.gameState.equals(oldState))
-//    } //waiting for small tests on equals, deepClone to help fix this
+    "be able to return an initial GameState" in {
+      val tabletop2 = new Tabletop(GameState().initialState())
+      val oldState = tabletop2.gameState.deepClone()
+      assert(tabletop2.gameState.equals(oldState))
+      tabletop2.resetGameState()
+      assert(tabletop2.gameState.equals(oldState))
+    }
     "let a tile be added to the tile map" in {
       tabletop.addTileToMap(Index(7), Index(7), tile)
       val tileFromMap = tabletop.gameState.map.data((Index(7), Index(7))).get

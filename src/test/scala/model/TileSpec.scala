@@ -95,6 +95,10 @@ class TileSpec extends AnyWordSpec {
     "return false if you compare two different tiles" in {
       assert(!tile.equals(tile2))
     }
+    "return the same hashcode for equal tiles" in {
+      val t1 = new Tile(borders = Vector(road, town, road, pasture))
+      assert(tile.hashCode() == t1.hashCode())
+    }
     "return the String it receives internally from TextProvider" in {
       val textProvider = new TextProvider
       assert(tile.toString.equals(textProvider.toText(tile)))
