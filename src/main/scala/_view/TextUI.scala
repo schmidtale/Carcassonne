@@ -2,7 +2,8 @@ package _view
 import model.{TextProvider, Tile}
 import controller.Tabletop
 import model.Index
-import util.Observer
+import util.{MusicPlayer, Observer}
+
 import scala.collection.immutable.Queue
 import java.io.InputStream
 import scala.io.Source
@@ -34,6 +35,9 @@ class TextUI(tabletop: Tabletop) extends Observer {
     updateMap(placementInfo._1, placementInfo._3, placementInfo._4, cardToPlace)
 
     // TODO if placement correct and legal move and legal liegeman placement
+
+    val roundFinishedPlayer = MusicPlayer.createPlayer("TownJingle")
+    roundFinishedPlayer.play()
     turn + 1
   }
 
