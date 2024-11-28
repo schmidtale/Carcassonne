@@ -1,7 +1,7 @@
 package _view
 
 import controller.Tabletop
-import model.{GameState, Index, Tile, TileMap}
+import model.{GameData, Index, Tile, TileMap}
 import model.BorderType.*
 import model.LiegemanPosition.*
 import model.LiegemanType.*
@@ -16,7 +16,7 @@ import org.scalatest.time.{Seconds, Span}
 
 class TextUISpec extends AnyWordSpec {
   val tile2 = new Tile(false, true, borders = Vector(town, pasture, pasture, town), (knight, north))
-  val tabletop =  new Tabletop(GameState())
+  val tabletop =  new Tabletop(GameData())
   val textUI = new TextUI(tabletop)
 
 

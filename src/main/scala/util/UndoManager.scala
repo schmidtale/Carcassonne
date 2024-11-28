@@ -22,15 +22,15 @@ class UndoManager {
         redoStack = head :: redoStack
       }
     }
+  }
 
-    def redoStep(): Unit = {
-      redoStack match
-        case Nil => // no commands to redo
-        case head :: stack => {
-          head.redoStep()
-          redoStack = stack
-          undoStack = head :: undoStack
-        }
-    }
+  def redoStep(): Unit = {
+    redoStack match
+      case Nil => // no commands to redo
+      case head :: stack => {
+        head.redoStep()
+        redoStack = stack
+        undoStack = head :: undoStack
+      }
   }
 }

@@ -4,17 +4,17 @@ import model.Color._
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 
-class GameStateSpec extends AnyWordSpec {
-  "A GameState" should {
-    val game = GameState()
+class GameDataSpec extends AnyWordSpec {
+  "A GameData instance" should {
+    val game = GameData()
     "return the color of the active Player" in {
       assert(game.activePlayer().equals(blue))
-      val game1 = GameState(turn = 1)
+      val game1 = GameData(turn = 1)
       assert(game1.activePlayer().equals(red))
     }
     "return a different reference to current tile based on the turn" in {
       assert(game.currentTile().isInstanceOf[Tile])
-      val gameTurn1 = GameState(turn = 20)
+      val gameTurn1 = GameData(turn = 20)
       val gameTurn0 = gameTurn1.initialState()
       assert(gameTurn1.currentTile() != gameTurn0.currentTile())
     }
@@ -30,27 +30,27 @@ class GameStateSpec extends AnyWordSpec {
       val game2 = game.deepClone()
       assert(game.equals(game1) && game1.equals(game2) && game.equals(game2))
     }
-    "return false if you compare a GameState to null" in {
+    "return false if you compare a GameData to null" in {
       assert(!game.equals(null))
     }
-    "return false if you compare a GameState to something else" in {
+    "return false if you compare a GameData to something else" in {
       val that = "empty"
       assert(!game.equals(that))
     }
-    "return false if you compare two different GameStates" in {
-      val game1 = GameState(turn = 1)
+    "return false if you compare two different GameData" in {
+      val game1 = GameData(turn = 1)
       assert(!game.equals(game1))
     }
-    "return the same hashcode for equal GameStates" in {
+    "return the same hashcode for equal GameData" in {
       val game1 = game.deepClone()
       assert(game.hashCode() == game1.hashCode())
     }
     "provide an unchanging reference to its current data" in {
-      var game = GameState()
+      var game = GameData()
       val clone = game.deepClone()
       assert(game.equals(clone))
       
-      game = GameState()
+      game = GameData()
       assert(game != clone)
     }
   }
