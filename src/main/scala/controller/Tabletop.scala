@@ -1,7 +1,7 @@
 package controller
 
 import model.{GameData, Index, Tile, TileMap, TileStack}
-import util.{Observable, UndoManager}
+import util.{Observable, State, UndoManager}
 
 import scala.collection.immutable.Queue
 
@@ -43,5 +43,9 @@ class Tabletop(var gameData: GameData) extends Observable {
   def redo() : Unit = {
     undoManager.redoStep()
     notifyObservers()
+  }
+
+  def changeState(state: State): Unit = {
+    gameData = gameData.withState(state)
   }
 }

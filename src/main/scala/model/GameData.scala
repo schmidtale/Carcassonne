@@ -25,7 +25,11 @@ class GameData(val map: TileMap = TileMap(),
   }
 
   def withMap(newMap: TileMap): GameData = {
-    new GameData(newMap, stack, players, turn)
+    new GameData(newMap, stack, players, turn, state)
+  }
+
+  def withState(newState: State) : GameData = {
+    new GameData(map, stack, players, turn, newState)
   }
 
   def initialState(): GameData = {

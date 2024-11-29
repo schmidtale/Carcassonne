@@ -1,6 +1,6 @@
 package controller
 
-import model.{GameData, Index, Tile, TileMap, TileStack}
+import model.{GameData, Index, PlacingLiegemanState, PlacingTileState, ReviewState, Tile, TileMap, TileStack}
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -43,6 +43,44 @@ class TabletopSpec extends AnyWordSpec {
       val tabletopString = Tabletop(GameData()).constructTabletopFromMap()
       val tileMapString = TileMap().toString
       assert(tabletopString == tileMapString)
+    }
+    "undo and redo a command" in {
+      val tabletop = new Tabletop(GameData().initialState())
+      val startingTile = TileStack().startingTile
+      tabletop.addTileToMap(Index(0), Index(0), startingTile)
+      tabletop.undo()
+      assert(tabletop.gameData.map.data(Index(0), Index(0)).isEmpty)
+      tabletop.redo()
+      assert(tabletop.gameData.map.data(Index(0), Index(0)).get.equals(startingTile))
+    }
+    "not undo a command if there is nothing to undo" in {
+      val gameData = GameData().initialState()
+      val tabletop = new Tabletop(gameData)
+      tabletop.undo()
+      assert(tabletop.gameData.equals(gameData))
+    }
+    "not redo a command if there is nothing to redo" in {
+      val gameData = GameData().initialState()
+      val tabletop = new Tabletop(gameData)
+      tabletop.redo()
+      assert(tabletop.gameData.equals(gameData))
+    }
+    "change gameData states and call commands with different States" in {
+      // TODO configure test correctly when using state pattern
+      val gameData = GameData().initialState()
+      val tabletop = new Tabletop(gameData)
+      val startingTile = TileStack().startingTile
+      tabletop.addTileToMap(Index(0), Index(0), startingTile)
+      tabletop.changeState(PlacingTileState)
+      assert(tabletop.gameData.state == PlacingTileState)
+      tabletop.addTileToMap(Index(1), Index(1), startingTile)
+      tabletop.changeState(PlacingLiegemanState)
+      assert(tabletop.gameData.state == PlacingLiegemanState)
+      tabletop.addTileToMap(Index(2), Index(2), startingTile)
+      tabletop.changeState(ReviewState)
+      assert(tabletop.gameData.state == ReviewState)
+      // TODO Check for review state, adding should not be possible anymore
+      tabletop.addTileToMap(Index(3), Index(3), startingTile)
     }
   }
 }
