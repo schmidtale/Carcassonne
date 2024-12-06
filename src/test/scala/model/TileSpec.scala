@@ -73,15 +73,31 @@ class TileSpec extends AnyWordSpec {
     "not be required to rotate Liegemen, as this is not possible in game flow" in {
       true
     }
-    "check if two tiles are equal" in {
-      val sameTile = new Tile(borders = Vector(road, town, road, pasture))
+    "have reflexive equals" in {
       assert(tile.equals(tile))
-      assert(!tile.equals(tile2))
-      assert(tile.equals(sameTile))
+    }
+    "have symmetric equals" in {
+      val t1 = new Tile(borders = Vector(road, town, road, pasture))
+      assert(tile.equals(t1) && t1.equals(tile))
+    }
+    "have transitive equals" in {
+      val t1 = new Tile(borders = Vector(road, town, road, pasture))
+      val t2 = new Tile(borders = Vector(road, town, road, pasture))
+      assert(tile.equals(t1) && t1.equals(t2) && tile.equals(t2))
+    }
+    "return false if you compare a tile to null" in {
+      assert(!tile.equals(null))
     }
     "return false if you compare a tile to something else" in {
       val that = "empty"
       assert(!tile.equals(that))
+    }
+    "return false if you compare two different tiles" in {
+      assert(!tile.equals(tile2))
+    }
+    "return the same hashcode for equal tiles" in {
+      val t1 = new Tile(borders = Vector(road, town, road, pasture))
+      assert(tile.hashCode() == t1.hashCode())
     }
     "return the String it receives internally from TextProvider" in {
       val textProvider = new TextProvider

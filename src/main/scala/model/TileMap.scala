@@ -1,8 +1,19 @@
 package model
+import util.Prototype
 import scala.collection.immutable.SortedMap
 
 case class Index(value: Int) {
   require(value >= 0 && value <= 14, "Value must be between 0 and 14")
+
+  override def equals(obj: Any): Boolean = {
+    obj match
+      case that: Index =>
+        this.value == that.value
+
+      case _ => false
+  }
+
+  override def hashCode(): Int = (this.value).##
 }
 
 // Companion Object for Ordering
@@ -16,6 +27,7 @@ class TileMap(// Create a Map with keys 0 0 to 14 14 and None as values
                 i <- 0 to 14
                 j <- 0 to 14
               } yield ((Index(i), Index(j)) -> Option.empty[Tile])).toSeq: _*))// unpack sequence)
+extends Prototype[TileMap]
 {
   override def toString: String = {
     val strBuilder = new StringBuilder
@@ -46,6 +58,15 @@ class TileMap(// Create a Map with keys 0 0 to 14 14 and None as values
     }
     val tileMapString = strBuilder.toString()
     tileMapString
+  }
+
+  override def deepClone(): TileMap = {
+    val tileMap = TileMap(this.data)
+    tileMap
+  }
+
+  def add(index1: Index, index2: Index, tile: Option[Tile]): TileMap = {
+    TileMap(data + ((index1, index2) -> tile))
   }
 }
 
