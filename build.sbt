@@ -22,8 +22,10 @@ libraryDependencies ++= {
     case _ => throw new Exception("Unknown platform!")
   }
   Seq("base", "controls", "fxml", "graphics", "media", "swing", "web")
-    .map(m => "org.openjfx" % s"javafx-$m" % "16" classifier osName)
+    .map(m => "org.openjfx" % s"javafx-$m" % "20" classifier osName)
 }
+
+javaOptions ++= Seq("--add-modules", "javafx.controls,javafx.fxml")
 
 enablePlugins(ScoverageSbtPlugin)
 enablePlugins(CoverallsPlugin)
