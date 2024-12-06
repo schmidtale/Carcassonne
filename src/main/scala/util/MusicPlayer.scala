@@ -5,11 +5,11 @@ import javazoom.jl.player.Player
 import java.io.{BufferedInputStream, FileInputStream}
 import scala.annotation.tailrec
 
-class MusicPlayer(resourcePath: String, shouldLoop: Boolean) {
+class MusicPlayer(resourcePath: String, val shouldLoop: Boolean) {
   @volatile private var isLooping = true
 
   def play(): Unit = {
-    new Thread(() => {
+    val thread = new Thread(() => {
       try {
         while (isLooping) {
           if (!shouldLoop) {
@@ -28,11 +28,16 @@ class MusicPlayer(resourcePath: String, shouldLoop: Boolean) {
       } catch {
         case ex: Exception => println(s"Error playing file: ${ex.getMessage}")
       }
-    }).start()
+    })
+    thread.start()
   }
 
   def stop(): Unit = {
     isLooping = false
+  }
+
+  def currentlyLooping(): Boolean = {
+    isLooping
   }
 }
 
