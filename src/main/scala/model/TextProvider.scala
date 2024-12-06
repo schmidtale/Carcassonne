@@ -3,7 +3,7 @@ package model
 import model.{BorderType, Tile}
 
 class TextProvider {
-  private val prototype = "* a A a *|d e i f b|D l M j B|d h k g b|* c C c *"
+  val prototype = "* a A a *|d e i f b|D l M j B|d h k g b|* c C c *"
 
   def line(c: Tile, l: Int & 0 | 1 | 2 | 3 | 4): String = {
     toText(c).split("\n")(l)
@@ -14,7 +14,7 @@ class TextProvider {
     cardString
   }
 
-  private def replaceChar(char: Char, c: Tile): Char = {
+  def replaceChar(char: Char, c: Tile): Char = {
     (char, c.borders(0), c.borders(1), c.borders(2), c.borders(3), c.townConnection, c.monastery) match {
 
       case ('|', _, _, _, _, _, _) => '\n'
@@ -86,7 +86,7 @@ class TextProvider {
 
       /* print # to indicate missed cases */
       case (' ', _, _, _, _, _, _) => ' '
-      
+
       /* print # to indicate missed cases */
       case (_, _, _, _, _, _, _) => '#'
     }

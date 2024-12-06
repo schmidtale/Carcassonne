@@ -7,8 +7,8 @@ import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 
 class TextProviderSpec extends AnyWordSpec {
-  val tile2 = new Tile(false, true, borders = Vector(town, pasture, pasture, town), (knight, north))
   val textProvider = new TextProvider
+  val tile2 = new Tile(false, true, borders = Vector(town, pasture, pasture, town), (knight, north))
   val expectedStringTile2 = "* B B B *\nB B . . .\nB . . . .\nB . . . .\n* . . . *"
 
   val t1 = new Tile(true, false, Vector(pasture, pasture, pasture, pasture))
@@ -22,6 +22,37 @@ class TextProviderSpec extends AnyWordSpec {
   val t5 = new Tile(false, false, Vector(road, town, town, road))
   val s5 = "* . H . *\n. . H . B\nH H H . B\n. . . . B\n* B B B *"
 
+  val t6 = new Tile(false, true, Vector(town, town, town, town))
+  val s6 = "* B B B *\nB B B B B\nB B B B B\nB B B B B\n* B B B *"
+  val t7 = new Tile(false, true, Vector(town, town, town, pasture))
+  val s7 = "* B B B *\n. . B B B\n. . B B B\n. . B B B\n* B B B *"
+  val t8 = new Tile(false, true, Vector(town, town, pasture, town))
+  val s8 = "* B B B *\nB B B B B\nB B B B B\nB . . . B\n* . . . *"
+  val t9 = new Tile(false, true, Vector(town, pasture, town, town))
+  val s9 = "* B B B *\nB B B . .\nB B B . .\nB B B . .\n* B B B *"
+
+  val t10 = new Tile(false, false, Vector(town, pasture, pasture, town))
+  val s10 = "* B B B *\nB . . . .\nB . . . .\nB . . . .\n* . . . *"
+  val t11 = new Tile(false, false, Vector(town, town, pasture, pasture))
+  val s11 = "* B B B *\n. . . . B\n. . . . B\n. . . . B\n* . . . *"
+  val t12 = new Tile(false, true, Vector(town, town, pasture, pasture))
+  val s12 = "* B B B *\n. . . B B\n. . . . B\n. . . . B\n* . . . *"
+  val t13 = new Tile(false, true, Vector(pasture, town, town, pasture))
+  val s13 = "* . . . *\n. . . . B\n. . . . B\n. . . B B\n* B B B *"
+  val t14 = new Tile(false, true, Vector(pasture, pasture, town, town))
+  val s14 = "* . . . *\nB . . . .\nB . . . .\nB B . . .\n* B B B *"
+  val t15 = new Tile(false, false, Vector(pasture, pasture, town, town))
+  val s15 = "* . . . *\nB . . . .\nB . . . .\nB . . . .\n* B B B *"
+
+  val t16 = new Tile(false, false, Vector(pasture, pasture, road, road))
+  val s16 = "* . . . *\n. . . . .\nH H H . .\n. . H . .\n* . H . *"
+  val t17 = new Tile(false, false, Vector(pasture, road, road, pasture))
+  val s17 = "* . . . *\n. . . . .\n. . H H H\n. . H . .\n* . H . *"
+
+  /* non existing tile t18 : */
+  val t18 = new Tile(true, false, Vector(pasture, road, town, road))
+  val s19 = "* . . . *\n. . . . .\nH H M H H\n. . H . .\n* B B B *"
+
   "A model.TextProvider" should {
     "provide a string representation of a whole Tile" in {
       assert(textProvider.toText(tile2) == expectedStringTile2)
@@ -30,6 +61,18 @@ class TextProviderSpec extends AnyWordSpec {
       assert(textProvider.toText(t3) == s3)
       assert(textProvider.toText(t4) == s4)
       assert(textProvider.toText(t5) == s5)
+      assert(textProvider.toText(t6) == s6)
+      assert(textProvider.toText(t7) == s7)
+      assert(textProvider.toText(t8) == s8)
+      assert(textProvider.toText(t9) == s9)
+      assert(textProvider.toText(t10) == s10)
+      assert(textProvider.toText(t11) == s11)
+      assert(textProvider.toText(t12) == s12)
+      assert(textProvider.toText(t13) == s13)
+      assert(textProvider.toText(t14) == s14)
+      assert(textProvider.toText(t15) == s15)
+      assert(textProvider.toText(t16) == s16)
+      assert(textProvider.toText(t17) == s17)
     }
     
     "translate the data of a tile to Strings used by the TUI" in {
@@ -40,6 +83,9 @@ class TextProviderSpec extends AnyWordSpec {
       assert(textProvider.line(tile2,4) == "* . . . *")
     }
 
+    "replace unknown chars with # char" in {
+      assert(". + .".map(char => textProvider.replaceChar(char, t1)) == "# # #")
+    }
     
   }
 
