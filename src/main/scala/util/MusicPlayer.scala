@@ -5,7 +5,7 @@ import javazoom.jl.player.Player
 import java.io.{BufferedInputStream, FileInputStream}
 import scala.annotation.tailrec
 
-class MusicPlayer(resourcePath: String, shouldLoop: Boolean) {
+class MusicPlayer(resourcePath: String, val shouldLoop: Boolean) {
   @volatile private var isLooping = true
 
   def play(): Unit = {
