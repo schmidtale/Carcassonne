@@ -1,12 +1,21 @@
-import _view.TextUI
+import _view.{GUI, TextUI}
 import controller.Tabletop
-import model.GameData
+import model.{GameData, PlayerState}
 import util.MusicPlayer
+import model.Color.*
+
+import scala.collection.immutable.Queue
 
 object Carcassonne {
-    val tabletop = new Tabletop(GameData().initialState())
+    val tabletop = new Tabletop(GameData(players = Queue(PlayerState(blue), PlayerState(red), PlayerState(yellow), PlayerState(green), PlayerState(black))).initialState())
     private val tui = new TextUI(tabletop)
+    private val gui = new GUI(tabletop)
     tabletop.notifyObservers()
+
+    new Thread(() => {
+        gui.main(Array.empty)
+    }).start()
+
     private var currentTurn: Int = 0
     @main
     def main(): Unit = {
