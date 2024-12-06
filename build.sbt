@@ -26,11 +26,17 @@ libraryDependencies ++= {
 }
 
 // JDK Compatibility
-javacOptions ++= Seq("--release", "22")
-Compile / run / javaOptions ++= Seq(
-    "--module-path", (Compile / fullClasspath).value.map(_.data).mkString(";"),
+Compile / run / javaOptions ++= {
+  val javafxJars = (Compile / dependencyClasspath).value
+    .map(_.data)
+    .filter(_.getName.contains("javafx"))
+    .mkString(System.getProperty(";"))
+
+  Seq(
+    "--module-path", javafxJars,
     "--add-modules", "javafx.controls,javafx.fxml"
-)
+  )
+}
 
 enablePlugins(ScoverageSbtPlugin)
 enablePlugins(CoverallsPlugin)
