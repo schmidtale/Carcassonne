@@ -25,7 +25,12 @@ libraryDependencies ++= {
     .map(m => "org.openjfx" % s"javafx-$m" % "20" classifier osName)
 }
 
-javaOptions ++= Seq("--add-modules", "javafx.controls,javafx.fxml")
+// JDK Compatibility
+javacOptions ++= Seq("--release", "22")
+Compile / run / javaOptions ++= Seq(
+    "--module-path", (Compile / fullClasspath).value.map(_.data).mkString(";"),
+    "--add-modules", "javafx.controls,javafx.fxml"
+)
 
 enablePlugins(ScoverageSbtPlugin)
 enablePlugins(CoverallsPlugin)
