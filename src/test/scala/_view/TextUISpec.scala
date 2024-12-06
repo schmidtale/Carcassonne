@@ -50,19 +50,49 @@ class TextUISpec extends AnyWordSpec {
       //                                                               ^empty slot
     }
     "convert a user's command into placement information" in {
-      failAfter(Span(12, Seconds)) {
-        val input1 = new ByteArrayInputStream("0 5 14\n".getBytes)
-        val input2 = new ByteArrayInputStream("3 15 2\n".getBytes) // Invalid input
-        val input3 = new ByteArrayInputStream("3 f 2\n".getBytes) // Invalid input
+        val input1 = "0 5 14"
+        val input2 = "3 15 2" // Invalid input
+        val input3 = "3 f 2" // Invalid input
+        val input4 = "n" // new game
+        val input5 = "z" // undo
+        val input6 = "y" // redo
         assert(textUI.readPlacement(input1) == (true, 0, Index(5), Index(14)))
         assert(textUI.readPlacement(input2) == (false, 0, Index(0), Index(0)))
         assert(textUI.readPlacement(input3) == (false, 0, Index(0), Index(0)))
-      }
+        assert(textUI.readPlacement(input4) == (false, 0, Index(0), Index(0)))
+        assert(textUI.readPlacement(input5) == (false, 0, Index(0), Index(0)))
+        assert(textUI.readPlacement(input6) == (false, 0, Index(0), Index(0)))
     }
-    "return an Int equal to (input + 1)" in {
+    "return an Int equal to (exampleTurn + 1)" in {
       val exampleTurn = 5
       val input = new ByteArrayInputStream("0 5 8\n".getBytes)
       assert(textUI.exec(exampleTurn, tabletop.tileStack(), input) == exampleTurn + 1)
+    }
+    "return an Int equal to exampleTurn when undoing" in {
+      val exampleTurn = 5
+      val input = new ByteArrayInputStream("0 5 8\n".getBytes)
+      assert(textUI.exec(exampleTurn, tabletop.tileStack(), input) == exampleTurn + 1)
+      val input2 = new ByteArrayInputStream("z\n".getBytes)
+      assert(textUI.exec(exampleTurn + 1, tabletop.tileStack(), input2) == exampleTurn)
+    }
+    "return an Int equal to (exampleTurn + 1) when redoing" in {
+      val exampleTurn = 5
+      val input = new ByteArrayInputStream("0 5 8\n".getBytes)
+      assert(textUI.exec(exampleTurn, tabletop.tileStack(), input) == exampleTurn + 1)
+      val input2 = new ByteArrayInputStream("z\n".getBytes)
+      assert(textUI.exec(exampleTurn + 1, tabletop.tileStack(), input2) == exampleTurn)
+      val input3 = new ByteArrayInputStream("y\n".getBytes)
+      assert(textUI.exec(exampleTurn, tabletop.tileStack(), input3) == exampleTurn + 1)
+    }
+    "return an Int equal to 0 when restarting" in {
+      val exampleTurn = 5
+      val input = new ByteArrayInputStream("n\n".getBytes)
+      assert(textUI.exec(exampleTurn, tabletop.tileStack(), input) == 0)
+    }
+    "return an Int equal to exampleTurn when using invalid input" in {
+      val exampleTurn = 5
+      val input = new ByteArrayInputStream("\n".getBytes)
+      assert(textUI.exec(exampleTurn, tabletop.tileStack(), input) == exampleTurn)
     }
   }
 }

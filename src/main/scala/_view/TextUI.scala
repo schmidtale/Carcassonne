@@ -8,6 +8,7 @@ import util.{MusicPlayer, Observer}
 import scala.collection.immutable.Queue
 import java.io.InputStream
 import scala.io.Source
+import scala.util.Try
 
 class TextUI(tabletop: Tabletop) extends Observer {
   tabletop.add(this)
@@ -26,26 +27,7 @@ class TextUI(tabletop: Tabletop) extends Observer {
     print(helpStr0)
 
     val line = Source.fromInputStream(inputStream).getLines().next() // Read the first line
-    val placementInfo = line match {
-      // "new" reset game
-      case "n" =>
-        tabletop.resetGameData()
-        (false, 0, Index(0), Index(0)) // not a placement or invalid
-      // "strg Z" undo
-      case "z" =>
-        tabletop.undo()
-        (false, 0, Index(0), Index(0))
-      // strg "y" redo
-      case "y" =>
-        tabletop.redo()
-        (false, 0, Index(0), Index(0))
-      case _ => line.toList.filter(c => c != ' ').filter(_.isDigit).map(c => c.toString.toInt) match {
-        case rotation :: index1 :: index2 :: Nil =>
-          (true, rotation, Index(index1), Index(index2))
-        case _ =>
-          (false, 0, Index(0), Index(0))
-      }
-    }
+    val placementInfo = readPlacement(line)
 
     // valid placement
     if (placementInfo._1) {
@@ -83,22 +65,28 @@ class TextUI(tabletop: Tabletop) extends Observer {
   }
 
 
-  def readPlacement(input: InputStream): (Boolean, Int, Index, Index) = {
-    try {
-      val line = Source.fromInputStream(input).getLines().next() // Read the first line
-      val commandSet = line.split(" ")
-      val rotationCount = commandSet(0).toIntOption
-      val row = commandSet(1).toIntOption
-      val column = commandSet(2).toIntOption
-
-      if (rotationCount.isEmpty || row.isEmpty || column.isEmpty) {
+  def readPlacement(line: String): (Boolean, Int, Index, Index) = {
+    val placementInfo = line match {
+      // "new" reset game
+      case "n" =>
+        tabletop.resetGameData()
+        (false, 0, Index(0), Index(0)) // not a placement or invalid
+      // "strg Z" undo
+      case "z" =>
+        tabletop.undo()
         (false, 0, Index(0), Index(0))
-      } else {
-        (true, rotationCount.get, Index(row.get), Index(column.get))
+      // strg "y" redo
+      case "y" =>
+        tabletop.redo()
+        (false, 0, Index(0), Index(0))
+      case _ => line.split("\\s+").flatMap(part => Try(part.toInt).toOption).toList match {
+        case rotation :: index1 :: index2 :: Nil if index1 >= 0 && index1 <= 14 && index2 >= 0 && index2 <= 14 =>
+          (true, rotation, Index(index1), Index(index2))
+        case _ =>
+          (false, 0, Index(0), Index(0))
       }
-    } catch {
-      case _: Exception => (false, 0, Index(0), Index(0))
     }
+    placementInfo
   }
 
 
