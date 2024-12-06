@@ -28,9 +28,7 @@ libraryDependencies ++= {
 // JDK Compatibility
 javacOptions ++= Seq("--release", "22")
 Compile / run / javaOptions ++= Seq(
-    "--module-path", (Compile / classDirectory).value + ";" + (libraryDependencies
-    .filter(_.organization == "org.openjfx")
-    .map(dep => (Compile / classDirectory).value.getParentFile / dep.name).mkString(";")),
+    "--module-path", (Compile / fullClasspath).value.map(_.data).mkString(";"),
     "--add-modules", "javafx.controls,javafx.fxml"
 )
 
