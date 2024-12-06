@@ -12,6 +12,7 @@ class GameDataSpec extends AnyWordSpec {
       val game1 = GameData(turn = 1)
       assert(game1.activePlayer().equals(red))
     }
+    // TODO test randomly failed once
     "return a different reference to current tile based on the turn" in {
       assert(game.currentTile().isInstanceOf[Tile])
       val gameTurn1 = GameData(turn = 20)

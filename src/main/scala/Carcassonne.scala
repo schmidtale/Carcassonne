@@ -10,7 +10,7 @@ object Carcassonne {
     private var currentTurn: Int = 0
     @main
     def main(): Unit = {
-        val loopPlayer = MusicPlayer.createPlayer("gameplayLoop")
+        val loopPlayer = MusicPlayer("gameplayLoop")
         loopPlayer.play()
         while (currentTurn < tabletop.gameData.stack.size) {
             currentTurn = tui.exec(currentTurn, tabletop.gameData.stack, System.in)

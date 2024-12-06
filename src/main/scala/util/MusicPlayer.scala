@@ -1,7 +1,9 @@
 package util
 
 import javazoom.jl.player.Player
+
 import java.io.{BufferedInputStream, FileInputStream}
+import scala.annotation.tailrec
 
 class MusicPlayer(resourcePath: String, shouldLoop: Boolean) {
   @volatile private var isLooping = true
@@ -40,9 +42,9 @@ class MusicPlayer(resourcePath: String, shouldLoop: Boolean) {
 }
 
 object MusicPlayer {
-  def createPlayer(kind: String): MusicPlayer = {
+  def apply(kind: String): MusicPlayer = {
     kind match
-      case "gameplayLoop" => MusicPlayer("/loop0.mp3", true)
-      case "TownJingle" => MusicPlayer("/finished_town_jig.mp3", false)
+      case "gameplayLoop" => new MusicPlayer("/loop0.mp3", true)
+      case "TownJingle" => new MusicPlayer("/finished_town_jig.mp3", false)
   }
 }
