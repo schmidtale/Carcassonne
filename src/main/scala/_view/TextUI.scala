@@ -16,10 +16,10 @@ class TextUI(tabletop: Tabletop) extends Observer {
 
   //printMap
 
-  def exec(turn: Int, stack: Queue[Tile], inputStream: InputStream): Int = {
+  def exec(inputStream: InputStream): Int = {
 
     //get and print Tile from Queue
-    val drawnTile = stack(turn)
+    val drawnTile = tabletop.gameData.currentTile()
     print("next tile:\n" + textProvider.toText(drawnTile) + "\n")
     val helpStr0 = "enter desired tile placement in the following format:\n" +
       "rotation line column\n" +
@@ -43,24 +43,25 @@ class TextUI(tabletop: Tabletop) extends Observer {
 
       val roundFinishedPlayer = MusicPlayer("TownJingle")
       roundFinishedPlayer.play()
-      turn + 1
+      tabletop.gameData.turn
     }
     // TODO use turn from gameData
     else {
-      // Undo
-      if (line == "z") {
-        turn - 1
-        // Redo
-      }
-      else if (line == "y") {
-        turn + 1
-      }
-      else if (line == "n") {
-        0
-      }
-      else {
-        turn
-      }
+//      // Undo
+//      if (line == "z") {
+//        turn - 1
+//        // Redo
+//      }
+//      else if (line == "y") {
+//        turn + 1
+//      }
+//      else if (line == "n") {
+//        0
+//      }
+//      else {
+//        turn
+//      } 
+     tabletop.gameData.turn
     }
   }
 

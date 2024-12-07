@@ -2,8 +2,8 @@ package _view
 
 import util.Observer
 import controller.Tabletop
-import model.Color
-import scalafx.application.JFXApp3
+import model.{Color, Index, Tile}
+import scalafx.application.{JFXApp3, Platform}
 import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.Scene
 import scalafx.scene.control.Button
@@ -28,6 +28,13 @@ def getColorFromEnum(playerColor: model.Color): scalafx.scene.paint.Color = {
 
 class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
   tabletop.add(this)
+
+  // Store tileImages 15x15 grid for tiles
+  private val tileImages: Array[Array[ImageView]] = Array.ofDim[ImageView](15, 15)
+
+  private var nextCardImageView: ImageView = _
+
+
   /* Viewport sizes */
   private var viewHeight: Double = 0
   private var viewWidth: Double = 0
@@ -48,9 +55,9 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
             // add imageView for next Card
             // TODO add button for rotation of card
             // TODO nextCardImageView inside of StackPane and Button on top
-            val stackPane = new StackPane {
-              val nextCardImage = new Image("C:\\Software Engineering\\Carcassonne\\src\\main\\resources\\tile-b.png")
-              val nextCardImageView = new ImageView(nextCardImage) {
+            val nextTileStackPane = new StackPane {
+              val nextCardImage = new Image(getImagePath(tabletop.gameData.currentTile()))
+              nextCardImageView = new ImageView(nextCardImage) {
                 preserveRatio = true
                 fitWidth = viewWidth / 4 // TODO Adjust size as needed
               }
@@ -96,40 +103,40 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
               button.setMinHeight(60)
               gridPane.add(button, col, row)
             }
-            children = Seq(stackPane, gridPane)
+            children = Seq(nextTileStackPane, gridPane)
           }
           center = new StackPane {
-            val backgroundImage = new Image("C:\\Software Engineering\\Carcassonne\\src\\main\\resources\\Light_Wooden_Background.png")
-            val imageView = new ImageView(backgroundImage) {
-              preserveRatio = true
-              fitWidth = viewWidth
-              fitHeight = viewHeight
-            }
             // Create a grid (15x15) of StackPanes with ImageViews and transparent buttons on top
-            val cardImage = new Image("C:\\Software Engineering\\Carcassonne\\src\\main\\resources\\tile-a.png")
+            val initialCardImage = new Image(getClass.getClassLoader.getResource("background_tile.png").toString)
             val fieldGridPane = new GridPane {
             }
-            for (i <- 0 until 15) {
-              for (j <- 0 until 15) {
+            for (row <- 0 until 15) {
+              for (column <- 0 until 15) {
                 val fieldStackPane = new StackPane {
                   maxWidth = viewWidth / 16
                   maxHeight() = viewHeight / 16
 
-                  val cardImageView = new ImageView(cardImage) {
+                  val cardImageView = new ImageView(initialCardImage) {
                     fitWidth = viewWidth / 16
                     fitHeight = viewHeight / 16
                     preserveRatio = true
                   }
+                  tileImages(row)(column) = cardImageView
                   val fieldButton = new Button {
                     maxWidth = Double.MaxValue
                     maxHeight = Double.MaxValue
                     style = "-fx-background-color: transparent; " +
                       "-fx-border-color: transparent; " +
                       "-fx-text-fill: #000000;"
+
+                    // Event handler to call add from tabletop
+                    //val newTile = tabletop.gameData.currentTile() // Fetch the next tile from game data
+                    //cardImageView.image = new Image(getImagePath(newTile)) // Update the image
+                    onAction = _ => tabletop.addTileToMap(Index(row), Index(column), tabletop.gameData.currentTile())
                   }
                   children = Seq(cardImageView, fieldButton)
                 }
-                fieldGridPane.add(fieldStackPane, i, j)
+                fieldGridPane.add(fieldStackPane, column, row)
               }
             }
 
@@ -167,5 +174,57 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
 
   override def update(): Unit = {
     // TODO update scene based on GameData state
+    Platform.runLater {
+      for (row <- 0 to 14) {
+        for (column <- 0 to 14) {
+          tabletop.gameData.map.data.get(Index(row), Index(column)).flatten match {
+            case Some(tile) =>
+              tileImages(row)(column).image = new Image(getImagePath(tile)) // Update the corresponding image view
+              tileImages(row)(column).rotate = tile.rotation * 90
+            case None =>
+          }
+        }
+      } // Get tile from game data
+    }
+    // Update the next card image when the current tile changes
+    val nextTile = tabletop.gameData.currentTile() // Fetch the new current tile
+    val nextCardImage = new Image(getImagePath(nextTile)) // Get the image for the new tile
+    nextCardImageView.image = nextCardImage // Update the ImageView
+  }
+
+  def getImagePath(tile: Tile): String = {
+    val filename = tile.name match {
+      case "A" => "tile-a.png"
+      case "B" => "tile-b.png"
+      case "C" => "tile-c.png"
+      case "D" => "tile-d.png"
+      case "E" => "tile-e.png"
+      case "F" => "tile-f.png"
+      case "G" => "tile-g.png"
+      case "H" => "tile-h.png"
+      case "I" => "tile-i.png"
+      case "J" => "tile-j.png"
+      case "K" => "tile-k.png"
+      case "L" => "tile-l.png"
+      case "M" => "tile-m.png"
+      case "N" => "tile-n.png"
+      case "O" => "tile-o.png"
+      case "P" => "tile-p.png"
+      case "Q" => "tile-q.png"
+      case "R" => "tile-r.png"
+      case "S" => "tile-s.png"
+      case "T" => "tile-t.png"
+      case "U" => "tile-u.png"
+      case "V" => "tile-v.png"
+      case "W" => "tile-w.png"
+      case "X" => "tile-x.png"
+      case _ => "default_tile.png"
+    }
+    val imagePath = getClass.getClassLoader.getResource(filename)
+    // If the resource is found, return its path, otherwise return a default or error string
+    Option(imagePath) match {
+      case Some(path) => path.toString // Return the resource URL as a string
+      case None => "Resource not found" // Handle the case where the resource doesn't exist
+    }
   }
 }

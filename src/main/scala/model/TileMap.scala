@@ -40,9 +40,9 @@ extends Prototype[TileMap]
         // Loop through all columns in the i th row
         for (j <- 0 to 14) {
           data.get((Index(i), Index(j))).flatten match {
-            case Some(card) =>
+            case Some(tile) =>
               // Append i th line of column to String
-              strBuilder.append(card.line(l.asInstanceOf[Int & (0 | 1 | 2 | 3 | 4)]))
+              strBuilder.append(tile.line(l.asInstanceOf[Int & (0 | 1 | 2 | 3 | 4)]))
               strBuilder.append(" ")
             // Print empty tile (index)
             case None =>

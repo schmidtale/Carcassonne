@@ -31,6 +31,10 @@ class GameData(val map: TileMap = TileMap(),
   def withState(newState: State) : GameData = {
     new GameData(map, stack, players, turn, newState)
   }
+  
+  def withTurn(newTurn: Int) : GameData = {
+    new GameData(map, stack, players, newTurn, state)
+  }
 
   def initialState(): GameData = {
     val initialMap = TileMap().add(Index(7), Index(7), Some(TileStack().startingTile))

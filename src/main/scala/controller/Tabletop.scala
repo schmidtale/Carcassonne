@@ -48,4 +48,9 @@ class Tabletop(var gameData: GameData) extends Observable {
   def changeState(state: State): Unit = {
     gameData = gameData.withState(state)
   }
+  
+  def incrementTurn(): Int = {
+    gameData = gameData.withTurn(gameData.turn + 1)
+    gameData.turn
+  }
 }

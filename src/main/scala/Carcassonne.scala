@@ -8,21 +8,23 @@ import scala.collection.immutable.Queue
 
 object Carcassonne {
     val tabletop = new Tabletop(GameData(players = Queue(PlayerState(blue), PlayerState(red), PlayerState(yellow), PlayerState(green), PlayerState(black))).initialState())
-    private val tui = new TextUI(tabletop)
     private val gui = new GUI(tabletop)
-    tabletop.notifyObservers()
+    private val tui = new TextUI(tabletop)
 
-    new Thread(() => {
-        gui.main(Array.empty)
-    }).start()
-
-    private var currentTurn: Int = 0
     @main
     def main(): Unit = {
         val loopPlayer = MusicPlayer("gameplayLoop")
         loopPlayer.play()
-        while (currentTurn < tabletop.gameData.stack.size) {
-            currentTurn = tui.exec(currentTurn, tabletop.gameData.stack, System.in)
+
+        new Thread(() => {
+            gui.main(Array.empty)
+        }).start()
+
+        //tabletop.notifyObservers()
+
+
+        while (tabletop.gameData.turn < tabletop.gameData.stack.size) {
+             tui.exec(System.in)
         }
         // TODO Call function that calculates resulting points from GUI
     }

@@ -19,8 +19,8 @@ import Orientation._
 import BorderType._
 import LiegemanType._
 import LiegemanPosition._
-class Tile(val monastery: Boolean = false, val townConnection: Boolean = false, val borders: Vector[BorderType],
-           val liegeman: (LiegemanType, LiegemanPosition) = (none, nowhere), val coat_of_arms: Boolean = false) {
+class Tile(val name: String = "default name", val monastery: Boolean = false, val townConnection: Boolean = false, val borders: Vector[BorderType],
+           val liegeman: (LiegemanType, LiegemanPosition) = (none, nowhere), val coat_of_arms: Boolean = false, val rotation: Int = 0) {
 
   private val provider = new TextProvider()
   def borderType(o: Orientation): BorderType = {
@@ -42,8 +42,8 @@ class Tile(val monastery: Boolean = false, val townConnection: Boolean = false, 
   def rotate: Tile = {
     val newBorders = Vector(this.borderType(western), this.borderType(northern),
       this.borderType(eastern),this.borderType(southern))
-    val newCard = new Tile(this.monastery, this.townConnection, newBorders,
-      coat_of_arms = this.coat_of_arms
+    val newCard = new Tile(this.name, this.monastery, this.townConnection, newBorders,
+      coat_of_arms = this.coat_of_arms, this.rotation + 1
       /* other arguments must be on default if rotation is possible */ )
     newCard
   }
@@ -60,6 +60,7 @@ class Tile(val monastery: Boolean = false, val townConnection: Boolean = false, 
   override def equals(obj: Any): Boolean = {
     obj match {
       case that: Tile =>
+        /* No comparison of names */
         this.monastery == that.monastery &&
         this.townConnection == that.townConnection &&
         this.borders == that.borders &&
