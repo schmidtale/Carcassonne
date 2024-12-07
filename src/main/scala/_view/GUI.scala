@@ -4,15 +4,14 @@ import util.Observer
 import controller.Tabletop
 import model.{Color, Index, Tile}
 import scalafx.application.{JFXApp3, Platform}
-import scalafx.geometry.{Insets, Pos}
+import scalafx.geometry.Pos
 import scalafx.scene.Scene
 import scalafx.scene.control.Button
 import scalafx.stage.Screen
-import scalafx.scene.effect.DropShadow
 import scalafx.scene.image.{Image, ImageView}
-import scalafx.scene.layout.{BorderPane, GridPane, HBox, Pane, StackPane, VBox}
+import scalafx.scene.layout.{BorderPane, GridPane, Pane, StackPane, VBox}
 import scalafx.scene.paint.Color.*
-import scalafx.scene.paint.{LinearGradient, Stops}
+import scalafx.scene.paint
 import scalafx.scene.text.{Font, Text}
 
 // Function to convert enum Color to scalafx Color
@@ -31,8 +30,11 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
 
   // Store tileImages 15x15 grid for tiles
   private val tileImages: Array[Array[ImageView]] = Array.ofDim[ImageView](15, 15)
+  private val fieldButtons: Array[Array[Button]] = Array.ofDim[Button](15, 15)
 
   private var nextCardImageView: ImageView = _
+
+  private val fieldGridPane = new GridPane
 
   // current rotation of nextCardImageView tile
   var currentRotation = 0
@@ -114,8 +116,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
           center = new StackPane {
             // Create a grid (15x15) of StackPanes with ImageViews and transparent buttons on top
             val initialCardImage = new Image(getClass.getClassLoader.getResource("background_tile.png").toString)
-            val fieldGridPane = new GridPane {
-            }
+            // for fieldGridPane
             for (row <- 0 until 15) {
               for (column <- 0 until 15) {
                 val fieldStackPane = new StackPane {
@@ -144,6 +145,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
                       nextCardImageView.rotate = 0
                     }
                   }
+                  fieldButtons(row)(column) = fieldButton
                   children = Seq(cardImageView, fieldButton)
                 }
                 fieldGridPane.add(fieldStackPane, column, row)
@@ -192,9 +194,17 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
                 tileImages(row)(column).image = new Image(getImagePath(tile)) // Update the corresponding image view
                 tileImages(row)(column).rotate = tile.rotation * 90
               }
+              // Disable the button for filled tiles
+              if (fieldButtons(row)(column) != null) {
+                fieldButtons(row)(column).disable = true
+              }
             case None =>
               if (tileImages(row)(column) != null) {
                 tileImages(row)(column).image = new Image(getClass.getClassLoader.getResource("background_tile.png").toString) // Update the corresponding image view
+              }
+              // Enable the button for empty tiles
+              if (fieldButtons(row)(column) != null) {
+                fieldButtons(row)(column).disable = false
               }
           }
         }
@@ -210,7 +220,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
     }
   }
 
-  def getImagePath(tile: Tile): String = {
+  private def getImagePath(tile: Tile): String = {
     val filename = tile.name match {
       case "A" => "tile-a.png"
       case "B" => "tile-b.png"

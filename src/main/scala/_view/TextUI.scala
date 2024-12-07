@@ -13,19 +13,13 @@ import scala.util.Try
 class TextUI(tabletop: Tabletop) extends Observer {
   tabletop.add(this)
   private val textProvider = new TextProvider
+  private var drawnTile = tabletop.gameData.currentTile()
 
   //printMap
 
   def exec(inputStream: InputStream): Int = {
 
     //get and print Tile from Queue
-    val drawnTile = tabletop.gameData.currentTile()
-    print("next tile:\n" + textProvider.toText(drawnTile) + "\n")
-    val helpStr0 = "enter desired tile placement in the following format:\n" +
-      "rotation line column\n" +
-      "[0-3]   [0-14][0-14]\n"
-    print(helpStr0)
-
     val line = Source.fromInputStream(inputStream).getLines().next() // Read the first line
     val placementInfo = readPlacement(line)
 
@@ -60,7 +54,7 @@ class TextUI(tabletop: Tabletop) extends Observer {
 //      }
 //      else {
 //        turn
-//      } 
+//      }
      tabletop.gameData.turn
     }
   }
@@ -99,6 +93,13 @@ class TextUI(tabletop: Tabletop) extends Observer {
 
   override def update(): Unit = {
     print(tabletop.constructTabletopFromMap())
+    //get and print Tile from Queue
+    drawnTile = tabletop.gameData.currentTile()
+    print("next tile:\n" + textProvider.toText(drawnTile) + "\n")
+    val helpStr0 = "enter desired tile placement in the following format:\n" +
+      "rotation line  column\n" +
+      "  [0-3] [0-14] [0-14]\n"
+    print(helpStr0)
   }
 }
 
