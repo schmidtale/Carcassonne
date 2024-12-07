@@ -1,5 +1,6 @@
 import _view.{GUI, TextUI}
 import controller.Tabletop
+import javafx.embed.swing.JFXPanel
 import model.{GameData, PlayerState}
 import util.MusicPlayer
 import model.Color.*
@@ -11,6 +12,8 @@ object Carcassonne {
     private val gui = new GUI(tabletop)
     private val tui = new TextUI(tabletop)
 
+    new JFXPanel(); // this will prepare JavaFX toolkit and environment
+
     @main
     def main(): Unit = {
         val loopPlayer = MusicPlayer("gameplayLoop")
@@ -19,8 +22,7 @@ object Carcassonne {
         new Thread(() => {
             gui.main(Array.empty)
         }).start()
-
-        //tabletop.notifyObservers()
+        tabletop.notifyObservers()
 
 
         while (tabletop.gameData.turn < tabletop.gameData.stack.size) {

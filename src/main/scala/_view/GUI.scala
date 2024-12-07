@@ -34,6 +34,8 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
 
   private var nextCardImageView: ImageView = _
 
+  // current rotation of nextCardImageView tile
+  var currentRotation = 0
 
   /* Viewport sizes */
   private var viewHeight: Double = 0
@@ -52,14 +54,13 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
         fill = Black
         content = new BorderPane {
           left = new VBox {
-            // add imageView for next Card
+            // add imageView for next Card and Button for rotation on top
             // TODO add button for rotation of card
-            // TODO nextCardImageView inside of StackPane and Button on top
             val nextTileStackPane = new StackPane {
               val nextCardImage = new Image(getImagePath(tabletop.gameData.currentTile()))
               nextCardImageView = new ImageView(nextCardImage) {
                 preserveRatio = true
-                fitWidth = viewWidth / 4 // TODO Adjust size as needed
+                fitWidth = viewWidth / 4 // Adjust size as needed
               }
               val rotateButton = new Button {
                 maxWidth = Double.MaxValue
@@ -67,6 +68,11 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
                 style = "-fx-background-color: transparent; " +
                   "-fx-border-color: transparent; " +
                   "-fx-text-fill: #000000;"
+                // Event handler to rotate the nextCardImageView by 90 degrees when clicked
+                onAction = _ => {
+                  currentRotation = (currentRotation + 90) % 360 // Increment rotation by 90 degrees and loop after 360
+                  nextCardImageView.rotate = currentRotation
+                }
               }
               children = Seq(nextCardImageView, rotateButton)
             }
@@ -132,15 +138,17 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
                     // Event handler to call add from tabletop
                     //val newTile = tabletop.gameData.currentTile() // Fetch the next tile from game data
                     //cardImageView.image = new Image(getImagePath(newTile)) // Update the image
-                    onAction = _ => tabletop.addTileToMap(Index(row), Index(column), tabletop.gameData.currentTile())
+                    onAction = _ => {
+                      tabletop.addTileToMap(Index(row), Index(column), tabletop.gameData.currentTile().rotate(currentRotation / 90))
+                      currentRotation = 0
+                      nextCardImageView.rotate = 0
+                    }
                   }
                   children = Seq(cardImageView, fieldButton)
                 }
                 fieldGridPane.add(fieldStackPane, column, row)
               }
             }
-
-            //children = Seq(imageView, gridPane) // TODO add background image
             children = Seq(fieldGridPane)
           }
           right = new VBox {
@@ -170,26 +178,36 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
         }
       }
     }
+    update()
   }
 
   override def update(): Unit = {
-    // TODO update scene based on GameData state
+    // update scene based on GameData state
     Platform.runLater {
       for (row <- 0 to 14) {
         for (column <- 0 to 14) {
           tabletop.gameData.map.data.get(Index(row), Index(column)).flatten match {
             case Some(tile) =>
-              tileImages(row)(column).image = new Image(getImagePath(tile)) // Update the corresponding image view
-              tileImages(row)(column).rotate = tile.rotation * 90
+              if (tileImages(row)(column) != null) {
+                tileImages(row)(column).image = new Image(getImagePath(tile)) // Update the corresponding image view
+                tileImages(row)(column).rotate = tile.rotation * 90
+              }
             case None =>
+              if (tileImages(row)(column) != null) {
+                tileImages(row)(column).image = new Image(getClass.getClassLoader.getResource("background_tile.png").toString) // Update the corresponding image view
+              }
           }
         }
       } // Get tile from game data
+      // Update the next card image when the current tile changes
+
+      // TODO use option instead of checking for null exception
+      if (nextCardImageView != null) {
+        val nextTile = tabletop.gameData.currentTile() // Fetch the new current tile
+        val nextCardImage = new Image(getImagePath(nextTile)) // Get the image for the new tile
+        nextCardImageView.image = nextCardImage // Update the ImageView
+      }
     }
-    // Update the next card image when the current tile changes
-    val nextTile = tabletop.gameData.currentTile() // Fetch the new current tile
-    val nextCardImage = new Image(getImagePath(nextTile)) // Get the image for the new tile
-    nextCardImageView.image = nextCardImage // Update the ImageView
   }
 
   def getImagePath(tile: Tile): String = {
