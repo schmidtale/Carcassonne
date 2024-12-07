@@ -105,28 +105,36 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
               fitWidth = viewWidth
               fitHeight = viewHeight
             }
-            // Create a grid (15x15) of ImageViews
-            val gridPane = new GridPane {
-              alignment = Pos.TopCenter
-            }
-
+            // Create a grid (15x15) of StackPanes with ImageViews and transparent buttons on top
             val cardImage = new Image("C:\\Software Engineering\\Carcassonne\\src\\main\\resources\\tile-a.png")
-            // Loop to create a 15x15 grid of ImageViews
+            val fieldGridPane = new GridPane {
+            }
             for (i <- 0 until 15) {
               for (j <- 0 until 15) {
-                val imageGrid = new ImageView(cardImage) {
-                  fitWidth = viewWidth / 16
-                  fitHeight = viewHeight / 16
-                  preserveRatio = true
+                val fieldStackPane = new StackPane {
+                  maxWidth = viewWidth / 16
+                  maxHeight() = viewHeight / 16
+
+                  val cardImageView = new ImageView(cardImage) {
+                    fitWidth = viewWidth / 16
+                    fitHeight = viewHeight / 16
+                    preserveRatio = true
+                  }
+                  val fieldButton = new Button {
+                    maxWidth = Double.MaxValue
+                    maxHeight = Double.MaxValue
+                    style = "-fx-background-color: transparent; " +
+                      "-fx-border-color: transparent; " +
+                      "-fx-text-fill: #000000;"
+                  }
+                  children = Seq(cardImageView, fieldButton)
                 }
-                gridPane.add(imageGrid, i, j)
+                fieldGridPane.add(fieldStackPane, i, j)
               }
             }
+
             //children = Seq(imageView, gridPane) // TODO add background image
-            children = gridPane
-            // TODO image view child
-            // TODO GridPane 15*15
-            // TODO in GridPane image view, then Button
+            children = Seq(fieldGridPane)
           }
           right = new VBox {
             // add VBoxes depending on tabletop.players list size
