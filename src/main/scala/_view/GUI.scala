@@ -9,10 +9,12 @@ import scalafx.scene.Scene
 import scalafx.scene.control.Button
 import scalafx.stage.Screen
 import scalafx.scene.image.{Image, ImageView}
+import scalafx.scene.input.{KeyCode, KeyEvent}
 import scalafx.scene.layout.{BorderPane, GridPane, Pane, StackPane, VBox}
 import scalafx.scene.paint.Color.*
 import scalafx.scene.paint
 import scalafx.scene.text.{Font, Text}
+import scalafx.Includes._
 
 // Function to convert enum Color to scalafx Color
 def getColorFromEnum(playerColor: model.Color): scalafx.scene.paint.Color = {
@@ -176,6 +178,17 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
               }
               children.add(playerVBox)
             }
+          }
+        }
+        onKeyPressed = (event: KeyEvent) => {
+          if (event.code == KeyCode.Z) {
+            tabletop.undo()
+          }
+          if (event.code == KeyCode.Y) {
+            tabletop.redo()
+          }
+          if (event.code == KeyCode.N) {
+            tabletop.resetGameData()
           }
         }
       }
