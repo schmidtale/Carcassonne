@@ -4,17 +4,17 @@ import util.Observer
 import controller.Tabletop
 import model.{Color, Index, Tile}
 import scalafx.application.{JFXApp3, Platform}
-import scalafx.geometry.Pos
+import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.Scene
 import scalafx.scene.control.Button
 import scalafx.stage.Screen
 import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.input.{KeyCode, KeyEvent}
-import scalafx.scene.layout.{BorderPane, GridPane, Pane, StackPane, VBox}
+import scalafx.scene.layout.{Background, BackgroundFill, BorderPane, CornerRadii, GridPane, Pane, StackPane, VBox}
 import scalafx.scene.paint.Color.*
 import scalafx.scene.paint
 import scalafx.scene.text.{Font, Text}
-import scalafx.Includes._
+import scalafx.Includes.*
 
 // Function to convert enum Color to scalafx Color
 def getColorFromEnum(playerColor: model.Color): scalafx.scene.paint.Color = {
@@ -54,6 +54,8 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
       height = viewHeight
       resizable = false
 
+      icons.add(new Image(getClass.getClassLoader.getResource("taskbar_icon.png").toString))
+
       scene = new Scene {
         fill = Black
         content = new BorderPane {
@@ -83,13 +85,10 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
 
 
             // add BorderPane for buttons to select placement of liegeman
-            val gridPane = new GridPane {
+            val liegemanPlacementGridPane = new GridPane {
               // add buttons to BorderPane at Top/Left/Bottom/Right
-              alignment = Pos.Center // Centering the buttons in the gri
-
-              // add 3x3 GridPain of Buttons to Center
-
-
+              alignment = Pos.Center // Centering the buttons in the grid
+              // add 3x3 GridPane of Buttons to Center
             }
             val buttonDetails = List(
               (0, 2, "K"), // button02
@@ -111,9 +110,9 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
               // Set the button size to be uniform
               button.setMinWidth(60)
               button.setMinHeight(60)
-              gridPane.add(button, col, row)
+              liegemanPlacementGridPane.add(button, col, row)
             }
-            children = Seq(nextTileStackPane, gridPane)
+            children = Seq(nextTileStackPane, liegemanPlacementGridPane)
           }
           center = new StackPane {
             // Create a grid (15x15) of StackPanes with ImageViews and transparent buttons on top
@@ -199,37 +198,44 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
   override def update(): Unit = {
     // update scene based on GameData state
     Platform.runLater {
-      for (row <- 0 to 14) {
-        for (column <- 0 to 14) {
-          tabletop.gameData.map.data.get(Index(row), Index(column)).flatten match {
-            case Some(tile) =>
-              if (tileImages(row)(column) != null) {
-                tileImages(row)(column).image = new Image(getImagePath(tile)) // Update the corresponding image view
-                tileImages(row)(column).rotate = tile.rotation * 90
-              }
-              // Disable the button for filled tiles
-              if (fieldButtons(row)(column) != null) {
-                fieldButtons(row)(column).disable = true
-              }
-            case None =>
-              if (tileImages(row)(column) != null) {
-                tileImages(row)(column).image = new Image(getClass.getClassLoader.getResource("background_tile.png").toString) // Update the corresponding image view
-              }
-              // Enable the button for empty tiles
-              if (fieldButtons(row)(column) != null) {
-                fieldButtons(row)(column).disable = false
-              }
-          }
-        }
-      } // Get tile from game data
-      // Update the next card image when the current tile changes
-
-      // TODO use option instead of checking for null exception
-      if (nextCardImageView != null) {
-        val nextTile = tabletop.gameData.currentTile() // Fetch the new current tile
-        val nextCardImage = new Image(getImagePath(nextTile)) // Get the image for the new tile
-        nextCardImageView.image = nextCardImage // Update the ImageView
+      if (tabletop.gameData.turn >= tabletop.gameData.stack.size) {
+        // Game has ended, show review scene
+        showReviewScene()
       }
+      else {
+        for (row <- 0 to 14) {
+          for (column <- 0 to 14) {
+            tabletop.gameData.map.data.get(Index(row), Index(column)).flatten match {
+              case Some(tile) =>
+                if (tileImages(row)(column) != null) {
+                  tileImages(row)(column).image = new Image(getImagePath(tile)) // Update the corresponding image view
+                  tileImages(row)(column).rotate = tile.rotation * 90
+                }
+                // Disable the button for filled tiles
+                if (fieldButtons(row)(column) != null) {
+                  fieldButtons(row)(column).disable = true
+                }
+              case None =>
+                if (tileImages(row)(column) != null) {
+                  tileImages(row)(column).image = new Image(getClass.getClassLoader.getResource("background_tile.png").toString) // Update the corresponding image view
+                }
+                // Enable the button for empty tiles
+                if (fieldButtons(row)(column) != null) {
+                  fieldButtons(row)(column).disable = false
+                }
+            }
+          }
+        } // Get tile from game data
+        // Update the next card image when the current tile changes
+
+        // TODO use option instead of checking for null exception
+        if (nextCardImageView != null) {
+          val nextTile = tabletop.gameData.currentTile() // Fetch the new current tile
+          val nextCardImage = new Image(getImagePath(nextTile)) // Get the image for the new tile
+          nextCardImageView.image = nextCardImage // Update the ImageView
+        }
+      }
+
     }
   }
 
@@ -266,6 +272,47 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
     Option(imagePath) match {
       case Some(path) => path.toString // Return the resource URL as a string
       case None => "Resource not found" // Handle the case where the resource doesn't exist
+    }
+  }
+
+  private def showReviewScene(): Unit = {
+    stage.scene = new Scene {
+      fill = Black
+      root = new VBox {
+        background = new Background(Array(new BackgroundFill(Black, CornerRadii.Empty, Insets.Empty)))
+        fill = Black
+        alignment = Pos.Center
+        prefWidth = stage.width.value
+        prefHeight = stage.height.value
+        spacing = 20
+        children = Seq(
+          new Text("Game Over") {
+            fill = White
+            font = Font.font("Century", 36)
+          },
+          new Text("Final Scores") {
+            fill = White
+            font = Font.font("Century", 24)
+          },
+          new VBox {
+            spacing = 10
+            alignment = Pos.Center
+            children = tabletop.gameData.players.map {
+              player =>
+                new Text(s"Player ${tabletop.gameData.players.indexOf(player) + 1}: ${player.points} points") {
+                  fill = getColorFromEnum(player.color)
+                  font = Font.font("Century", 20)
+                }
+            }
+          },
+          new Button("Exit to Main Menu") {
+            onAction = _ => {
+              // TODO switch to Menu scene
+              Platform.exit()
+            }
+          }
+        )
+      }
     }
   }
 }
