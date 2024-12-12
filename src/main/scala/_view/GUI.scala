@@ -2,11 +2,17 @@ package _view
 
 import util.Observer
 import controller.Tabletop
+import javafx.embed.swing.SwingFXUtils
 import model.{Color, Index, Tile}
+
+import java.io.File
+import java.awt.image.BufferedImage
+import org.apache.batik.transcoder.image.ImageTranscoder
+import org.apache.batik.transcoder.{TranscoderInput, TranscoderOutput}
 import scalafx.application.{JFXApp3, Platform}
 import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.Scene
-import scalafx.scene.control.Button
+import scalafx.scene.control.{Button, Tooltip}
 import scalafx.stage.Screen
 import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.input.{KeyCode, KeyEvent}
@@ -19,11 +25,11 @@ import scalafx.Includes.*
 // Function to convert enum Color to scalafx Color
 def getColorFromEnum(playerColor: model.Color): scalafx.scene.paint.Color = {
   playerColor match {
-    case Color.blue => scalafx.scene.paint.Color.SkyBlue
-    case Color.red => scalafx.scene.paint.Color.MediumVioletRed
-    case Color.green => scalafx.scene.paint.Color.ForestGreen
-    case Color.yellow => scalafx.scene.paint.Color.Yellow
-    case Color.black => scalafx.scene.paint.Color.Gray
+    case Color.blue => scalafx.scene.paint.Color.rgb(56,58,107)
+    case Color.red => scalafx.scene.paint.Color.rgb(203,31,115)
+    case Color.green => scalafx.scene.paint.Color.rgb(224,58,60)
+    case Color.yellow => scalafx.scene.paint.Color.rgb(234,109,61)
+    case Color.black => scalafx.scene.paint.Color.rgb(252,199,45)
   }
 }
 
@@ -58,8 +64,9 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
 
       scene = new Scene {
         fill = Black
-        content = new BorderPane {
+        root = new BorderPane {
           left = new VBox {
+            style = s"-fx-background-color:black"
             // add imageView for next Card and Button for rotation on top
             // TODO add button for rotation of card
             val nextTileStackPane = new StackPane {
@@ -83,13 +90,44 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
               children = Seq(nextCardImageView, rotateButton)
             }
 
-
-            // add BorderPane for buttons to select placement of liegeman
-            val liegemanPlacementGridPane = new GridPane {
+            // add BorderPane for buttons to select placement of liegeman/undo/redo
+            val controlPanelGridPane = new GridPane {
               // add buttons to BorderPane at Top/Left/Bottom/Right
               alignment = Pos.Center // Centering the buttons in the grid
               // add 3x3 GridPane of Buttons to Center
             }
+
+            val undoButton = new Button() {
+              minWidth = 60
+              minHeight = 60
+              style = "-fx-background-color: #FF6347; -fx-text-fill: white;" // Red background, white text
+              onAction = _ => tabletop.undo()
+              // Set the image for the button
+              graphic = new ImageView(new Image(getClass.getClassLoader.getResource("undo_button.png").toString)) {
+                fitWidth = 20
+                fitHeight = 20
+                preserveRatio = true
+              }
+              // Add a tooltip to the button
+              tooltip = new Tooltip("Undo")
+            }
+            val redoButton = new Button() {
+              minWidth = 60
+              minHeight = 60
+              style = "-fx-background-color: #4682B4; -fx-text-fill: white;" // Blue background, white text
+              onAction = _ => tabletop.redo()
+
+              graphic = new ImageView(new Image(getClass.getClassLoader.getResource("redo_button.png").toString)) {
+                fitWidth = 20
+                fitHeight = 20
+                preserveRatio = true
+              }
+              // Add a tooltip to the button
+              tooltip = new Tooltip("Redo")
+            }
+            controlPanelGridPane.add(undoButton, 0, 0)
+            controlPanelGridPane.add(redoButton, 4, 0)
+
             val buttonDetails = List(
               (0, 2, "K"), // button02
               (1, 1, "P"), // button11
@@ -110,9 +148,18 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
               // Set the button size to be uniform
               button.setMinWidth(60)
               button.setMinHeight(60)
-              liegemanPlacementGridPane.add(button, col, row)
+
+              // Actions for specific buttons
+              if (label == "Undo") {
+                button.onAction = _ => tabletop.undo()
+              }
+              else if (label == "Redo") {
+                button.onAction = _ => tabletop.redo()
+              }
+
+              controlPanelGridPane.add(button, col, row)
             }
-            children = Seq(nextTileStackPane, liegemanPlacementGridPane)
+            children = Seq(nextTileStackPane, controlPanelGridPane)
           }
           center = new StackPane {
             // Create a grid (15x15) of StackPanes with ImageViews and transparent buttons on top
@@ -150,28 +197,40 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
                   children = Seq(cardImageView, fieldButton)
                 }
                 fieldGridPane.add(fieldStackPane, column, row)
+                fieldGridPane.style = s"-fx-background-color:black"
               }
             }
             children = Seq(fieldGridPane)
           }
           right = new VBox {
+            style = s"-fx-background-color:black"
+            alignment = Pos.Center
+            this.setPrefSize(viewHeight * 0.4, viewWidth)
+            spacing = 10
             // add VBoxes depending on tabletop.players list size
             // add player info labels to VBoxes
             tabletop.gameData.players.zipWithIndex.foreach { case (player, index) =>
               val playerVBox = new VBox {
                 alignment = Pos.Center
+                padding = Insets(10)
+                spacing = 5
+                maxWidth = viewWidth * 0.15
+                val colorHex = colorToHex(getColorFromEnum(player.color))
+                style =
+                  s"""-fx-background-color: ${colorHex};
+                       -fx-background-radius: 15;
+                       -fx-border-radius: 15;
+                       -fx-border-width: 2;""" // Rounded corners
+
                 children = Seq(
                   new Text(s"Player ${index + 1}") {
-                    fill = getColorFromEnum(player.color)
                     font = Font.font("Century", 24)
                   },
                   new Text(s"Points ${player.points}") {
-                    fill = getColorFromEnum(player.color)
-                    font = Font.font("Century", 24)
+                    font = Font.font("Century", 18)
                   },
                   new Text(s"Liegemen ${player.meepleCount}") {
-                    fill = getColorFromEnum(player.color)
-                    font = Font.font("Century", 24)
+                    font = Font.font("Century", 18)
                   }
                 )
               }
@@ -240,6 +299,10 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
   }
 
   private def getImagePath(tile: Tile): String = {
+    // TODO as svg
+    //    val svgFile = new File(getClass.getClassLoader.getResource("monastery0.svg").toURI)
+    //    val image = loadSvgAsImage(svgFile)
+
     val filename = tile.name match {
       case "A" => "tile-a.png"
       case "B" => "tile-b.png"
@@ -314,5 +377,38 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
         )
       }
     }
+  }
+
+  // Function to render SVG to JavaFX Image
+  def loadSvgAsImage(svgFile: File): Image = {
+    require(svgFile.exists() && svgFile.isFile, "The provided SVG file must exist and be a valid file")
+
+    // Buffer to hold the rendered image
+    var bufferedImage: BufferedImage = null
+
+    // Custom Transcoder to convert SVG to BufferedImage
+    val transcoder = new ImageTranscoder {
+      override def createImage(width: Int, height: Int): BufferedImage = {
+        new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
+      }
+
+      override def writeImage(img: BufferedImage, out: TranscoderOutput): Unit = {
+        bufferedImage = img
+      }
+    }
+
+    // Transcode the SVG
+    val input = new TranscoderInput(svgFile.toURI.toString)
+    transcoder.transcode(input, null)
+
+    // Convert BufferedImage to JavaFX Image
+    SwingFXUtils.toFXImage(bufferedImage, null)
+  }
+
+  def colorToHex(color: scalafx.scene.paint.Color): String = {
+    val red = (color.red * 255).toInt
+    val green = (color.green * 255).toInt
+    val blue = (color.blue * 255).toInt
+    f"#$red%02X$green%02X$blue%02X" // Format it as #RRGGBB
   }
 }
