@@ -7,6 +7,7 @@ class UndoManager {
   def doStep(command: Command): Unit = {
     // adds command to top of undoStack
     undoStack = command :: undoStack
+    redoStack = Nil
     command.doStep()
   }
 
