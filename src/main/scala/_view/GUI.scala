@@ -145,9 +145,34 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
             )
             buttonDetails.foreach { case (row, col, label) =>
               val stackPane = new StackPane {
+                background = new Background(Array(new BackgroundFill(White, CornerRadii.Empty, Insets.Empty)))
                 val imageView = label match {
                   case "Peasant" =>
                     val svgFile = new File(getClass.getClassLoader.getResource("peasant_button.svg").toURI)
+                    val image = loadSvgAsImage(svgFile)
+                    new ImageView(image) {
+                      fitWidth = 60
+                      fitHeight = 60
+                      preserveRatio = true
+                    }
+                  case "Knight" =>
+                    val svgFile = new File(getClass.getClassLoader.getResource("knight_button.svg").toURI)
+                    val image = loadSvgAsImage(svgFile)
+                    new ImageView(image) {
+                      fitWidth = 60
+                      fitHeight = 60
+                      preserveRatio = true
+                    }
+                  case "Monk" =>
+                    val svgFile = new File(getClass.getClassLoader.getResource("monk_button.svg").toURI)
+                    val image = loadSvgAsImage(svgFile)
+                    new ImageView(image) {
+                      fitWidth = 60
+                      fitHeight = 60
+                      preserveRatio = true
+                    }
+                  case "Waylayer" =>
+                    val svgFile = new File(getClass.getClassLoader.getResource("waylayer_button.svg").toURI)
                     val image = loadSvgAsImage(svgFile)
                     new ImageView(image) {
                       fitWidth = 60
