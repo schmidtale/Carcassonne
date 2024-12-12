@@ -180,7 +180,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
                       preserveRatio = true
                     }
                   case _ =>
-                    new ImageView(new Image(getClass.getClassLoader.getResource("default_meeple.png").toString)) {
+                    new ImageView(new Image(getClass.getClassLoader.getResource("default_tile.png").toString)) {
                       fitWidth = 60
                       fitHeight = 60
                       preserveRatio = true
