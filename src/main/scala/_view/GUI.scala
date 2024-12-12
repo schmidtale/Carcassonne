@@ -129,35 +129,75 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
             controlPanelGridPane.add(redoButton, 4, 0)
 
             val buttonDetails = List(
-              (0, 2, "K"), // button02
-              (1, 1, "P"), // button11
-              (1, 2, "W"), // button12
-              (1, 3, "P"), // button13
-              (2, 0, "K"), // button20
-              (2, 1, "W"), // button21
-              (2, 2, "M"), // button22
-              (2, 3, "W"), // button23
-              (2, 4, "K"), // button24
-              (3, 1, "P"), // button31
-              (3, 2, "W"), // button32
-              (3, 3, "P"), // button33
-              (4, 2, "K") // button42
+              (0, 2, "Knight"), // button02
+              (1, 1, "Peasant"), // button11
+              (1, 2, "Waylayer"), // button12
+              (1, 3, "Peasant"), // button13
+              (2, 0, "Knight"), // button20
+              (2, 1, "Waylayer"), // button21
+              (2, 2, "Monk"), // button22
+              (2, 3, "Waylayer"), // button23
+              (2, 4, "Knight"), // button24
+              (3, 1, "Peasant"), // button31
+              (3, 2, "Waylayer"), // button32
+              (3, 3, "Peasant"), // button33
+              (4, 2, "Knight") // button42
             )
             buttonDetails.foreach { case (row, col, label) =>
-              val button = new Button(label)
-              // Set the button size to be uniform
-              button.setMinWidth(60)
-              button.setMinHeight(60)
+              val stackPane = new StackPane {
+                background = new Background(Array(new BackgroundFill(White, CornerRadii.Empty, Insets.Empty)))
+                val imageView = label match {
+                  case "Peasant" =>
+                    val svgFile = new File(getClass.getClassLoader.getResource("peasant_button.svg").toURI)
+                    val image = loadSvgAsImage(svgFile)
+                    new ImageView(image) {
+                      fitWidth = 60
+                      fitHeight = 60
+                      preserveRatio = true
+                    }
+                  case "Knight" =>
+                    val svgFile = new File(getClass.getClassLoader.getResource("knight_button.svg").toURI)
+                    val image = loadSvgAsImage(svgFile)
+                    new ImageView(image) {
+                      fitWidth = 60
+                      fitHeight = 60
+                      preserveRatio = true
+                    }
+                  case "Monk" =>
+                    val svgFile = new File(getClass.getClassLoader.getResource("monk_button.svg").toURI)
+                    val image = loadSvgAsImage(svgFile)
+                    new ImageView(image) {
+                      fitWidth = 60
+                      fitHeight = 60
+                      preserveRatio = true
+                    }
+                  case "Waylayer" =>
+                    val svgFile = new File(getClass.getClassLoader.getResource("waylayer_button.svg").toURI)
+                    val image = loadSvgAsImage(svgFile)
+                    new ImageView(image) {
+                      fitWidth = 60
+                      fitHeight = 60
+                      preserveRatio = true
+                    }
+                  case _ =>
+                    new ImageView(new Image(getClass.getClassLoader.getResource("default_meeple.png").toString)) {
+                      fitWidth = 60
+                      fitHeight = 60
+                      preserveRatio = true
+                    }
+                }
 
-              // Actions for specific buttons
-              if (label == "Undo") {
-                button.onAction = _ => tabletop.undo()
+                val button = new Button() {
+                  // Set the button size to be uniform
+                  minWidth = 60
+                  minHeight = 60
+                  style = "-fx-background-color: transparent; -fx-border-color: transparent;"
+                  //onAction = _ => println(s"Button $label clicked!")
+                  tooltip = new Tooltip(s"$label")
+                }
+                children = Seq(imageView, button)
               }
-              else if (label == "Redo") {
-                button.onAction = _ => tabletop.redo()
-              }
-
-              controlPanelGridPane.add(button, col, row)
+              controlPanelGridPane.add(stackPane, col, row)
             }
             children = Seq(nextTileStackPane, controlPanelGridPane)
           }
