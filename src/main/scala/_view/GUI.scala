@@ -248,6 +248,8 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
             spacing = 10
             // add VBoxes depending on tabletop.players list size
             // add player info labels to VBoxes
+
+            // Higher order function
             tabletop.gameData.players.zipWithIndex.foreach { case (player, index) =>
               val playerVBox = new VBox {
                 alignment = Pos.Center
@@ -288,6 +290,12 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
             tabletop.resetGameData()
           }
         }
+        // Handle the close button
+        onCloseRequest = _ => {
+          println("Closing application...")
+          Platform.exit()
+          System.exit(0)
+        }
       }
     }
     update()
@@ -304,6 +312,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
         for (row <- 0 to 14) {
           for (column <- 0 to 14) {
             tabletop.gameData.map.data.get(Index(row), Index(column)).flatten match {
+              // TODO use higher order functions
               case Some(tile) =>
                 if (tileImages(row)(column) != null) {
                   tileImages(row)(column).image = getTileImage(tile) // Update the corresponding image view
