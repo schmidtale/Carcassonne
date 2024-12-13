@@ -13,7 +13,7 @@ import scalafx.application.{JFXApp3, Platform}
 import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.Scene
 import scalafx.scene.control.{Button, Tooltip}
-import scalafx.stage.Screen
+import scalafx.stage.{Screen, StageStyle}
 import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.input.{KeyCode, KeyEvent}
 import scalafx.scene.layout.{Background, BackgroundFill, BorderPane, CornerRadii, GridPane, Pane, StackPane, VBox}
@@ -61,7 +61,6 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
       resizable = false
 
       icons.add(new Image(getClass.getClassLoader.getResource("taskbar_icon.png").toString))
-
       scene = new Scene {
         fill = Black
         root = new BorderPane {
@@ -249,7 +248,6 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
             // add VBoxes depending on tabletop.players list size
             // add player info labels to VBoxes
 
-            // Higher order function
             tabletop.gameData.players.zipWithIndex.foreach { case (player, index) =>
               val playerVBox = new VBox {
                 alignment = Pos.Center
@@ -314,29 +312,22 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
             tabletop.gameData.map.data.get(Index(row), Index(column)).flatten match {
               // TODO use higher order functions
               case Some(tile) =>
-                if (tileImages(row)(column) != null) {
+                Option(tileImages(row)(column)).foreach { ImageView =>
                   tileImages(row)(column).image = getTileImage(tile) // Update the corresponding image view
                   tileImages(row)(column).rotate = tile.rotation * 90
                 }
                 // Disable the button for filled tiles
-                if (fieldButtons(row)(column) != null) {
-                  fieldButtons(row)(column).disable = true
-                }
+                Option(fieldButtons(row)(column)).foreach(_.disable = true)
               case None =>
-                if (tileImages(row)(column) != null) {
-                  tileImages(row)(column).image = new Image(getClass.getClassLoader.getResource("background_tile.png").toString) // Update the corresponding image view
-                }
+                Option(tileImages(row)(column)).foreach(_.image = new Image(getClass.getClassLoader.getResource("background_tile.png").toString))
                 // Enable the button for empty tiles
-                if (fieldButtons(row)(column) != null) {
-                  fieldButtons(row)(column).disable = false
-                }
+                Option(fieldButtons(row)(column)).foreach(_.disable = false)
             }
           }
         } // Get tile from game data
         // Update the next card image when the current tile changes
 
-        // TODO use option instead of checking for null exception
-        if (nextCardImageView != null) {
+        Option(nextCardImageView).foreach { imageView =>
           val nextTile = tabletop.gameData.currentTile() // Fetch the new current tile
           val nextCardImage = getTileImage(nextTile) // Get the image for the new tile
           nextCardImageView.image = nextCardImage // Update the ImageView
