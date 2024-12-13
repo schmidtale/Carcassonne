@@ -9,13 +9,13 @@ import org.scalatest.wordspec.AnyWordSpec
 
 class TileSpec extends AnyWordSpec {
   val tile = new Tile(borders = Vector(road, town, road, pasture))
-  val tile2 = new Tile(false, true, borders = Vector(town, pasture, pasture, town), (knight, north))
-  val tile3 = new Tile(false, borders = Vector(road, road, road, pasture))
+  val tile2 = new Tile(monastery = false, townConnection = true, borders = Vector(town, pasture, pasture, town), (knight, north))
+  val tile3 = new Tile(monastery = false, borders = Vector(road, road, road, pasture))
 
-  val tileR1 = new Tile(false, false, Vector(pasture, road, town, road))
-  val tileOrig = new Tile(false, false, Vector(town, road, road, road), (none, nowhere), true)
-  val tileOrigR2 = new Tile(false, false, Vector(road, road, town, road), (none, nowhere), true)
-  val tileOrigR3 = new Tile(false, false, Vector(road, road, road, town), (none, nowhere), true)
+  val tileR1 = new Tile(monastery = false, townConnection = false, Vector(pasture, road, town, road))
+  val tileOrig = new Tile(monastery = false, townConnection = false, Vector(town, road, road, road), (none, nowhere), true)
+  val tileOrigR2 = new Tile(monastery = false, townConnection = false, Vector(road, road, town, road), (none, nowhere), true)
+  val tileOrigR3 = new Tile(monastery = false, townConnection = false, Vector(road, road, road, town), (none, nowhere), true)
 
   "A tile" should {
     "return the type of its northern border" in {

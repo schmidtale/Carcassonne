@@ -15,7 +15,7 @@ import org.scalatest.time.{Seconds, Span}
 
 
 class TextUISpec extends AnyWordSpec {
-  val tile2 = new Tile(false, true, borders = Vector(town, pasture, pasture, town), (knight, north))
+  val tile2 = new Tile(monastery = false, true, borders = Vector(town, pasture, pasture, town), (knight, north))
   val tabletop =  new Tabletop(GameData())
   val textUI = new TextUI(tabletop)
 
@@ -66,33 +66,48 @@ class TextUISpec extends AnyWordSpec {
     "return an Int equal to (exampleTurn + 1)" in {
       val exampleTurn = 5
       val input = new ByteArrayInputStream("0 5 8\n".getBytes)
-      assert(textUI.exec(exampleTurn, tabletop.tileStack(), input) == exampleTurn + 1)
+      val tabletop =  new Tabletop(GameData())
+      tabletop.gameData = tabletop.gameData.withTurn(exampleTurn)
+      val textUI = new TextUI(tabletop)
+      assert(textUI.exec(input) == exampleTurn + 1)
     }
     "return an Int equal to exampleTurn when undoing" in {
       val exampleTurn = 5
       val input = new ByteArrayInputStream("0 5 8\n".getBytes)
-      assert(textUI.exec(exampleTurn, tabletop.tileStack(), input) == exampleTurn + 1)
+      val tabletop = new Tabletop(GameData())
+      tabletop.gameData = tabletop.gameData.withTurn(exampleTurn)
+      val textUI = new TextUI(tabletop)
+      assert(textUI.exec(input) == exampleTurn + 1)
       val input2 = new ByteArrayInputStream("z\n".getBytes)
-      assert(textUI.exec(exampleTurn + 1, tabletop.tileStack(), input2) == exampleTurn)
+      assert(textUI.exec(input2) == exampleTurn)
     }
     "return an Int equal to (exampleTurn + 1) when redoing" in {
       val exampleTurn = 5
       val input = new ByteArrayInputStream("0 5 8\n".getBytes)
-      assert(textUI.exec(exampleTurn, tabletop.tileStack(), input) == exampleTurn + 1)
+      val tabletop = new Tabletop(GameData())
+      tabletop.gameData = tabletop.gameData.withTurn(exampleTurn)
+      val textUI = new TextUI(tabletop)
+      assert(textUI.exec(input) == exampleTurn + 1)
       val input2 = new ByteArrayInputStream("z\n".getBytes)
-      assert(textUI.exec(exampleTurn + 1, tabletop.tileStack(), input2) == exampleTurn)
+      assert(textUI.exec(input2) == exampleTurn)
       val input3 = new ByteArrayInputStream("y\n".getBytes)
-      assert(textUI.exec(exampleTurn, tabletop.tileStack(), input3) == exampleTurn + 1)
+      assert(textUI.exec(input3) == exampleTurn + 1)
     }
     "return an Int equal to 0 when restarting" in {
       val exampleTurn = 5
       val input = new ByteArrayInputStream("n\n".getBytes)
-      assert(textUI.exec(exampleTurn, tabletop.tileStack(), input) == 0)
+      val tabletop = new Tabletop(GameData())
+      tabletop.gameData = tabletop.gameData.withTurn(exampleTurn)
+      val textUI = new TextUI(tabletop)
+      assert(textUI.exec(input) == 0)
     }
     "return an Int equal to exampleTurn when using invalid input" in {
       val exampleTurn = 5
       val input = new ByteArrayInputStream("\n".getBytes)
-      assert(textUI.exec(exampleTurn, tabletop.tileStack(), input) == exampleTurn)
+      val tabletop = new Tabletop(GameData())
+      tabletop.gameData = tabletop.gameData.withTurn(exampleTurn)
+      val textUI = new TextUI(tabletop)
+      assert(textUI.exec(input) == exampleTurn)
     }
   }
 }
