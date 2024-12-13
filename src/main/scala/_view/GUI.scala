@@ -70,8 +70,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
             // add imageView for next Card and Button for rotation on top
             // TODO add button for rotation of card
             val nextTileStackPane = new StackPane {
-              val nextCardImage = new Image(getImagePath(tabletop.gameData.currentTile()))
-              nextCardImageView = new ImageView(nextCardImage) {
+              nextCardImageView = new ImageView(getTileImage(tabletop.gameData.currentTile())) {
                 preserveRatio = true
                 fitWidth = viewWidth / 4 // Adjust size as needed
               }
@@ -307,7 +306,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
             tabletop.gameData.map.data.get(Index(row), Index(column)).flatten match {
               case Some(tile) =>
                 if (tileImages(row)(column) != null) {
-                  tileImages(row)(column).image = new Image(getImagePath(tile)) // Update the corresponding image view
+                  tileImages(row)(column).image = getTileImage(tile) // Update the corresponding image view
                   tileImages(row)(column).rotate = tile.rotation * 90
                 }
                 // Disable the button for filled tiles
@@ -330,7 +329,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
         // TODO use option instead of checking for null exception
         if (nextCardImageView != null) {
           val nextTile = tabletop.gameData.currentTile() // Fetch the new current tile
-          val nextCardImage = new Image(getImagePath(nextTile)) // Get the image for the new tile
+          val nextCardImage = getTileImage(nextTile) // Get the image for the new tile
           nextCardImageView.image = nextCardImage // Update the ImageView
         }
       }
@@ -338,44 +337,36 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
     }
   }
 
-  private def getImagePath(tile: Tile): String = {
-    // TODO as svg
-    //    val svgFile = new File(getClass.getClassLoader.getResource("monastery0.svg").toURI)
-    //    val image = loadSvgAsImage(svgFile)
-
+  private def getTileImage(tile: Tile): Image = {
     val filename = tile.name match {
-      case "A" => "tile-a.png"
-      case "B" => "tile-b.png"
-      case "C" => "tile-c.png"
-      case "D" => "tile-d.png"
-      case "E" => "tile-e.png"
-      case "F" => "tile-f.png"
-      case "G" => "tile-g.png"
-      case "H" => "tile-h.png"
-      case "I" => "tile-i.png"
-      case "J" => "tile-j.png"
-      case "K" => "tile-k.png"
-      case "L" => "tile-l.png"
-      case "M" => "tile-m.png"
-      case "N" => "tile-n.png"
-      case "O" => "tile-o.png"
-      case "P" => "tile-p.png"
-      case "Q" => "tile-q.png"
-      case "R" => "tile-r.png"
-      case "S" => "tile-s.png"
-      case "T" => "tile-t.png"
-      case "U" => "tile-u.png"
-      case "V" => "tile-v.png"
-      case "W" => "tile-w.png"
-      case "X" => "tile-x.png"
+      case "A" => "tile-a.svg"
+      case "B" => "tile-b.svg"
+      case "C" => "tile-c.svg"
+      case "D" => "tile-d.svg"
+      case "E" => "tile-e.svg"
+      case "F" => "tile-f.svg"
+      case "G" => "tile-g.svg"
+      case "H" => "tile-h.svg"
+      case "I" => "tile-i.svg"
+      case "J" => "tile-j.svg"
+      case "K" => "tile-k.svg"
+      case "L" => "tile-l.svg"
+      case "M" => "tile-m.svg"
+      case "N" => "tile-n.svg"
+      case "O" => "tile-o.svg"
+      case "P" => "tile-p.svg"
+      case "Q" => "tile-q.svg"
+      case "R" => "tile-r.svg"
+      case "S" => "tile-s.svg"
+      case "T" => "tile-t.svg"
+      case "U" => "tile-u.svg"
+      case "V" => "tile-v.svg"
+      case "W" => "tile-w.svg"
+      case "X" => "tile-x.svg"
       case _ => "default_tile.png"
     }
-    val imagePath = getClass.getClassLoader.getResource(filename)
-    // If the resource is found, return its path, otherwise return a default or error string
-    Option(imagePath) match {
-      case Some(path) => path.toString // Return the resource URL as a string
-      case None => "Resource not found" // Handle the case where the resource doesn't exist
-    }
+    val svgFile = new File(getClass.getClassLoader.getResource(filename).toURI)
+    loadSvgAsImage(svgFile)
   }
 
   private def showReviewScene(): Unit = {
@@ -420,7 +411,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
   }
 
   // Function to render SVG to JavaFX Image
-  def loadSvgAsImage(svgFile: File): Image = {
+  private def loadSvgAsImage(svgFile: File): Image = {
     require(svgFile.exists() && svgFile.isFile, "The provided SVG file must exist and be a valid file")
 
     // Buffer to hold the rendered image
@@ -445,7 +436,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
     SwingFXUtils.toFXImage(bufferedImage, null)
   }
 
-  def colorToHex(color: scalafx.scene.paint.Color): String = {
+  private def colorToHex(color: scalafx.scene.paint.Color): String = {
     val red = (color.red * 255).toInt
     val green = (color.green * 255).toInt
     val blue = (color.blue * 255).toInt
