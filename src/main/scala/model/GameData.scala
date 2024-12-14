@@ -21,7 +21,10 @@ class GameData(val map: TileMap = TileMap(),
   }
 
   def currentTile(): Tile = {
-    stack(turn)
+    if(turn < stack.size) {
+      return stack(turn)
+    }
+    TileStack().defaultTile
   }
 
   def withMap(newMap: TileMap): GameData = {

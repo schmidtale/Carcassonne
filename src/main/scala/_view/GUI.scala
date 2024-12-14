@@ -2,26 +2,34 @@ package _view
 
 import util.Observer
 import controller.Tabletop
+import javafx.embed.swing.SwingFXUtils
 import model.{Color, Index, Tile}
+
+import java.io.File
+import java.awt.image.BufferedImage
+import org.apache.batik.transcoder.image.ImageTranscoder
+import org.apache.batik.transcoder.{TranscoderInput, TranscoderOutput}
 import scalafx.application.{JFXApp3, Platform}
-import scalafx.geometry.Pos
+import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.Scene
-import scalafx.scene.control.Button
-import scalafx.stage.Screen
+import scalafx.scene.control.{Button, Tooltip}
+import scalafx.stage.{Screen, StageStyle}
 import scalafx.scene.image.{Image, ImageView}
-import scalafx.scene.layout.{BorderPane, GridPane, Pane, StackPane, VBox}
+import scalafx.scene.input.{KeyCode, KeyEvent}
+import scalafx.scene.layout.{Background, BackgroundFill, BorderPane, CornerRadii, GridPane, Pane, StackPane, VBox}
 import scalafx.scene.paint.Color.*
 import scalafx.scene.paint
 import scalafx.scene.text.{Font, Text}
+import scalafx.Includes.*
 
 // Function to convert enum Color to scalafx Color
 def getColorFromEnum(playerColor: model.Color): scalafx.scene.paint.Color = {
   playerColor match {
-    case Color.blue => scalafx.scene.paint.Color.SkyBlue
-    case Color.red => scalafx.scene.paint.Color.MediumVioletRed
-    case Color.green => scalafx.scene.paint.Color.ForestGreen
-    case Color.yellow => scalafx.scene.paint.Color.Yellow
-    case Color.black => scalafx.scene.paint.Color.Gray
+    case Color.blue => scalafx.scene.paint.Color.rgb(56,58,107)
+    case Color.red => scalafx.scene.paint.Color.rgb(203,31,115)
+    case Color.green => scalafx.scene.paint.Color.rgb(224,58,60)
+    case Color.yellow => scalafx.scene.paint.Color.rgb(234,109,61)
+    case Color.black => scalafx.scene.paint.Color.rgb(252,199,45)
   }
 }
 
@@ -52,15 +60,16 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
       height = viewHeight
       resizable = false
 
+      icons.add(new Image(getClass.getClassLoader.getResource("taskbar_icon.png").toString))
       scene = new Scene {
         fill = Black
-        content = new BorderPane {
+        root = new BorderPane {
           left = new VBox {
+            style = s"-fx-background-color:black"
             // add imageView for next Card and Button for rotation on top
             // TODO add button for rotation of card
             val nextTileStackPane = new StackPane {
-              val nextCardImage = new Image(getImagePath(tabletop.gameData.currentTile()))
-              nextCardImageView = new ImageView(nextCardImage) {
+              nextCardImageView = new ImageView(getTileImage(tabletop.gameData.currentTile())) {
                 preserveRatio = true
                 fitWidth = viewWidth / 4 // Adjust size as needed
               }
@@ -79,39 +88,116 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
               children = Seq(nextCardImageView, rotateButton)
             }
 
-
-            // add BorderPane for buttons to select placement of liegeman
-            val gridPane = new GridPane {
+            // add BorderPane for buttons to select placement of liegeman/undo/redo
+            val controlPanelGridPane = new GridPane {
               // add buttons to BorderPane at Top/Left/Bottom/Right
-              alignment = Pos.Center // Centering the buttons in the gri
-
-              // add 3x3 GridPain of Buttons to Center
-
-
+              alignment = Pos.Center // Centering the buttons in the grid
+              // add 3x3 GridPane of Buttons to Center
             }
+
+            val undoButton = new Button() {
+              minWidth = 60
+              minHeight = 60
+              style = "-fx-background-color: #FF6347; -fx-text-fill: white;" // Red background, white text
+              onAction = _ => tabletop.undo()
+              // Set the image for the button
+              graphic = new ImageView(new Image(getClass.getClassLoader.getResource("undo_button.png").toString)) {
+                fitWidth = 20
+                fitHeight = 20
+                preserveRatio = true
+              }
+              // Add a tooltip to the button
+              tooltip = new Tooltip("Undo")
+            }
+            val redoButton = new Button() {
+              minWidth = 60
+              minHeight = 60
+              style = "-fx-background-color: #4682B4; -fx-text-fill: white;" // Blue background, white text
+              onAction = _ => tabletop.redo()
+
+              graphic = new ImageView(new Image(getClass.getClassLoader.getResource("redo_button.png").toString)) {
+                fitWidth = 20
+                fitHeight = 20
+                preserveRatio = true
+              }
+              // Add a tooltip to the button
+              tooltip = new Tooltip("Redo")
+            }
+            controlPanelGridPane.add(undoButton, 0, 0)
+            controlPanelGridPane.add(redoButton, 4, 0)
+
             val buttonDetails = List(
-              (0, 2, "K"), // button02
-              (1, 1, "P"), // button11
-              (1, 2, "W"), // button12
-              (1, 3, "P"), // button13
-              (2, 0, "K"), // button20
-              (2, 1, "W"), // button21
-              (2, 2, "M"), // button22
-              (2, 3, "W"), // button23
-              (2, 4, "K"), // button24
-              (3, 1, "P"), // button31
-              (3, 2, "W"), // button32
-              (3, 3, "P"), // button33
-              (4, 2, "K") // button42
+              (0, 2, "Knight"), // button02
+              (1, 1, "Peasant"), // button11
+              (1, 2, "Waylayer"), // button12
+              (1, 3, "Peasant"), // button13
+              (2, 0, "Knight"), // button20
+              (2, 1, "Waylayer"), // button21
+              (2, 2, "Monk"), // button22
+              (2, 3, "Waylayer"), // button23
+              (2, 4, "Knight"), // button24
+              (3, 1, "Peasant"), // button31
+              (3, 2, "Waylayer"), // button32
+              (3, 3, "Peasant"), // button33
+              (4, 2, "Knight") // button42
             )
             buttonDetails.foreach { case (row, col, label) =>
-              val button = new Button(label)
-              // Set the button size to be uniform
-              button.setMinWidth(60)
-              button.setMinHeight(60)
-              gridPane.add(button, col, row)
+              val stackPane = new StackPane {
+                background = new Background(Array(new BackgroundFill(White, CornerRadii.Empty, Insets.Empty)))
+                val imageView = label match {
+                  case "Peasant" =>
+                    val svgFile = new File(getClass.getClassLoader.getResource("peasant_button.svg").toURI)
+                    val image = loadSvgAsImage(svgFile)
+                    new ImageView(image) {
+                      fitWidth = 60
+                      fitHeight = 60
+                      preserveRatio = true
+                    }
+                  case "Knight" =>
+                    val svgFile = new File(getClass.getClassLoader.getResource("knight_button.svg").toURI)
+                    val image = loadSvgAsImage(svgFile)
+                    new ImageView(image) {
+                      fitWidth = 60
+                      fitHeight = 60
+                      preserveRatio = true
+                    }
+                  case "Monk" =>
+                    val svgFile = new File(getClass.getClassLoader.getResource("monk_button.svg").toURI)
+                    val image = loadSvgAsImage(svgFile)
+                    new ImageView(image) {
+                      fitWidth = 60
+                      fitHeight = 60
+                      preserveRatio = true
+                    }
+                  case "Waylayer" =>
+                    val svgFile = new File(getClass.getClassLoader.getResource("waylayer_button.svg").toURI)
+                    val image = loadSvgAsImage(svgFile)
+                    new ImageView(image) {
+                      fitWidth = 60
+                      fitHeight = 60
+                      preserveRatio = true
+                    }
+                  case _ =>
+                    new ImageView(new Image(getClass.getClassLoader.getResource("default_tile.png").toString)) {
+                      fitWidth = 60
+                      fitHeight = 60
+                      preserveRatio = true
+                    }
+                }
+
+                val button = new Button() {
+                  // Set the button size to be uniform
+                  minWidth = 60
+                  minHeight = 60
+                  style = "-fx-background-color: transparent; -fx-border-color: transparent;"
+                  //onAction = _ => println(s"Button $label clicked!")
+                  tooltip = new Tooltip(s"$label")
+                }
+                children = Seq(imageView, button)
+              }
+              controlPanelGridPane.add(stackPane, col, row)
             }
-            children = Seq(nextTileStackPane, gridPane)
+            children = Seq(nextTileStackPane, controlPanelGridPane)
           }
           center = new StackPane {
             // Create a grid (15x15) of StackPanes with ImageViews and transparent buttons on top
@@ -149,34 +235,64 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
                   children = Seq(cardImageView, fieldButton)
                 }
                 fieldGridPane.add(fieldStackPane, column, row)
+                fieldGridPane.style = s"-fx-background-color:black"
               }
             }
             children = Seq(fieldGridPane)
           }
           right = new VBox {
+            style = s"-fx-background-color:black"
+            alignment = Pos.Center
+            this.setPrefSize(viewHeight * 0.4, viewWidth)
+            spacing = 10
             // add VBoxes depending on tabletop.players list size
             // add player info labels to VBoxes
+
             tabletop.gameData.players.zipWithIndex.foreach { case (player, index) =>
               val playerVBox = new VBox {
                 alignment = Pos.Center
+                padding = Insets(10)
+                spacing = 5
+                maxWidth = viewWidth * 0.15
+                val colorHex = colorToHex(getColorFromEnum(player.color))
+                style =
+                  s"""-fx-background-color: ${colorHex};
+                       -fx-background-radius: 15;
+                       -fx-border-radius: 15;
+                       -fx-border-width: 2;""" // Rounded corners
+
                 children = Seq(
                   new Text(s"Player ${index + 1}") {
-                    fill = getColorFromEnum(player.color)
                     font = Font.font("Century", 24)
                   },
                   new Text(s"Points ${player.points}") {
-                    fill = getColorFromEnum(player.color)
-                    font = Font.font("Century", 24)
+                    font = Font.font("Century", 18)
                   },
                   new Text(s"Liegemen ${player.meepleCount}") {
-                    fill = getColorFromEnum(player.color)
-                    font = Font.font("Century", 24)
+                    font = Font.font("Century", 18)
                   }
                 )
               }
               children.add(playerVBox)
             }
           }
+        }
+        onKeyPressed = (event: KeyEvent) => {
+          if (event.code == KeyCode.Z) {
+            tabletop.undo()
+          }
+          if (event.code == KeyCode.Y) {
+            tabletop.redo()
+          }
+          if (event.code == KeyCode.N) {
+            tabletop.resetGameData()
+          }
+        }
+        // Handle the close button
+        onCloseRequest = _ => {
+          println("Closing application...")
+          Platform.exit()
+          System.exit(0)
         }
       }
     }
@@ -186,73 +302,144 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
   override def update(): Unit = {
     // update scene based on GameData state
     Platform.runLater {
-      for (row <- 0 to 14) {
-        for (column <- 0 to 14) {
-          tabletop.gameData.map.data.get(Index(row), Index(column)).flatten match {
-            case Some(tile) =>
-              if (tileImages(row)(column) != null) {
-                tileImages(row)(column).image = new Image(getImagePath(tile)) // Update the corresponding image view
-                tileImages(row)(column).rotate = tile.rotation * 90
-              }
-              // Disable the button for filled tiles
-              if (fieldButtons(row)(column) != null) {
-                fieldButtons(row)(column).disable = true
-              }
-            case None =>
-              if (tileImages(row)(column) != null) {
-                tileImages(row)(column).image = new Image(getClass.getClassLoader.getResource("background_tile.png").toString) // Update the corresponding image view
-              }
-              // Enable the button for empty tiles
-              if (fieldButtons(row)(column) != null) {
-                fieldButtons(row)(column).disable = false
-              }
+      if (tabletop.gameData.turn >= tabletop.gameData.stack.size) {
+        // Game has ended, show review scene
+        showReviewScene()
+      }
+      else {
+        for (row <- 0 to 14) {
+          for (column <- 0 to 14) {
+            tabletop.gameData.map.data.get(Index(row), Index(column)).flatten match {
+              // TODO use higher order functions
+              case Some(tile) =>
+                Option(tileImages(row)(column)).foreach { ImageView =>
+                  tileImages(row)(column).image = getTileImage(tile) // Update the corresponding image view
+                  tileImages(row)(column).rotate = tile.rotation * 90
+                }
+                // Disable the button for filled tiles
+                Option(fieldButtons(row)(column)).foreach(_.disable = true)
+              case None =>
+                Option(tileImages(row)(column)).foreach(_.image = new Image(getClass.getClassLoader.getResource("background_tile.png").toString))
+                // Enable the button for empty tiles
+                Option(fieldButtons(row)(column)).foreach(_.disable = false)
+            }
           }
-        }
-      } // Get tile from game data
-      // Update the next card image when the current tile changes
+        } // Get tile from game data
+        // Update the next card image when the current tile changes
 
-      // TODO use option instead of checking for null exception
-      if (nextCardImageView != null) {
-        val nextTile = tabletop.gameData.currentTile() // Fetch the new current tile
-        val nextCardImage = new Image(getImagePath(nextTile)) // Get the image for the new tile
-        nextCardImageView.image = nextCardImage // Update the ImageView
+        Option(nextCardImageView).foreach { imageView =>
+          val nextTile = tabletop.gameData.currentTile() // Fetch the new current tile
+          val nextCardImage = getTileImage(nextTile) // Get the image for the new tile
+          nextCardImageView.image = nextCardImage // Update the ImageView
+        }
+      }
+
+    }
+  }
+
+  private def getTileImage(tile: Tile): Image = {
+    val filename = tile.name match {
+      case "A" => "tile-a.svg"
+      case "B" => "tile-b.svg"
+      case "C" => "tile-c.svg"
+      case "D" => "tile-d.svg"
+      case "E" => "tile-e.svg"
+      case "F" => "tile-f.svg"
+      case "G" => "tile-g.svg"
+      case "H" => "tile-h.svg"
+      case "I" => "tile-i.svg"
+      case "J" => "tile-j.svg"
+      case "K" => "tile-k.svg"
+      case "L" => "tile-l.svg"
+      case "M" => "tile-m.svg"
+      case "N" => "tile-n.svg"
+      case "O" => "tile-o.svg"
+      case "P" => "tile-p.svg"
+      case "Q" => "tile-q.svg"
+      case "R" => "tile-r.svg"
+      case "S" => "tile-s.svg"
+      case "T" => "tile-t.svg"
+      case "U" => "tile-u.svg"
+      case "V" => "tile-v.svg"
+      case "W" => "tile-w.svg"
+      case "X" => "tile-x.svg"
+      case _ => "default_tile.png"
+    }
+    val svgFile = new File(getClass.getClassLoader.getResource(filename).toURI)
+    loadSvgAsImage(svgFile)
+  }
+
+  private def showReviewScene(): Unit = {
+    stage.scene = new Scene {
+      fill = Black
+      root = new VBox {
+        background = new Background(Array(new BackgroundFill(Black, CornerRadii.Empty, Insets.Empty)))
+        fill = Black
+        alignment = Pos.Center
+        prefWidth = stage.width.value
+        prefHeight = stage.height.value
+        spacing = 20
+        children = Seq(
+          new Text("Game Over") {
+            fill = White
+            font = Font.font("Century", 36)
+          },
+          new Text("Final Scores") {
+            fill = White
+            font = Font.font("Century", 24)
+          },
+          new VBox {
+            spacing = 10
+            alignment = Pos.Center
+            children = tabletop.gameData.players.map {
+              player =>
+                new Text(s"Player ${tabletop.gameData.players.indexOf(player) + 1}: ${player.points} points") {
+                  fill = getColorFromEnum(player.color)
+                  font = Font.font("Century", 20)
+                }
+            }
+          },
+          new Button("Exit to Main Menu") {
+            onAction = _ => {
+              // TODO switch to Menu scene
+              Platform.exit()
+            }
+          }
+        )
       }
     }
   }
 
-  private def getImagePath(tile: Tile): String = {
-    val filename = tile.name match {
-      case "A" => "tile-a.png"
-      case "B" => "tile-b.png"
-      case "C" => "tile-c.png"
-      case "D" => "tile-d.png"
-      case "E" => "tile-e.png"
-      case "F" => "tile-f.png"
-      case "G" => "tile-g.png"
-      case "H" => "tile-h.png"
-      case "I" => "tile-i.png"
-      case "J" => "tile-j.png"
-      case "K" => "tile-k.png"
-      case "L" => "tile-l.png"
-      case "M" => "tile-m.png"
-      case "N" => "tile-n.png"
-      case "O" => "tile-o.png"
-      case "P" => "tile-p.png"
-      case "Q" => "tile-q.png"
-      case "R" => "tile-r.png"
-      case "S" => "tile-s.png"
-      case "T" => "tile-t.png"
-      case "U" => "tile-u.png"
-      case "V" => "tile-v.png"
-      case "W" => "tile-w.png"
-      case "X" => "tile-x.png"
-      case _ => "default_tile.png"
+  // Function to render SVG to JavaFX Image
+  private def loadSvgAsImage(svgFile: File): Image = {
+    require(svgFile.exists() && svgFile.isFile, "The provided SVG file must exist and be a valid file")
+
+    // Buffer to hold the rendered image
+    var bufferedImage: BufferedImage = null
+
+    // Custom Transcoder to convert SVG to BufferedImage
+    val transcoder = new ImageTranscoder {
+      override def createImage(width: Int, height: Int): BufferedImage = {
+        new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
+      }
+
+      override def writeImage(img: BufferedImage, out: TranscoderOutput): Unit = {
+        bufferedImage = img
+      }
     }
-    val imagePath = getClass.getClassLoader.getResource(filename)
-    // If the resource is found, return its path, otherwise return a default or error string
-    Option(imagePath) match {
-      case Some(path) => path.toString // Return the resource URL as a string
-      case None => "Resource not found" // Handle the case where the resource doesn't exist
-    }
+
+    // Transcode the SVG
+    val input = new TranscoderInput(svgFile.toURI.toString)
+    transcoder.transcode(input, null)
+
+    // Convert BufferedImage to JavaFX Image
+    SwingFXUtils.toFXImage(bufferedImage, null)
+  }
+
+  private def colorToHex(color: scalafx.scene.paint.Color): String = {
+    val red = (color.red * 255).toInt
+    val green = (color.green * 255).toInt
+    val blue = (color.blue * 255).toInt
+    f"#$red%02X$green%02X$blue%02X" // Format it as #RRGGBB
   }
 }

@@ -8,49 +8,49 @@ import org.scalatest.wordspec.AnyWordSpec
 
 class TextProviderSpec extends AnyWordSpec {
   val textProvider = new TextProvider
-  val tile2 = new Tile(false, true, borders = Vector(town, pasture, pasture, town), (knight, north))
+  val tile2 = new Tile(monastery = false, true, borders = Vector(town, pasture, pasture, town), (knight, north))
   val expectedStringTile2 = "* B B B *\nB B . . .\nB . . . .\nB . . . .\n* . . . *"
 
-  val t1 = new Tile(true, false, Vector(pasture, pasture, pasture, pasture))
+  val t1 = new Tile(monastery = true, false, Vector(pasture, pasture, pasture, pasture))
   val s1 = "* . . . *\n. . . . .\n. . C . .\n. . . . .\n* . . . *"
-  val t2 = new Tile(false, false, Vector(pasture, road, pasture, road))
+  val t2 = new Tile(monastery = false, false, Vector(pasture, road, pasture, road))
   val s2 = "* . . . *\n. . . . .\nH H H H H\n. . . . .\n* . . . *"
-  val t3 = new Tile(false, true, Vector(pasture, town, town, town)) //town connection must be true in this combination
+  val t3 = new Tile(monastery = false, true, Vector(pasture, town, town, town)) //town connection must be true in this combination
   val s3 = "* . . . *\nB . . . B\nB B B B B\nB B B B B\n* B B B *"
-  val t4 = new Tile(false, false, Vector(road, road, road, road))
+  val t4 = new Tile(monastery = false, false, Vector(road, road, road, road))
   val s4 = "* . H . *\n. . H . .\nH H H H H\n. . H . .\n* . H . *"
-  val t5 = new Tile(false, false, Vector(road, town, town, road))
+  val t5 = new Tile(monastery = false, false, Vector(road, town, town, road))
   val s5 = "* . H . *\n. . H . B\nH H H . B\n. . . . B\n* B B B *"
 
-  val t6 = new Tile(false, true, Vector(town, town, town, town))
+  val t6 = new Tile(monastery = false, true, Vector(town, town, town, town))
   val s6 = "* B B B *\nB B B B B\nB B B B B\nB B B B B\n* B B B *"
-  val t7 = new Tile(false, true, Vector(town, town, town, pasture))
+  val t7 = new Tile(monastery = false, true, Vector(town, town, town, pasture))
   val s7 = "* B B B *\n. . B B B\n. . B B B\n. . B B B\n* B B B *"
-  val t8 = new Tile(false, true, Vector(town, town, pasture, town))
+  val t8 = new Tile(monastery = false, true, Vector(town, town, pasture, town))
   val s8 = "* B B B *\nB B B B B\nB B B B B\nB . . . B\n* . . . *"
-  val t9 = new Tile(false, true, Vector(town, pasture, town, town))
+  val t9 = new Tile(monastery = false, true, Vector(town, pasture, town, town))
   val s9 = "* B B B *\nB B B . .\nB B B . .\nB B B . .\n* B B B *"
 
-  val t10 = new Tile(false, false, Vector(town, pasture, pasture, town))
+  val t10 = new Tile(monastery = false, false, Vector(town, pasture, pasture, town))
   val s10 = "* B B B *\nB . . . .\nB . . . .\nB . . . .\n* . . . *"
-  val t11 = new Tile(false, false, Vector(town, town, pasture, pasture))
+  val t11 = new Tile(monastery = false, false, Vector(town, town, pasture, pasture))
   val s11 = "* B B B *\n. . . . B\n. . . . B\n. . . . B\n* . . . *"
-  val t12 = new Tile(false, true, Vector(town, town, pasture, pasture))
+  val t12 = new Tile(monastery = false, true, Vector(town, town, pasture, pasture))
   val s12 = "* B B B *\n. . . B B\n. . . . B\n. . . . B\n* . . . *"
-  val t13 = new Tile(false, true, Vector(pasture, town, town, pasture))
+  val t13 = new Tile(monastery = false, true, Vector(pasture, town, town, pasture))
   val s13 = "* . . . *\n. . . . B\n. . . . B\n. . . B B\n* B B B *"
-  val t14 = new Tile(false, true, Vector(pasture, pasture, town, town))
+  val t14 = new Tile(monastery = false, true, Vector(pasture, pasture, town, town))
   val s14 = "* . . . *\nB . . . .\nB . . . .\nB B . . .\n* B B B *"
-  val t15 = new Tile(false, false, Vector(pasture, pasture, town, town))
+  val t15 = new Tile(monastery = false, false, Vector(pasture, pasture, town, town))
   val s15 = "* . . . *\nB . . . .\nB . . . .\nB . . . .\n* B B B *"
 
-  val t16 = new Tile(false, false, Vector(pasture, pasture, road, road))
+  val t16 = new Tile(monastery = false, false, Vector(pasture, pasture, road, road))
   val s16 = "* . . . *\n. . . . .\nH H H . .\n. . H . .\n* . H . *"
-  val t17 = new Tile(false, false, Vector(pasture, road, road, pasture))
+  val t17 = new Tile(monastery = false, false, Vector(pasture, road, road, pasture))
   val s17 = "* . . . *\n. . . . .\n. . H H H\n. . H . .\n* . H . *"
 
   /* non existing tile t18 : */
-  val t18 = new Tile(true, false, Vector(pasture, road, town, road))
+  val t18 = new Tile(monastery = true, false, Vector(pasture, road, town, road))
   val s19 = "* . . . *\n. . . . .\nH H M H H\n. . H . .\n* B B B *"
 
   "A model.TextProvider" should {

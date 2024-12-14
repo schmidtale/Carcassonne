@@ -39,26 +39,17 @@ class TextUI(tabletop: Tabletop) extends Observer {
       roundFinishedPlayer.play()
       tabletop.gameData.turn
     }
-    // TODO use turn from gameData
     else {
-//      // Undo
-//      if (line == "z") {
-//        turn - 1
-//        // Redo
-//      }
-//      else if (line == "y") {
-//        turn + 1
-//      }
-//      else if (line == "n") {
-//        0
-//      }
-//      else {
-//        turn
-//      }
      tabletop.gameData.turn
     }
   }
 
+  def review(): Unit = {
+    print("Game Finished\n")
+    for ((player, index) <- tabletop.gameData.players.zipWithIndex) {
+      print(s"Player ${index + 1}: ${player.points}\n")
+    }
+  }
 
   def readPlacement(line: String): (Boolean, Int, Index, Index) = {
     val placementInfo = line match {
@@ -92,6 +83,12 @@ class TextUI(tabletop: Tabletop) extends Observer {
   }
 
   override def update(): Unit = {
+    if (tabletop.gameData.turn >= tabletop.gameData.stack.size) {
+      // Game has ended, show review
+      review()
+      return
+    }
+
     print(tabletop.constructTabletopFromMap())
     //get and print Tile from Queue
     drawnTile = tabletop.gameData.currentTile()

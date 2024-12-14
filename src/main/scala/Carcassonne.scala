@@ -28,6 +28,6 @@ object Carcassonne {
         while (tabletop.gameData.turn < tabletop.gameData.stack.size) {
              tui.exec(System.in)
         }
-        // TODO Call function that calculates resulting points from GUI
+        // TODO Call function that calculates resulting points from TUI
     }
 }

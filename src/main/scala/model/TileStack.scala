@@ -3,7 +3,8 @@ import BorderType._
 
 import scala.collection.immutable.Queue
 
-class TileStack(val startingTile: Tile = new Tile(name = "D", borders = Vector(road, town, road, pasture)).rotate(3)) {
+class TileStack(val startingTile: Tile = new Tile(name = "D", borders = Vector(road, town, road, pasture)).rotate(3),
+               val defaultTile: Tile = new Tile(name = "", borders = Vector(pasture, pasture, pasture, pasture))) {
   // Create all Carcassonne Cards A-X
   // Referenz: https://brettspiele-report.de/images/carcassonne/Spielanleitung_Carcassonne.pdf
   private val Tile_A = new Tile(name = "A", monastery = true, borders = Vector(pasture, pasture, road, pasture))

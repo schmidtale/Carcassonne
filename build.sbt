@@ -12,6 +12,10 @@ libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.19"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.19" % "test"
 libraryDependencies += "javazoom" % "jlayer" % "1.0.1"
 libraryDependencies += "org.scalafx" %% "scalafx" % "20.0.0-R31"
+libraryDependencies ++= Seq(
+  "org.apache.xmlgraphics" % "batik-transcoder" % "1.16",
+  "org.apache.xmlgraphics" % "batik-codec" % "1.16"
+)
 
 libraryDependencies ++= {
   // Determine OS version of JavaFX binaries
