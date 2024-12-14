@@ -67,7 +67,6 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
           left = new VBox {
             style = s"-fx-background-color:black"
             // add imageView for next Card and Button for rotation on top
-            // TODO add button for rotation of card
             val nextTileStackPane = new StackPane {
               nextCardImageView = new ImageView(getTileImage(tabletop.gameData.currentTile())) {
                 preserveRatio = true
@@ -310,7 +309,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
         for (row <- 0 to 14) {
           for (column <- 0 to 14) {
             tabletop.gameData.map.data.get(Index(row), Index(column)).flatten match {
-              // TODO use higher order functions
+              // TODO use partially applied functions
               case Some(tile) =>
                 Option(tileImages(row)(column)).foreach { ImageView =>
                   tileImages(row)(column).image = getTileImage(tile) // Update the corresponding image view
@@ -363,7 +362,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
       case "V" => "tile-v.svg"
       case "W" => "tile-w.svg"
       case "X" => "tile-x.svg"
-      case _ => "default_tile.png"
+      case _ => "default_tile.svg"
     }
     val svgFile = new File(getClass.getClassLoader.getResource(filename).toURI)
     loadSvgAsImage(svgFile)
