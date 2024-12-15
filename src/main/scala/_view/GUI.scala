@@ -13,7 +13,7 @@ import scalafx.application.{JFXApp3, Platform}
 import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.Scene
 import scalafx.scene.control.{Button, Tooltip}
-import scalafx.stage.{Screen, StageStyle}
+import scalafx.stage.Screen
 import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.input.{KeyCode, KeyEvent}
 import scalafx.scene.layout.{Background, BackgroundFill, BorderPane, CornerRadii, GridPane, Pane, StackPane, VBox}
@@ -45,7 +45,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
   private val fieldGridPane = new GridPane
 
   // current rotation of nextCardImageView tile
-  var currentRotation = 0
+  private var currentRotation = 0
 
   /* Viewport sizes */
   private var viewHeight: Double = 0
@@ -60,7 +60,9 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
       height = viewHeight
       resizable = false
 
-      icons.add(new Image(getClass.getClassLoader.getResource("taskbar_icon.png").toString))
+      val svgFile = new File(getClass.getClassLoader.getResource("icon.svg").toURI)
+      val iconImage = loadSvgAsImage(svgFile)
+      icons.add(iconImage)
       scene = new Scene {
         fill = Black
         root = new BorderPane {
