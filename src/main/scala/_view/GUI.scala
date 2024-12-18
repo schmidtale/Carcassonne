@@ -2,13 +2,8 @@ package _view
 
 import util.Observer
 import controller.Tabletop
-import javafx.embed.swing.SwingFXUtils
 import model.{Color, Index, Tile}
 
-import java.io.File
-import java.awt.image.BufferedImage
-import org.apache.batik.transcoder.image.ImageTranscoder
-import org.apache.batik.transcoder.{TranscoderInput, TranscoderOutput}
 import scalafx.application.{JFXApp3, Platform}
 import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.Scene
@@ -329,7 +324,6 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
           nextCardImageView.image = nextCardImage // Update the ImageView
         }
       }
-
     }
   }
 
