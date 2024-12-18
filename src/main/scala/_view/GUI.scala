@@ -60,9 +60,8 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
       height = viewHeight
       resizable = false
 
-      val svgFile = new File(getClass.getClassLoader.getResource("icon.svg").toURI)
-      val iconImage = loadSvgAsImage(svgFile)
-      icons.add(iconImage)
+      val taskbar_icon = new Image(getClass.getClassLoader.getResource("icon.png").toString)
+      icons.add(taskbar_icon)
       scene = new Scene {
         fill = Black
         root = new BorderPane {
@@ -147,32 +146,28 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
                 background = new Background(Array(new BackgroundFill(White, CornerRadii.Empty, Insets.Empty)))
                 val imageView = label match {
                   case "Peasant" =>
-                    val svgFile = new File(getClass.getClassLoader.getResource("peasant_button.svg").toURI)
-                    val image = loadSvgAsImage(svgFile)
+                    val image = new Image(getClass.getClassLoader.getResource("peasant_button.png").toString)
                     new ImageView(image) {
                       fitWidth = 60
                       fitHeight = 60
                       preserveRatio = true
                     }
                   case "Knight" =>
-                    val svgFile = new File(getClass.getClassLoader.getResource("knight_button.svg").toURI)
-                    val image = loadSvgAsImage(svgFile)
+                    val image = new Image(getClass.getClassLoader.getResource("knight_button.png").toString)
                     new ImageView(image) {
                       fitWidth = 60
                       fitHeight = 60
                       preserveRatio = true
                     }
                   case "Monk" =>
-                    val svgFile = new File(getClass.getClassLoader.getResource("monk_button.svg").toURI)
-                    val image = loadSvgAsImage(svgFile)
+                    val image = new Image(getClass.getClassLoader.getResource("monk_button.png").toString)
                     new ImageView(image) {
                       fitWidth = 60
                       fitHeight = 60
                       preserveRatio = true
                     }
                   case "Waylayer" =>
-                    val svgFile = new File(getClass.getClassLoader.getResource("waylayer_button.svg").toURI)
-                    val image = loadSvgAsImage(svgFile)
+                    val image = new Image(getClass.getClassLoader.getResource("waylayer_button.png").toString)
                     new ImageView(image) {
                       fitWidth = 60
                       fitHeight = 60
@@ -340,34 +335,33 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
 
   private def getTileImage(tile: Tile): Image = {
     val filename = tile.name match {
-      case "A" => "tile-a.svg"
-      case "B" => "tile-b.svg"
-      case "C" => "tile-c.svg"
-      case "D" => "tile-d.svg"
-      case "E" => "tile-e.svg"
-      case "F" => "tile-f.svg"
-      case "G" => "tile-g.svg"
-      case "H" => "tile-h.svg"
-      case "I" => "tile-i.svg"
-      case "J" => "tile-j.svg"
-      case "K" => "tile-k.svg"
-      case "L" => "tile-l.svg"
-      case "M" => "tile-m.svg"
-      case "N" => "tile-n.svg"
-      case "O" => "tile-o.svg"
-      case "P" => "tile-p.svg"
-      case "Q" => "tile-q.svg"
-      case "R" => "tile-r.svg"
-      case "S" => "tile-s.svg"
-      case "T" => "tile-t.svg"
-      case "U" => "tile-u.svg"
-      case "V" => "tile-v.svg"
-      case "W" => "tile-w.svg"
-      case "X" => "tile-x.svg"
-      case _ => "default_tile.svg"
+      case "A" => "tile-a.png"
+      case "B" => "tile-b.png"
+      case "C" => "tile-c.png"
+      case "D" => "tile-d.png"
+      case "E" => "tile-e.png"
+      case "F" => "tile-f.png"
+      case "G" => "tile-g.png"
+      case "H" => "tile-h.png"
+      case "I" => "tile-i.png"
+      case "J" => "tile-j.png"
+      case "K" => "tile-k.png"
+      case "L" => "tile-l.png"
+      case "M" => "tile-m.png"
+      case "N" => "tile-n.png"
+      case "O" => "tile-o.png"
+      case "P" => "tile-p.png"
+      case "Q" => "tile-q.png"
+      case "R" => "tile-r.png"
+      case "S" => "tile-s.png"
+      case "T" => "tile-t.png"
+      case "U" => "tile-u.png"
+      case "V" => "tile-v.png"
+      case "W" => "tile-w.png"
+      case "X" => "tile-x.png"
+      case _ => "default_tile.png"
     }
-    val svgFile = new File(getClass.getClassLoader.getResource(filename).toURI)
-    loadSvgAsImage(svgFile)
+    new Image(getClass.getClassLoader.getResource(filename).toString)
   }
 
   private def showReviewScene(): Unit = {
@@ -409,32 +403,6 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
         )
       }
     }
-  }
-
-  // Function to render SVG to JavaFX Image
-  private def loadSvgAsImage(svgFile: File): Image = {
-    require(svgFile.exists() && svgFile.isFile, "The provided SVG file must exist and be a valid file")
-
-    // Buffer to hold the rendered image
-    var bufferedImage: BufferedImage = null
-
-    // Custom Transcoder to convert SVG to BufferedImage
-    val transcoder = new ImageTranscoder {
-      override def createImage(width: Int, height: Int): BufferedImage = {
-        new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
-      }
-
-      override def writeImage(img: BufferedImage, out: TranscoderOutput): Unit = {
-        bufferedImage = img
-      }
-    }
-
-    // Transcode the SVG
-    val input = new TranscoderInput(svgFile.toURI.toString)
-    transcoder.transcode(input, null)
-
-    // Convert BufferedImage to JavaFX Image
-    SwingFXUtils.toFXImage(bufferedImage, null)
   }
 
   private def colorToHex(color: scalafx.scene.paint.Color): String = {
