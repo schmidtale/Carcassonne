@@ -3,20 +3,36 @@ package model.gameDataComponent
 import model.gameDataComponent.{Index, Tile}
 import util.{Prototype, State}
 
-import scala.collection.immutable.Queue
+import scala.collection.immutable.{Queue, SortedMap}
 
 trait GameDataTrait extends Prototype[GameDataTrait] {
-  val map: TileMap
-  val stack: Queue[Tile]
-  val players: Queue[PlayerState]
+  val map: TileMapTrait
+  val stack: Queue[TileTrait]
+  val players: Queue[PlayerTrait]
   val turn: Int
   val state: State
 
-  def startingTile(): Tile
+  def startingTile(): TileTrait
   def initialState(): GameDataTrait
   def withState(newState: State): GameDataTrait
   def withTurn(newTurn: Int) : GameDataTrait
-  def withMap(newMap: TileMap): GameDataTrait
-  def currentTile(): Tile
+  def withMap(newMap: TileMapTrait): GameDataTrait
+  def currentTile(): TileTrait
+}
+
+trait TileTrait {
+  val name: String
+  def rotate(r: Int): Tile
+}
+
+trait TileMapTrait {
+  val data: SortedMap[(Index, Index), Option[Tile]]
+  def add(index1: Index, index2: Index, tile: Option[TileTrait]): TileMap
+}
+
+trait PlayerTrait {
+  val meepleCount: Int
+  val color: Color
+  val points: Int
 }
 

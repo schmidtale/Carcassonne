@@ -32,8 +32,8 @@ class GameData(val map: TileMap = TileMap(),
     TileStack().startingTile
   }
 
-  def withMap(newMap: TileMap): GameData = {
-    new GameData(newMap, stack, players, turn, state)
+  def withMap(newMap: TileMapTrait): GameData = {
+    new GameData(newMap.asInstanceOf[TileMap], stack, players, turn, state)
   }
 
   def withState(newState: State) : GameData = {
@@ -69,7 +69,7 @@ class GameData(val map: TileMap = TileMap(),
   }
 }
 
-class PlayerState(val meepleCount: Int = 7, val color: Color = blue, val points: Int = 0) {
+class PlayerState(val meepleCount: Int = 7, val color: Color = blue, val points: Int = 0) extends PlayerTrait {
   def this(color: Color) = {
     this(7, color, 0)
   }

@@ -1,6 +1,6 @@
 package controller.controllerComponent
 
-import model.gameDataComponent.{GameDataTrait, Index, Tile}
+import model.gameDataComponent.{GameDataTrait, Index, TileTrait}
 import util.{State, UndoManager}
 
 import scala.collection.immutable.Queue
@@ -8,10 +8,10 @@ import scala.collection.immutable.Queue
 class Tabletop(var gameData: GameDataTrait) extends ControllerTrait {
   private val undoManager = new UndoManager
   
-  def tileStack(): Queue[Tile] = {
+  def tileStack(): Queue[TileTrait] = {
     gameData.stack
   }
-  def startingTile(): Tile = {
+  def startingTile(): TileTrait = {
     gameData.startingTile()
   }
 
@@ -23,7 +23,7 @@ class Tabletop(var gameData: GameDataTrait) extends ControllerTrait {
   // Add Tile:
   // val newCard = Tile(...)
   // val updatedCardMap = cardMap + ((Index(5), Index(5)) -> Some(newCard))
-  def addTileToMap(index1: Index, index2: Index, tile: Tile): Unit = {
+  def addTileToMap(index1: Index, index2: Index, tile: TileTrait): Unit = {
     undoManager.doStep(new TurnCommand(index1, index2, tile, this))
     notifyObservers()
   }

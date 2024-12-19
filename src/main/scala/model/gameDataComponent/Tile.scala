@@ -21,7 +21,7 @@ import LiegemanType.*
 import LiegemanPosition.*
 
 class Tile(val name: String = "default name", val monastery: Boolean = false, val townConnection: Boolean = false, val borders: Vector[BorderType],
-           val liegeman: (LiegemanType, LiegemanPosition) = (none, nowhere), val coat_of_arms: Boolean = false, val rotation: Int = 0)
+           val liegeman: (LiegemanType, LiegemanPosition) = (none, nowhere), val coat_of_arms: Boolean = false, val rotation: Int = 0) extends TileTrait
 {
   private val provider = new TextProvider()
   def borderType(o: Orientation): BorderType = {

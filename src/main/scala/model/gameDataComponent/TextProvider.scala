@@ -9,8 +9,8 @@ class TextProvider {
     toText(c).split("\n")(l)
   }
   
-  def toText(c: Tile): String = {
-    val cardString = prototype.map(char => replaceChar(char, c))
+  def toText(c: TileTrait): String = {
+    val cardString = prototype.map(char => replaceChar(char, c.asInstanceOf[Tile]))
     cardString
   }
 

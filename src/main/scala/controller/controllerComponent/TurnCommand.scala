@@ -1,8 +1,8 @@
 package controller.controllerComponent
-import model.gameDataComponent.{GameDataTrait, Index, MenuState, PlacingLiegemanState, PlacingTileState, ReviewState, Tile}
+import model.gameDataComponent.{GameDataTrait, Index, MenuState, PlacingLiegemanState, PlacingTileState, ReviewState, TileTrait}
 import util.Command
 
-class TurnCommand(index1: Index, index2: Index, tile: Tile, tabletop: Tabletop) extends Command {
+class TurnCommand(index1: Index, index2: Index, tile: TileTrait, tabletop: Tabletop) extends Command {
   private var memento: GameDataTrait = tabletop.gameData
   // Modifies GameData, simulating progress of a turn
   override def doStep(): Unit = {
