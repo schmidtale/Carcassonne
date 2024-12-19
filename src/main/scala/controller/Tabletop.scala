@@ -1,20 +1,18 @@
 package controller
 
-import model.{GameData, Index, Tile, TileMap, TileStack}
+import model.gameDataComponent.{GameDataTrait, Index, Tile}
 import util.{Observable, State, UndoManager}
 
 import scala.collection.immutable.Queue
 
-class Tabletop(var gameData: GameData) extends Observable {
-  private val stack = new TileStack
-
+class Tabletop(var gameData: GameDataTrait) extends Observable {
   private val undoManager = new UndoManager
   
   def tileStack(): Queue[Tile] = {
-    stack.construct()
+    gameData.stack
   }
   def startingTile(): Tile = {
-    stack.startingTile
+    gameData.startingTile()
   }
 
   def constructTabletopFromMap(): String = {
@@ -28,6 +26,10 @@ class Tabletop(var gameData: GameData) extends Observable {
   def addTileToMap(index1: Index, index2: Index, tile: Tile): Unit = {
     undoManager.doStep(new TurnCommand(index1, index2, tile, this))
     notifyObservers()
+  }
+
+  def addCurrentTile(index1: Index, index2: Index, rotation: Int): Unit = {
+    addTileToMap(index1, index2, gameData.currentTile().rotate(rotation))
   }
 
   def resetGameData(): Unit = {

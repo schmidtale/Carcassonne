@@ -1,7 +1,8 @@
-package model
+package model.gameDataComponent
 
 import scala.collection.immutable.Queue
 import Color.*
+import model.gameDataComponent.GameDataTrait
 import util.{Prototype, State}
 
 import scala.util.Random
@@ -14,7 +15,7 @@ class GameData(val map: TileMap = TileMap(),
                val players: Queue[PlayerState] = Queue(PlayerState(blue), PlayerState(red)),
                val turn: Int = 0,
                val state: State = MenuState)
-  extends Prototype[GameData] {
+  extends GameDataTrait {
   /* also used as memento, since it is unchangeable */
   def activePlayer(): Color = {
     players(turn % players.size).color
@@ -25,6 +26,10 @@ class GameData(val map: TileMap = TileMap(),
       return stack(turn)
     }
     TileStack().defaultTile
+  }
+
+  def startingTile(): Tile = {
+    TileStack().startingTile
   }
 
   def withMap(newMap: TileMap): GameData = {
@@ -80,5 +85,4 @@ class PlayerState(val meepleCount: Int = 7, val color: Color = blue, val points:
   }
 
   override def hashCode(): Int = (meepleCount, color, points).##
-
 }

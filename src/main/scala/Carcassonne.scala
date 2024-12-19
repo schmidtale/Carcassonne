@@ -1,9 +1,9 @@
 import _view.{GUI, TextUI}
 import controller.Tabletop
 import javafx.embed.swing.JFXPanel
-import model.{GameData, PlayerState}
+import model.gameDataComponent.{GameData, PlayerState}
 import util.MusicPlayer
-import model.Color.*
+import model.gameDataComponent.Color.*
 
 import scala.collection.immutable.Queue
 

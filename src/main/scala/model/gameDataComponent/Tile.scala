@@ -1,4 +1,4 @@
-package model
+package model.gameDataComponent
 
 enum Orientation:
   case northern, eastern, southern, western
@@ -15,13 +15,14 @@ enum LiegemanType:
 enum LiegemanPosition:
   case nowhere, north, east, south, west, middle, northWest, northEast, southEast, southWest
 
-import Orientation._
-import BorderType._
-import LiegemanType._
-import LiegemanPosition._
-class Tile(val name: String = "default name", val monastery: Boolean = false, val townConnection: Boolean = false, val borders: Vector[BorderType],
-           val liegeman: (LiegemanType, LiegemanPosition) = (none, nowhere), val coat_of_arms: Boolean = false, val rotation: Int = 0) {
+import Orientation.*
+import BorderType.*
+import LiegemanType.*
+import LiegemanPosition.*
 
+class Tile(val name: String = "default name", val monastery: Boolean = false, val townConnection: Boolean = false, val borders: Vector[BorderType],
+           val liegeman: (LiegemanType, LiegemanPosition) = (none, nowhere), val coat_of_arms: Boolean = false, val rotation: Int = 0)
+{
   private val provider = new TextProvider()
   def borderType(o: Orientation): BorderType = {
     o match

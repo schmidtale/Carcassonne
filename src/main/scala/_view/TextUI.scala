@@ -1,8 +1,8 @@
 package _view
 
-import model.{TextProvider, Tile}
+import model.gameDataComponent.{TextProvider, Tile}
 import controller.Tabletop
-import model.Index
+import model.gameDataComponent.Index
 import util.{MusicPlayer, Observer}
 
 import scala.collection.immutable.Queue
@@ -25,14 +25,12 @@ class TextUI(tabletop: Tabletop) extends Observer {
 
     // valid placement
     if (placementInfo._1) {
-      val cardToPlace = drawnTile.rotate(placementInfo._2)
       // check legality:
       //while (!isLegalPlacement)...
-
       //---liegeman
       //---check legality
 
-      updateMap(placementInfo._1, placementInfo._3, placementInfo._4, cardToPlace)
+      updateMap(placementInfo._1, placementInfo._3, placementInfo._4, placementInfo._2)
       // TODO if placement correct and legal move and legal liegeman placement
 
       val roundFinishedPlayer = MusicPlayer("TownJingle")
@@ -76,9 +74,9 @@ class TextUI(tabletop: Tabletop) extends Observer {
   }
 
 
-  def updateMap(b: Boolean, line: Index, column: Index, card: Tile): Unit = {
+  def updateMap(b: Boolean, line: Index, column: Index, rotation: Int): Unit = {
     if (b) {
-      tabletop.addTileToMap(line, column, card)
+      tabletop.addCurrentTile(line, column, rotation)
     }
   }
 

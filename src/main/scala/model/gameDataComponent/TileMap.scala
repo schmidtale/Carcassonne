@@ -1,5 +1,6 @@
-package model
+package model.gameDataComponent
 import util.Prototype
+
 import scala.collection.immutable.SortedMap
 
 case class Index(value: Int) {

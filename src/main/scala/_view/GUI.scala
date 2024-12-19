@@ -3,7 +3,7 @@ package _view
 import util.Observer
 import controller.Tabletop
 import javafx.embed.swing.SwingFXUtils
-import model.{Color, Index, Tile}
+import model.gameDataComponent.{Color, Index, Tile}
 
 import java.io.File
 import java.awt.image.BufferedImage
@@ -23,7 +23,7 @@ import scalafx.scene.text.{Font, Text}
 import scalafx.Includes.*
 
 // Function to convert enum Color to scalafx Color
-def getColorFromEnum(playerColor: model.Color): scalafx.scene.paint.Color = {
+def getColorFromEnum(playerColor: model.gameDataComponent.Color): scalafx.scene.paint.Color = {
   playerColor match {
     case Color.blue => scalafx.scene.paint.Color.rgb(56,58,107)
     case Color.red => scalafx.scene.paint.Color.rgb(203,31,115)
@@ -72,10 +72,6 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
       )) yield {
         tileName -> new Image(
           getClass.getClassLoader.getResource(s"tile-$tileName.png").toString,
-          requestedWidth = viewWidth / 16, // Adjust size as needed
-          requestedHeight = viewHeight / 16,
-          preserveRatio = true,
-          smooth = true
         )
       }).toMap
 
@@ -248,7 +244,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
                     //val newTile = tabletop.gameData.currentTile() // Fetch the next tile from game data
                     //cardImageView.image = new Image(getImagePath(newTile)) // Update the image
                     onAction = _ => {
-                      tabletop.addTileToMap(Index(row), Index(column), tabletop.gameData.currentTile().rotate(currentRotation / 90))
+                      tabletop.addCurrentTile(Index(row), Index(column), currentRotation / 90)
                       currentRotation = 0
                       nextCardImageView.rotate = 0
                     }

@@ -1,6 +1,6 @@
-package model
+package model.gameDataComponent
 
-import model.{BorderType, Tile}
+import model.gameDataComponent.{BorderType, Tile}
 
 class TextProvider {
   val prototype = "* a A a *|d e i f b|D l M j B|d h k g b|* c C c *"

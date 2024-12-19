@@ -1,4 +1,4 @@
-package model
+package model.gameDataComponent
 import BorderType._
 
 import scala.collection.immutable.Queue
