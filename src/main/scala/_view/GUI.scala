@@ -334,27 +334,22 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
             tabletop.gameData.map.data.get(Index(row), Index(column)).flatten match {
               // TODO use partially applied functions
               case Some(tile) =>
-                if (tileImages(row)(column) != null) {
+                Option(tileImages(row)(column)).foreach { ImageView =>
                   tileImages(row)(column).image = getTileImage(tile) // Update the corresponding image view
                   tileImages(row)(column).rotate = tile.rotation * 90
                 }
                 // Disable the button for filled tiles
-                if (fieldButtons(row)(column) != null) {
-                  fieldButtons(row)(column).disable = true
-                }
+                Option(fieldButtons(row)(column)).foreach(_.disable = true)
               case None =>
-                if (tileImages(row)(column) != null) {
-                  tileImages(row)(column).image = tileCache("background") // Update the corresponding image view
-                }                // Enable the button for empty tiles
-                if (fieldButtons(row)(column) != null) {
-                  fieldButtons(row)(column).disable = false
-                }
+                Option(tileImages(row)(column)).foreach(_.image = tileCache("background")) // Update the corresponding image view
+                // Enable the button for empty tiles
+                Option(fieldButtons(row)(column)).foreach(_.disable = false)
             }
           }
         } // Get tile from game data
         // Update the next card image when the current tile changes
 
-        if (nextCardImageView != null) {
+        Option(nextCardImageView).foreach { imageView =>
           val nextTile = tabletop.gameData.currentTile() // Fetch the new current tile
           val nextCardImage = getTileImage(nextTile) // Get the image for the new tile
           nextCardImageView.image = nextCardImage // Update the ImageView
