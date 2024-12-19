@@ -1,5 +1,5 @@
 import _view.{GUI, TextUI}
-import controller.Tabletop
+import controller.controllerComponent.Tabletop
 import javafx.embed.swing.JFXPanel
 import model.gameDataComponent.{GameData, PlayerState}
 import util.MusicPlayer

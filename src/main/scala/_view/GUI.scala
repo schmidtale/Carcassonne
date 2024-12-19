@@ -1,9 +1,9 @@
 package _view
 
 import util.Observer
-import controller.Tabletop
+import controller.controllerComponent.ControllerTrait
 import javafx.embed.swing.SwingFXUtils
-import model.gameDataComponent.{Color, Index, Tile}
+import model.gameDataComponent.{Color, Index}
 
 import java.io.File
 import java.awt.image.BufferedImage
@@ -33,7 +33,7 @@ def getColorFromEnum(playerColor: model.gameDataComponent.Color): scalafx.scene.
   }
 }
 
-class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
+class GUI(tabletop: ControllerTrait) extends JFXApp3 with Observer {
   tabletop.add(this)
 
   // Store tileImages 15x15 grid for tiles
@@ -90,8 +90,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
             style = s"-fx-background-color:black"
             // add imageView for next Card and Button for rotation on top
             val nextTileStackPane = new StackPane {
-              val nextCardImage = new Image(getImagePath(tabletop.gameData.currentTile()))
-              nextCardImageView = new ImageView(nextCardImage) {
+              nextCardImageView = new ImageView() {
                 preserveRatio = true
                 fitWidth = viewWidth / 4 // Adjust size as needed
               }
@@ -331,7 +330,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
               // TODO use partially applied functions
               case Some(tile) =>
                 Option(tileImages(row)(column)).foreach { ImageView =>
-                  tileImages(row)(column).image = getTileImage(tile) // Update the corresponding image view
+                  tileImages(row)(column).image = getTileImage(tile.name) // Update the corresponding image view
                   tileImages(row)(column).rotate = tile.rotation * 90
                 }
                 // Disable the button for filled tiles
@@ -347,47 +346,11 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
 
         Option(nextCardImageView).foreach { imageView =>
           val nextTile = tabletop.gameData.currentTile() // Fetch the new current tile
-          val nextCardImage = getTileImage(nextTile) // Get the image for the new tile
+          val nextCardImage = getTileImage(nextTile.name) // Get the image for the new tile
           nextCardImageView.image = nextCardImage // Update the ImageView
         }
       }
 
-    }
-  }
-
-  private def getImagePath(tile: Tile): String = {
-    val filename = tile.name match {
-      case "A" => "tile-a.png"
-      case "B" => "tile-b.png"
-      case "C" => "tile-c.png"
-      case "D" => "tile-d.png"
-      case "E" => "tile-e.png"
-      case "F" => "tile-f.png"
-      case "G" => "tile-g.png"
-      case "H" => "tile-h.png"
-      case "I" => "tile-i.png"
-      case "J" => "tile-j.png"
-      case "K" => "tile-k.png"
-      case "L" => "tile-l.png"
-      case "M" => "tile-m.png"
-      case "N" => "tile-n.png"
-      case "O" => "tile-o.png"
-      case "P" => "tile-p.png"
-      case "Q" => "tile-q.png"
-      case "R" => "tile-r.png"
-      case "S" => "tile-s.png"
-      case "T" => "tile-t.png"
-      case "U" => "tile-u.png"
-      case "V" => "tile-v.png"
-      case "W" => "tile-w.png"
-      case "X" => "tile-x.png"
-      case _ => "default_tile.png"
-    }
-    val imagePath = getClass.getClassLoader.getResource(filename)
-    // If the resource is found, return its path, otherwise return an error string
-    Option(imagePath) match {
-      case Some(path) => path.toString
-      case None => "Resource not found"
     }
   }
 
@@ -441,7 +404,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
   }
 
   // Function to get the image from the cache
-  private def getTileImage(tile: Tile): Image = {
-    tileCache.getOrElse(tile.name, new Image(getClass.getClassLoader.getResource("default_tile.png").toString))
+  private def getTileImage(tileName: String): Image = {
+    tileCache.getOrElse(tileName, new Image(getClass.getClassLoader.getResource("default_tile.png").toString))
   }
 }

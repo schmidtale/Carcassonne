@@ -1,4 +1,4 @@
-package controller
+package controller.controllerComponent
 import model.gameDataComponent.{GameDataTrait, Index, MenuState, PlacingLiegemanState, PlacingTileState, ReviewState, Tile}
 import util.Command
 

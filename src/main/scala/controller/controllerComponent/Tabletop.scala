@@ -1,11 +1,11 @@
-package controller
+package controller.controllerComponent
 
 import model.gameDataComponent.{GameDataTrait, Index, Tile}
-import util.{Observable, State, UndoManager}
+import util.{State, UndoManager}
 
 import scala.collection.immutable.Queue
 
-class Tabletop(var gameData: GameDataTrait) extends Observable {
+class Tabletop(var gameData: GameDataTrait) extends ControllerTrait {
   private val undoManager = new UndoManager
   
   def tileStack(): Queue[Tile] = {
