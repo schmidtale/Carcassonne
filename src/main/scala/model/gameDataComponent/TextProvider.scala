@@ -2,7 +2,7 @@ package model.gameDataComponent
 
 import model.gameDataComponent.{BorderType, Tile}
 
-class TextProvider {
+class TextProvider extends TextProviderTrait {
   val prototype = "* a A a *|d e i f b|D l M j B|d h k g b|* c C c *"
 
   def line(c: Tile, l: Int & 0 | 1 | 2 | 3 | 4): String = {

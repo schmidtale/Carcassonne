@@ -36,3 +36,7 @@ trait PlayerTrait {
   val points: Int
 }
 
+trait TextProviderTrait {
+  def toText(c: TileTrait): String
+}
+

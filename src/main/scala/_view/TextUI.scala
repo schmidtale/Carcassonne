@@ -1,17 +1,15 @@
 package _view
 
-import model.gameDataComponent.TextProvider
+import model.gameDataComponent.{Index, TextProviderTrait}
 import controller.controllerComponent.ControllerTrait
-import model.gameDataComponent.Index
 import util.{MusicPlayer, Observer}
 
 import java.io.InputStream
 import scala.io.Source
 import scala.util.Try
 
-class TextUI(tabletop: ControllerTrait) extends Observer {
+class TextUI(tabletop: ControllerTrait, textProvider: TextProviderTrait) extends Observer {
   tabletop.add(this)
-  private val textProvider = new TextProvider
   private var drawnTile = tabletop.gameData.currentTile()
 
   //printMap
