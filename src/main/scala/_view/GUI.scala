@@ -309,23 +309,27 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
             tabletop.gameData.map.data.get(Index(row), Index(column)).flatten match {
               // TODO use partially applied functions
               case Some(tile) =>
-                Option(tileImages(row)(column)).foreach { ImageView =>
-                  val tileImage = new Image(getImagePath(tile))
-                  tileImages(row)(column).image = tileImage // Update the corresponding image view
+                if (tileImages(row)(column) != null) {
+                  tileImages(row)(column).image = new Image(getImagePath(tile)) // Update the corresponding image view
                   tileImages(row)(column).rotate = tile.rotation * 90
                 }
                 // Disable the button for filled tiles
-                Option(fieldButtons(row)(column)).foreach(_.disable = true)
+                if (fieldButtons(row)(column) != null) {
+                  fieldButtons(row)(column).disable = true
+                }
               case None =>
-                Option(tileImages(row)(column)).foreach(_.image = new Image(getClass.getClassLoader.getResource("background_tile.png").toString))
-                // Enable the button for empty tiles
-                Option(fieldButtons(row)(column)).foreach(_.disable = false)
+                if (tileImages(row)(column) != null) {
+                  tileImages(row)(column).image = new Image(getClass.getClassLoader.getResource("background_tile.png").toString) // Update the corresponding image view
+                }                // Enable the button for empty tiles
+                if (fieldButtons(row)(column) != null) {
+                  fieldButtons(row)(column).disable = false
+                }
             }
           }
         } // Get tile from game data
         // Update the next card image when the current tile changes
 
-        Option(nextCardImageView).foreach { imageView =>
+        if (nextCardImageView != null) {
           val nextTile = tabletop.gameData.currentTile() // Fetch the new current tile
           val tileImage = new Image(getImagePath(nextTile))
           val nextCardImage = tileImage // Get the image for the new tile
@@ -406,6 +410,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
             onAction = _ => {
               // TODO switch to Menu scene
               Platform.exit()
+              System.exit(0)
             }
           }
         )
