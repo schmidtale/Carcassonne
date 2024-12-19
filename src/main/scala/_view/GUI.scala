@@ -51,9 +51,34 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
   private var viewHeight: Double = 0
   private var viewWidth: Double = 0
 
+  // Cache for tiles
+  private var tileCache: Map[String, Image] = Map()
+
   override def start(): Unit = {
     viewHeight = Screen.primary.visualBounds.height
     viewWidth = Screen.primary.visualBounds.width
+
+    val backgroundTile = new Image(
+      getClass.getClassLoader.getResource("background_tile.png").toString,
+      requestedWidth = viewWidth / 16,
+      requestedHeight = viewHeight / 16,
+      preserveRatio = true,
+      smooth = true
+    )
+    /* Initialize tile cache */
+    tileCache = Map("background" -> backgroundTile) ++
+      (for (tileName <- List(
+        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X"
+      )) yield {
+        tileName -> new Image(
+          getClass.getClassLoader.getResource(s"tile-$tileName.png").toString,
+          requestedWidth = viewWidth / 16, // Adjust size as needed
+          requestedHeight = viewHeight / 16,
+          preserveRatio = true,
+          smooth = true
+        )
+      }).toMap
+
     stage = new JFXApp3.PrimaryStage {
       title = "Carcasonne"
       width = viewWidth
@@ -310,7 +335,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
               // TODO use partially applied functions
               case Some(tile) =>
                 if (tileImages(row)(column) != null) {
-                  tileImages(row)(column).image = new Image(getImagePath(tile)) // Update the corresponding image view
+                  tileImages(row)(column).image = getTileImage(tile) // Update the corresponding image view
                   tileImages(row)(column).rotate = tile.rotation * 90
                 }
                 // Disable the button for filled tiles
@@ -319,7 +344,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
                 }
               case None =>
                 if (tileImages(row)(column) != null) {
-                  tileImages(row)(column).image = new Image(getClass.getClassLoader.getResource("background_tile.png").toString) // Update the corresponding image view
+                  tileImages(row)(column).image = tileCache("background") // Update the corresponding image view
                 }                // Enable the button for empty tiles
                 if (fieldButtons(row)(column) != null) {
                   fieldButtons(row)(column).disable = false
@@ -331,8 +356,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
 
         if (nextCardImageView != null) {
           val nextTile = tabletop.gameData.currentTile() // Fetch the new current tile
-          val tileImage = new Image(getImagePath(nextTile))
-          val nextCardImage = tileImage // Get the image for the new tile
+          val nextCardImage = getTileImage(nextTile) // Get the image for the new tile
           nextCardImageView.image = nextCardImage // Update the ImageView
         }
       }
@@ -423,5 +447,10 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
     val green = (color.green * 255).toInt
     val blue = (color.blue * 255).toInt
     f"#$red%02X$green%02X$blue%02X" // Format it as #RRGGBB
+  }
+
+  // Function to get the image from the cache
+  private def getTileImage(tile: Tile): Image = {
+    tileCache.getOrElse(tile.name, new Image(getClass.getClassLoader.getResource("default_tile.png").toString))
   }
 }
