@@ -1,16 +1,15 @@
 package _view
 
-import model.gameDataComponent.{TextProvider, Tile}
-import controller.Tabletop
+import model.gameDataComponent.TextProvider
+import controller.controllerComponent.ControllerTrait
 import model.gameDataComponent.Index
 import util.{MusicPlayer, Observer}
 
-import scala.collection.immutable.Queue
 import java.io.InputStream
 import scala.io.Source
 import scala.util.Try
 
-class TextUI(tabletop: Tabletop) extends Observer {
+class TextUI(tabletop: ControllerTrait) extends Observer {
   tabletop.add(this)
   private val textProvider = new TextProvider
   private var drawnTile = tabletop.gameData.currentTile()
