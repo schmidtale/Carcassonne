@@ -69,7 +69,8 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
             style = s"-fx-background-color:black"
             // add imageView for next Card and Button for rotation on top
             val nextTileStackPane = new StackPane {
-              nextCardImageView = new ImageView(getTileImage(tabletop.gameData.currentTile())) {
+              val nextCardImage = new Image(getImagePath(tabletop.gameData.currentTile()))
+              nextCardImageView = new ImageView(nextCardImage) {
                 preserveRatio = true
                 fitWidth = viewWidth / 4 // Adjust size as needed
               }
@@ -309,7 +310,8 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
               // TODO use partially applied functions
               case Some(tile) =>
                 Option(tileImages(row)(column)).foreach { ImageView =>
-                  tileImages(row)(column).image = getTileImage(tile) // Update the corresponding image view
+                  val tileImage = new Image(getImagePath(tile))
+                  tileImages(row)(column).image = tileImage // Update the corresponding image view
                   tileImages(row)(column).rotate = tile.rotation * 90
                 }
                 // Disable the button for filled tiles
@@ -325,7 +327,8 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
 
         Option(nextCardImageView).foreach { imageView =>
           val nextTile = tabletop.gameData.currentTile() // Fetch the new current tile
-          val nextCardImage = getTileImage(nextTile) // Get the image for the new tile
+          val tileImage = new Image(getImagePath(nextTile))
+          val nextCardImage = tileImage // Get the image for the new tile
           nextCardImageView.image = nextCardImage // Update the ImageView
         }
       }
@@ -333,7 +336,7 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
     }
   }
 
-  private def getTileImage(tile: Tile): Image = {
+  private def getImagePath(tile: Tile): String = {
     val filename = tile.name match {
       case "A" => "tile-a.png"
       case "B" => "tile-b.png"
@@ -361,7 +364,12 @@ class GUI(tabletop: Tabletop) extends JFXApp3 with Observer {
       case "X" => "tile-x.png"
       case _ => "default_tile.png"
     }
-    new Image(getClass.getClassLoader.getResource(filename).toString)
+    val imagePath = getClass.getClassLoader.getResource(filename)
+    // If the resource is found, return its path, otherwise return an error string
+    Option(imagePath) match {
+      case Some(path) => path.toString
+      case None => "Resource not found"
+    }
   }
 
   private def showReviewScene(): Unit = {
