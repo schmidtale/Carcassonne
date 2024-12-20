@@ -1,10 +1,10 @@
-package model.gameDataComponent
+package model.gameDataComponent.gameDataBaseImplementation
 
-import scala.collection.immutable.Queue
-import Color.*
-import model.gameDataComponent.GameDataTrait
+import model.gameDataComponent.gameDataBaseImplementation.Color.*
+import model.gameDataComponent.*
 import util.{Prototype, State}
 
+import scala.collection.immutable.Queue
 import scala.util.Random
 
 enum Color:

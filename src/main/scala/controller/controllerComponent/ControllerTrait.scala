@@ -1,6 +1,7 @@
 package controller.controllerComponent
 
-import model.gameDataComponent.{GameDataTrait, Index}
+import model.gameDataComponent.{GameDataTrait}
+import model.gameDataComponent.gameDataBaseImplementation.Index
 import util.Observable
 
 trait ControllerTrait extends Observable {

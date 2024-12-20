@@ -1,6 +1,7 @@
-package model.gameDataStubImplementation
+package model.gameDataComponent.gameDataStubImplementation
 
 import model.gameDataComponent.*
+import model.gameDataComponent.gameDataBaseImplementation.*
 import util.State
 
 import scala.collection.immutable.Queue

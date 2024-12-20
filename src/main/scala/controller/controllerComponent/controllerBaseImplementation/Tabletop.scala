@@ -1,6 +1,9 @@
-package controller.controllerComponent
+package controller.controllerComponent.controllerBaseImplementation
 
-import model.gameDataComponent.{GameDataTrait, Index, TileTrait}
+import controller.controllerComponent.ControllerTrait
+import controller.controllerComponent.controllerBaseImplementation.TurnCommand
+import model.gameDataComponent.gameDataBaseImplementation.Index
+import model.gameDataComponent.{GameDataTrait, TileTrait}
 import util.{State, UndoManager}
 
 import scala.collection.immutable.Queue

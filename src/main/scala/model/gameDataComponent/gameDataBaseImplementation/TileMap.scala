@@ -1,4 +1,7 @@
-package model.gameDataComponent
+package model.gameDataComponent.gameDataBaseImplementation
+
+import model.gameDataComponent.{TileMapTrait, TileTrait}
+import model.gameDataComponent.gameDataBaseImplementation.Index
 import util.Prototype
 
 import scala.collection.immutable.SortedMap

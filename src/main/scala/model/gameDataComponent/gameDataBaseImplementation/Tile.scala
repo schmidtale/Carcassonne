@@ -1,4 +1,4 @@
-package model.gameDataComponent
+package model.gameDataComponent.gameDataBaseImplementation
 
 enum Orientation:
   case northern, eastern, southern, western
@@ -15,10 +15,11 @@ enum LiegemanType:
 enum LiegemanPosition:
   case nowhere, north, east, south, west, middle, northWest, northEast, southEast, southWest
 
-import Orientation.*
-import BorderType.*
-import LiegemanType.*
-import LiegemanPosition.*
+import model.gameDataComponent.gameDataBaseImplementation.BorderType.*
+import model.gameDataComponent.gameDataBaseImplementation.LiegemanPosition.*
+import model.gameDataComponent.gameDataBaseImplementation.LiegemanType.*
+import model.gameDataComponent.gameDataBaseImplementation.Orientation.*
+import model.gameDataComponent.*
 
 class Tile(val name: String = "default name", val monastery: Boolean = false, val townConnection: Boolean = false, val borders: Vector[BorderType],
            val liegeman: (LiegemanType, LiegemanPosition) = (none, nowhere), val coat_of_arms: Boolean = false, val rotation: Int = 0) extends TileTrait

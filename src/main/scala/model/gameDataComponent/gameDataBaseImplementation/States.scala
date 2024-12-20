@@ -1,4 +1,4 @@
-package model.gameDataComponent
+package model.gameDataComponent.gameDataBaseImplementation
 
 import util.State
 

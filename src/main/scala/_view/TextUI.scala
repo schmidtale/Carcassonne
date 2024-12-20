@@ -1,7 +1,8 @@
 package _view
 
-import model.gameDataComponent.{Index, TextProviderTrait}
+import model.gameDataComponent.{TextProviderTrait}
 import controller.controllerComponent.ControllerTrait
+import model.gameDataComponent.gameDataBaseImplementation.Index
 import util.{MusicPlayer, Observer}
 
 import java.io.InputStream

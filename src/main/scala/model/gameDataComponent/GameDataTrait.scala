@@ -1,6 +1,7 @@
 package model.gameDataComponent
 
-import model.gameDataComponent.{Index, Tile}
+import model.gameDataComponent.gameDataBaseImplementation.Index
+import model.gameDataComponent.gameDataBaseImplementation.{Color, Index, Tile, TileMap}
 import util.{Prototype, State}
 
 import scala.collection.immutable.{Queue, SortedMap}

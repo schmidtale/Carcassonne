@@ -3,7 +3,7 @@ package _view
 import util.Observer
 import controller.controllerComponent.ControllerTrait
 import javafx.embed.swing.SwingFXUtils
-import model.gameDataComponent.{Color, Index}
+import model.gameDataComponent.gameDataBaseImplementation.{Color, Index}
 
 import java.io.File
 import java.awt.image.BufferedImage
@@ -23,7 +23,7 @@ import scalafx.scene.text.{Font, Text}
 import scalafx.Includes.*
 
 // Function to convert enum Color to scalafx Color
-def getColorFromEnum(playerColor: model.gameDataComponent.Color): scalafx.scene.paint.Color = {
+def getColorFromEnum(playerColor: Color): scalafx.scene.paint.Color = {
   playerColor match {
     case Color.blue => scalafx.scene.paint.Color.rgb(56,58,107)
     case Color.red => scalafx.scene.paint.Color.rgb(203,31,115)

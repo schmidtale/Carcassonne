@@ -1,5 +1,7 @@
-package controller.controllerComponent
-import model.gameDataComponent.{GameDataTrait, Index, MenuState, PlacingLiegemanState, PlacingTileState, ReviewState, TileTrait}
+package controller.controllerComponent.controllerBaseImplementation
+
+import model.gameDataComponent.gameDataBaseImplementation.*
+import model.gameDataComponent.{GameDataTrait, TileTrait}
 import util.Command
 
 class TurnCommand(index1: Index, index2: Index, tile: TileTrait, tabletop: Tabletop) extends Command {

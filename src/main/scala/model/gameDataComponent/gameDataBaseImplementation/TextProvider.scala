@@ -1,6 +1,7 @@
-package model.gameDataComponent
+package model.gameDataComponent.gameDataBaseImplementation
 
-import model.gameDataComponent.{BorderType, Tile}
+import model.gameDataComponent.{TextProviderTrait, TileTrait}
+import model.gameDataComponent.gameDataBaseImplementation.{BorderType, Tile}
 
 class TextProvider extends TextProviderTrait {
   val prototype = "* a A a *|d e i f b|D l M j B|d h k g b|* c C c *"
