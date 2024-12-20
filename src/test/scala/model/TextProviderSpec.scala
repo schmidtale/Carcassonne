@@ -1,8 +1,9 @@
 package model
 
-import model.BorderType.*
-import model.LiegemanPosition.north
-import model.LiegemanType.knight
+import model.gameDataComponent.gameDataBaseImplementation.BorderType.*
+import model.gameDataComponent.gameDataBaseImplementation.LiegemanPosition.north
+import model.gameDataComponent.gameDataBaseImplementation.LiegemanType.knight
+import model.gameDataComponent.gameDataBaseImplementation.{TextProvider, Tile}
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 

@@ -1,7 +1,9 @@
 package model
 
+import model.gameDataComponent.gameDataBaseImplementation.{Index, Tile, TileMap, TileStack}
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
+
 import scala.collection.immutable.SortedMap
 
 class TileMapSpec extends AnyWordSpec {

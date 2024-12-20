@@ -1,6 +1,7 @@
 package model
 
-import model.Color._
+import model.gameDataComponent.gameDataBaseImplementation.Color.*
+import model.gameDataComponent.gameDataBaseImplementation.{GameData, PlayerState, Tile}
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 

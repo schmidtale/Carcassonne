@@ -1,9 +1,10 @@
 package model
 
-import BorderType.*
-import LiegemanPosition.*
-import LiegemanType.*
-import Orientation.*
+import model.gameDataComponent.gameDataBaseImplementation.BorderType.*
+import model.gameDataComponent.gameDataBaseImplementation.LiegemanPosition.*
+import model.gameDataComponent.gameDataBaseImplementation.LiegemanType.*
+import model.gameDataComponent.gameDataBaseImplementation.Orientation.*
+import model.gameDataComponent.gameDataBaseImplementation.{TextProvider, Tile}
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 

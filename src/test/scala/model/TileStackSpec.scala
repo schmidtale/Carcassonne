@@ -1,5 +1,6 @@
 package model
 
+import model.gameDataComponent.gameDataBaseImplementation.{Tile, TileStack}
 import org.scalatest.wordspec.AnyWordSpec
 
 import scala.collection.immutable.Queue
