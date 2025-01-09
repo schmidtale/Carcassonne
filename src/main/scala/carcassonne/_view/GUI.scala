@@ -22,8 +22,6 @@ import scalafx.scene.paint
 import scalafx.scene.text.{Font, Text}
 import scalafx.Includes.*
 
-import carcassonne.CarcassonneModule.given_ControllerTrait
-
 // Function to convert enum Color to scalafx Color
 def getColorFromEnum(playerColor: Color): scalafx.scene.paint.Color = {
   playerColor match {
@@ -35,7 +33,7 @@ def getColorFromEnum(playerColor: Color): scalafx.scene.paint.Color = {
   }
 }
 
-class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
+class GUI(tabletop: ControllerTrait) extends JFXApp3 with Observer {
   tabletop.add(this)
 
   // Store tileImages 15x15 grid for tiles

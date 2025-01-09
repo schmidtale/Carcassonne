@@ -6,17 +6,19 @@ import util.MusicPlayer
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Color.*
 
 import scala.collection.immutable.Queue
-import carcassonne.CarcassonneModule.given
 import carcassonne.controller.controllerComponent.ControllerTrait
 import carcassonne.controller.controllerComponent.ControllerTrait
 import carcassonne.model.gameDataComponent.TextProviderTrait
+import com.google.inject.{Guice, Injector}
 
 object Carcassonne {
-    val controller: ControllerTrait = summon[ControllerTrait]  // Uses the given instance from CarcassonneModule
+    val injector: Injector = Guice.createInjector(new CarcassonneModule())
+
+    val controller: ControllerTrait = injector.getInstance(classOf[ControllerTrait]) // Uses the given instance from CarcassonneModule
     // Use the given TextProviderTrait from CarcassonneModule
-    val textProvider: TextProviderTrait = summon[TextProviderTrait]
-    private val gui = new GUI(using controller)
-    private val tui = new TextUI(using controller, textProvider)
+    val textProvider: TextProviderTrait = injector.getInstance(classOf[TextProviderTrait])
+    private val gui = new GUI(controller)
+    private val tui = new TextUI(controller, textProvider)
 
     new JFXPanel(); // this will prepare JavaFX toolkit and environment
 

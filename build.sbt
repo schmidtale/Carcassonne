@@ -14,7 +14,8 @@ libraryDependencies += "javazoom" % "jlayer" % "1.0.1"
 libraryDependencies += "org.scalafx" %% "scalafx" % "20.0.0-R31"
 libraryDependencies ++= Seq(
   "org.apache.xmlgraphics" % "batik-transcoder" % "1.16",
-  "org.apache.xmlgraphics" % "batik-codec" % "1.16"
+  "org.apache.xmlgraphics" % "batik-codec" % "1.16",
+  "net.codingwell" %% "scala-guice" % "7.0.0"
 )
 
 libraryDependencies ++= {

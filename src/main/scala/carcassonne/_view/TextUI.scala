@@ -9,10 +9,7 @@ import java.io.InputStream
 import scala.io.Source
 import scala.util.Try
 
-import carcassonne.CarcassonneModule.given_ControllerTrait
-import carcassonne.CarcassonneModule.given_TextProviderTrait
-
-class TextUI(using tabletop: ControllerTrait, textProvider: TextProviderTrait) extends Observer {
+class TextUI(tabletop: ControllerTrait, textProvider: TextProviderTrait) extends Observer {
   tabletop.add(this)
   private var drawnTile = tabletop.gameData.currentTile()
 

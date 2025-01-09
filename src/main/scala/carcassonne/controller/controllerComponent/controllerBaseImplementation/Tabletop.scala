@@ -5,12 +5,11 @@ import carcassonne.controller.controllerComponent.controllerBaseImplementation.T
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Index
 import carcassonne.model.gameDataComponent.{GameDataTrait, TileTrait}
 import carcassonne.util.{State, UndoManager}
+import com.google.inject.Inject
 
 import scala.collection.immutable.Queue
 
-import carcassonne.CarcassonneModule.given_GameDataTrait
-
-class Tabletop(using var gameData: GameDataTrait) extends ControllerTrait {
+class Tabletop @Inject() (var gameData: GameDataTrait) extends ControllerTrait {
   private val undoManager = new UndoManager
   
   def tileStack(): Queue[TileTrait] = {
