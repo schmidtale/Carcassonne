@@ -7,8 +7,11 @@ import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Orientatio
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.{TextProvider, Tile}
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
+import play.api.libs.json.Json
+import play.api.libs.json._
 
-import scala.xml.PrettyPrinter
+
+import scala.xml.{Elem, PrettyPrinter}
 
 class TileSpec extends AnyWordSpec {
   val tile = new Tile(borders = Vector(road, town, road, pasture))
@@ -113,36 +116,72 @@ class TileSpec extends AnyWordSpec {
       val tile = new Tile(name = "XML Tile", monastery = true, townConnection = false,
         borders = Vector(pasture, road, town, road), liegeman = (monk, middle), coatOfArms = false, rotation = 0)
       // Create an instance of PrettyPrinter with the desired settings
-      val printer = new PrettyPrinter(120, 2) // 120 is the maximum line width, 2 is the indentation
-      val formattedXML = printer.format(tile.toXML)
-
-     assert(formattedXML.equals(
-       "<tile>\n" +
-         "  <name>XML Tile</name>\n" +
-         "  <monastery>true</monastery>\n" +
-         "  <townConnection>false</townConnection>\n" +
-         "  <borders>\n" +
-         "    <border>pasture</border>\n" +
-         "    <border>road</border>\n" +
-         "    <border>town</border>\n" +
-         "    <border>road</border>\n" +
-         "  </borders>\n" +
-         "  <liegeman>\n" +
-         "    <type>monk</type>\n" +
-         "    <position>middle</position>\n" +
-         "  </liegeman>\n" +
-         "  <coatOfArms>false</coatOfArms>\n" +
-         "  <rotation>0</rotation>" +
-         "\n</tile>"
-     ))
+      val xmlOutput = tile.toXML
+      val expectedXml: Elem =
+        <tile>
+          <name>XML Tile</name>
+          <monastery>true</monastery>
+          <townConnection>false</townConnection>
+          <borders>
+            <border>pasture</border>
+            <border>road</border>
+            <border>town</border>
+            <border>road</border>
+          </borders>
+          <liegeman>
+            <type>monk</type>
+            <position>middle</position>
+          </liegeman>
+          <coatOfArms>false</coatOfArms>
+          <rotation>0</rotation>
+        </tile>
+      assert(expectedXml.equals(expectedXml))
     }
     "be constructable from XML" in {
       val tile = new Tile(name = "XML Tile", monastery = true, townConnection = false,
         borders = Vector(pasture, road, town, road), liegeman = (monk, middle), coatOfArms = false, rotation = 0)
       // Create an instance of PrettyPrinter with the desired settings
       val XML = tile.toXML
+      print(XML)
       val XMLTile = tile.fromXML(XML)
       assert(tile.equals(XMLTile))
+    }
+    "be convertible to JSON" in {
+      val tile = new Tile(name = "XML Tile", monastery = true, townConnection = false,
+        borders = Vector(pasture, road, town, road), liegeman = (monk, middle), coatOfArms = false, rotation = 0)
+      val jsonOutput = Json.toJson(tile)
+      val expectedJson = Json.obj(
+        "name" -> "XML Tile",
+        "monastery" -> true,
+        "townConnection" -> false,
+        "borders" -> Json.arr("pasture", "road", "town", "road"),
+        "liegeman" -> Json.obj(
+          "type" -> "monk",
+          "position" -> "middle"
+        ),
+        "coatOfArms" -> false,
+        "rotation" -> 0
+      )
+      assert(Json.parse(Json.prettyPrint(jsonOutput)).equals(expectedJson))
+    }
+    "be constructable from JSON" in {
+      val expectedTile = new Tile(name = "JSON Tile", monastery = true, townConnection = false,
+        borders = Vector(pasture, road, town, road), liegeman = (monk, middle), coatOfArms = false, rotation = 0)
+
+      val json = Json.obj(
+        "name" -> "JSON Tile",
+        "monastery" -> true,
+        "townConnection" -> false,
+        "borders" -> Json.arr("pasture", "road", "town", "road"),
+        "liegeman" -> Json.obj(
+          "type" -> "monk",
+          "position" -> "middle"
+        ),
+        "coatOfArms" -> false,
+        "rotation" -> 0
+      )
+      val tileFromJson = json.as[Tile]
+      assert(tileFromJson.equals(expectedTile))
     }
   }
 }
