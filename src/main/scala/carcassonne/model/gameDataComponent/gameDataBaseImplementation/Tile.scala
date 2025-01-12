@@ -21,8 +21,10 @@ import carcassonne.model.gameDataComponent.gameDataBaseImplementation.LiegemanTy
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Orientation.*
 import carcassonne.model.gameDataComponent.*
 
+import scala.xml.Elem
+
 class Tile(val name: String = "default name", val monastery: Boolean = false, val townConnection: Boolean = false, val borders: Vector[BorderType] = Vector.empty,
-           val liegeman: (LiegemanType, LiegemanPosition) = (none, nowhere), val coat_of_arms: Boolean = false, val rotation: Int = 0) extends TileTrait
+           val liegeman: (LiegemanType, LiegemanPosition) = (none, nowhere), val coatOfArms: Boolean = false, val rotation: Int = 0) extends TileTrait
 {
   private val provider = new TextProvider()
   def borderType(o: Orientation): BorderType = {
@@ -45,7 +47,7 @@ class Tile(val name: String = "default name", val monastery: Boolean = false, va
     val newBorders = Vector(this.borderType(western), this.borderType(northern),
       this.borderType(eastern),this.borderType(southern))
     val newCard = new Tile(this.name, this.monastery, this.townConnection, newBorders,
-      coat_of_arms = this.coat_of_arms, this.rotation + 1
+      coatOfArms = this.coatOfArms, this.rotation + 1
       /* other arguments must be on default if rotation is possible */ )
     newCard
   }
@@ -67,12 +69,12 @@ class Tile(val name: String = "default name", val monastery: Boolean = false, va
         this.townConnection == that.townConnection &&
         this.borders == that.borders &&
         this.liegeman == that.liegeman &&
-        this.coat_of_arms == that.coat_of_arms
+        this.coatOfArms == that.coatOfArms
       case _ => false
     }
   }
 
-  override def hashCode(): Int = (monastery, townConnection, borders, liegeman, coat_of_arms).##
+  override def hashCode(): Int = (monastery, townConnection, borders, liegeman, coatOfArms).##
 
   override def toString: String = {
     provider.toText(this)
@@ -82,4 +84,40 @@ class Tile(val name: String = "default name", val monastery: Boolean = false, va
     provider.toText(this).split("\n")(l)
   }
 
+  def toXML: Elem = {
+    <tile>
+      <name>{name}</name>
+      <monastery>{monastery}</monastery>
+      <townConnection>{townConnection}</townConnection>
+      <borders>{borders.map(border => <border>{border}</border>)}</borders>
+      <liegeman>
+        <type>{liegeman._1}</type>
+        <position>{liegeman._2}</position>
+      </liegeman>
+      <coatOfArms>{coatOfArms}</coatOfArms>
+      <rotation>{rotation}</rotation>
+    </tile>
+  }
+
+  def fromXML(node: scala.xml.Node) : Tile = {
+    val name = (node \ "name").text
+    val monastery = (node \ "monastery").text.toBoolean
+    val townConnection = (node \ "townConnection").text.toBoolean
+    val borders = (node \ "borders" \ "border").map(border => BorderType.valueOf(border.text)).toVector
+    val liegemanType = LiegemanType.valueOf((node \ "liegeman" \ "type").text)
+    val liegemanPosition = LiegemanPosition.valueOf((node \ "liegeman" \ "position").text)
+    val liegeman = (liegemanType, liegemanPosition)
+    val coatOfArms = (node \ "coatOfArms").text.toBoolean
+    val rotation = (node \ "rotation").text.toInt
+
+    new Tile (
+      name,
+      monastery,
+      townConnection,
+      borders,
+      liegeman,
+      coatOfArms,
+      rotation
+    )
+  }
 }

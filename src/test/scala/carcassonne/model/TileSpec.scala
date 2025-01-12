@@ -8,6 +8,8 @@ import carcassonne.model.gameDataComponent.gameDataBaseImplementation.{TextProvi
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 
+import scala.xml.PrettyPrinter
+
 class TileSpec extends AnyWordSpec {
   val tile = new Tile(borders = Vector(road, town, road, pasture))
   val tile2 = new Tile(monastery = false, townConnection = true, borders = Vector(town, pasture, pasture, town), (knight, north))
@@ -106,6 +108,41 @@ class TileSpec extends AnyWordSpec {
     }
     "return the specified line within the textual representation of a tile" in {
       assert(tile.line(0).equals("* . H . *"))
+    }
+    "be convertible to XML" in {
+      val tile = new Tile(name = "XML Tile", monastery = true, townConnection = false,
+        borders = Vector(pasture, road, town, road), liegeman = (monk, middle), coatOfArms = false, rotation = 0)
+      // Create an instance of PrettyPrinter with the desired settings
+      val printer = new PrettyPrinter(120, 2) // 120 is the maximum line width, 2 is the indentation
+      val formattedXML = printer.format(tile.toXML)
+
+     assert(formattedXML.equals(
+       "<tile>\n" +
+         "  <name>XML Tile</name>\n" +
+         "  <monastery>true</monastery>\n" +
+         "  <townConnection>false</townConnection>\n" +
+         "  <borders>\n" +
+         "    <border>pasture</border>\n" +
+         "    <border>road</border>\n" +
+         "    <border>town</border>\n" +
+         "    <border>road</border>\n" +
+         "  </borders>\n" +
+         "  <liegeman>\n" +
+         "    <type>monk</type>\n" +
+         "    <position>middle</position>\n" +
+         "  </liegeman>\n" +
+         "  <coatOfArms>false</coatOfArms>\n" +
+         "  <rotation>0</rotation>" +
+         "\n</tile>"
+     ))
+    }
+    "be constructable from XML" in {
+      val tile = new Tile(name = "XML Tile", monastery = true, townConnection = false,
+        borders = Vector(pasture, road, town, road), liegeman = (monk, middle), coatOfArms = false, rotation = 0)
+      // Create an instance of PrettyPrinter with the desired settings
+      val XML = tile.toXML
+      val XMLTile = tile.fromXML(XML)
+      assert(tile.equals(XMLTile))
     }
   }
 }
