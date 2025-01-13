@@ -6,6 +6,7 @@ import carcassonne.util.{Prototype, State}
 
 import scala.collection.immutable.Queue
 import scala.util.Random
+import scala.xml.Elem
 
 enum Color:
   case blue, red, green, yellow, black
@@ -85,4 +86,55 @@ class PlayerState(val meepleCount: Int = 7, val color: Color = blue, val points:
   }
 
   override def hashCode(): Int = (meepleCount, color, points).##
+
+  def toXML: Elem = {
+    <playerState>
+      <meepleCount>{meepleCount}</meepleCount>
+      <color>{color}</color>
+      <points>{points}</points>
+    </playerState>
+  }
+
+  def fromXML(node: scala.xml.Node): PlayerState = {
+    val meepleCount = (node \ "meepleCount").text.trim.toInt
+    val color = Color.valueOf((node \ "color").text.trim)
+    val points = (node \ "points").text.trim.toInt
+
+    new PlayerState(
+      meepleCount,
+      color,
+      points
+    )
+  }
 }
+
+object PlayerState {
+  import play.api.libs.json._
+  implicit val colorWrites: Writes[Color] = Writes[Color](c => JsString(c.toString))
+  implicit val colorReads: Reads[Color] = Reads[Color](json => json.validate[String].map(Color.valueOf))
+
+  implicit val playerStateWrites: Writes[PlayerState] = new Writes[PlayerState] {
+    def writes(player: PlayerState): JsObject = Json.obj(
+      "meepleCount" -> player.meepleCount,
+      "color" -> player.color,
+      "points" -> player.points
+    )
+  }
+
+  implicit val playerStateReads: Reads[PlayerState] = new Reads[PlayerState] {
+    def reads(json: JsValue): JsResult[PlayerState] = {
+      for {
+        meepleCount <- (json \ "meepleCount").validate[Int]
+        color <- (json \ "color").validate[Color]
+        points <- (json \ "points").validate[Int]
+      } yield {
+        new PlayerState(
+          meepleCount,
+          color,
+          points
+        )
+      }
+    }
+  }
+}
+

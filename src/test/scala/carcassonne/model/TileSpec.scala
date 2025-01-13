@@ -140,7 +140,6 @@ class TileSpec extends AnyWordSpec {
     "be constructable from XML" in {
       val tile = new Tile(name = "XML Tile", monastery = true, townConnection = false,
         borders = Vector(pasture, road, town, road), liegeman = (monk, middle), coatOfArms = false, rotation = 0)
-      // Create an instance of PrettyPrinter with the desired settings
       val XML = tile.toXML
       print(XML)
       val XMLTile = tile.fromXML(XML)
@@ -162,7 +161,7 @@ class TileSpec extends AnyWordSpec {
         "coatOfArms" -> false,
         "rotation" -> 0
       )
-      assert(Json.parse(Json.prettyPrint(jsonOutput)).equals(expectedJson))
+      assert(jsonOutput.equals(expectedJson))
     }
     "be constructable from JSON" in {
       val expectedTile = new Tile(name = "JSON Tile", monastery = true, townConnection = false,

@@ -4,6 +4,9 @@ import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Color.*
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.{GameData, PlayerState, Tile}
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
+import play.api.libs.json.Json
+
+import scala.xml.Elem
 
 class GameDataSpec extends AnyWordSpec {
   "A GameData instance" should {
@@ -84,6 +87,46 @@ class GameDataSpec extends AnyWordSpec {
     "return the same hashcode for equal players" in {
       val player1 = PlayerState()
       assert(player.hashCode() == player1.hashCode())
+    }
+    "let players be convertible to XML" in {
+      val player = new PlayerState()
+      // Create an instance of PrettyPrinter with the desired settings
+      val xmlOutput = player.toXML
+      val expectedXml: Elem =
+        <playerState>
+          <meepleCount>{7}</meepleCount>
+          <color>{blue}</color>
+          <points>{0}</points>
+        </playerState>
+      assert(expectedXml.equals(expectedXml))
+    }
+    "let players be constructable from XML" in {
+      val player = new PlayerState()
+      // Create an instance of PrettyPrinter with the desired settings
+      val XML = player.toXML
+      print(XML)
+      val XMLTile = player.fromXML(XML)
+      assert(player.equals(XMLTile))
+    }
+    "let playerState be convertible to JSON" in {
+      val player = new PlayerState()
+      val jsonOutput = Json.toJson(player)
+      val expectedJson = Json.obj(
+        "meepleCount" -> 7,
+        "color" -> "blue",
+        "points" -> 0
+      )
+      assert(jsonOutput.equals(expectedJson))
+    }
+    "let playerState be constructable from JSON" in {
+      val expectedPlayer = new PlayerState()
+      val json = Json.obj(
+        "meepleCount" -> 7,
+        "color" -> "blue",
+        "points" -> 0
+      )
+      val playerFromJson = json.as[PlayerState]
+      assert(playerFromJson.equals(expectedPlayer))
     }
   }
 }
