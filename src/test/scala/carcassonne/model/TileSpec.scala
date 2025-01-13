@@ -135,7 +135,9 @@ class TileSpec extends AnyWordSpec {
           <coatOfArms>false</coatOfArms>
           <rotation>0</rotation>
         </tile>
-      assert(expectedXml.equals(expectedXml))
+      val normalizedXmlOutput = xmlOutput.toString.replaceAll("\\s+", "")
+      val normalizedExpectedXml = expectedXml.toString.replaceAll("\\s+", "")
+      assert(normalizedXmlOutput.equals(normalizedExpectedXml))
     }
     "be constructable from XML" in {
       val tile = new Tile(name = "XML Tile", monastery = true, townConnection = false,

@@ -5,6 +5,7 @@ import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Index
 import carcassonne.util.Prototype
 
 import scala.collection.immutable.SortedMap
+import scala.xml.Elem
 
 case class Index(value: Int) {
   require(value >= 0 && value <= 14, "Value must be between 0 and 14")
@@ -26,13 +27,12 @@ object Index {
   implicit val ascendingOrdering: Ordering[Index] = Ordering.by(_.value)
 }
 
-class TileMap(// Create a Map with keys 0 0 to 14 14 and None as values
-              val data: SortedMap[(Index, Index), Option[Tile]] = SortedMap((for {
-                i <- 0 to 14
-                j <- 0 to 14
-              } yield ((Index(i), Index(j)) -> Option.empty[Tile])).toSeq: _*))// unpack sequence)
-extends Prototype[TileMap] with TileMapTrait
-{
+class TileMap( // Create a Map with keys 0 0 to 14 14 and None as values
+               val data: SortedMap[(Index, Index), Option[Tile]] = SortedMap((for {
+                 i <- 0 to 14
+                 j <- 0 to 14
+               } yield ((Index(i), Index(j)) -> Option.empty[Tile])).toSeq: _*)) // unpack sequence)
+  extends Prototype[TileMap] with TileMapTrait {
   override def toString: String = {
     val strBuilder = new StringBuilder
     val provider = new TextProvider
@@ -71,6 +71,108 @@ extends Prototype[TileMap] with TileMapTrait
 
   def add(index1: Index, index2: Index, tile: Option[TileTrait]): TileMap = {
     TileMap(data + ((index1, index2) -> tile.asInstanceOf[Option[Tile]]))
+  }
+
+  def toXML: Elem = {
+    <tileMap>
+      {data.collect {
+      case ((index1, index2), Some(tile)) =>
+        <entry>
+          <position>
+            <x>
+              {index1.value}
+            </x>
+            <y>
+              {index2.value}
+            </y>
+          </position>{tile.toXML}
+        </entry>
+    }}
+    </tileMap>
+  }
+
+  def fromXML(node: scala.xml.Node): TileMap = {
+    val entries = (node \ "entry").map { entry =>
+      val x = (entry \ "position" \ "x").text.trim.toInt
+      val y = (entry \ "position" \ "y").text.trim.toInt
+
+      val tileNode = (entry \ "tile").headOption.getOrElse(
+        throw new IllegalArgumentException("Missing <tile> node in entry")
+      )
+      val tile = Tile().fromXML(tileNode)
+      (Index(x), Index(y), Some(tile))
+    }
+    var map = new TileMap()
+    for (entry <- entries) {
+      map = map.add(entry._1, entry._2, entry._3)
+    }
+    val result = map.deepClone()
+    result
+  }
+}
+
+object TileMap {
+
+  import play.api.libs.json._
+
+  implicit val indexWrites: Writes[Index] = (index: Index) => Json.toJson(index.value)
+
+  // TileMap Writes
+  implicit val tileMapWrites: Writes[TileMap] = new Writes[TileMap] {
+    def writes(tileMap: TileMap): JsObject = {
+      val entriesJson = tileMap.data.collect {
+        case ((index1, index2), Some(tile)) =>
+          Json.obj(
+            "position" -> Json.obj(
+              "x" -> index1.value,
+              "y" -> index2.value
+            ),
+            "tile" -> Json.toJson(tile)
+          )
+      }.toSeq
+
+      Json.obj(
+        "tileMap" -> Json.obj(
+          "entries" -> entriesJson
+        )
+      )
+    }
+  }
+
+  implicit val tileMapReads: Reads[TileMap] = new Reads[TileMap] {
+    def reads(json: JsValue): JsResult[TileMap] = {
+      for {
+        entries <- (json \ "tileMap" \ "entries").validate[Seq[JsObject]].flatMap { entrySeq  =>
+          val parsedEntries = entrySeq.map { entry =>
+              for {
+                x <- (entry \ "position" \ "x").validate[Int]
+                y <- (entry \ "position" \ "y").validate[Int]
+                tile <- (entry \ "tile").validate[Tile]
+              } yield {
+                (Index(x), Index(y), Some(tile))
+              }
+          }
+          // Collect all results into a single JsResult
+          parsedEntries.foldLeft(JsSuccess(Seq.empty[(Index, Index, Option[Tile])]): JsResult[Seq[(Index, Index, Option[Tile])]]) {
+            // combines the current accumulator with the new value.
+            case (JsSuccess(acc, _), JsSuccess(value, _)) => JsSuccess(acc :+ value)
+            // accumulator is a JsError, and the current entry is valid
+            case (JsError(errors), JsSuccess(_, _)) => JsError(errors)
+            // the accumulator is a valid JsSuccess but the current entry is a JsError
+            case (JsSuccess(_, _), JsError(errors)) => JsError(errors)
+            // both the accumulator and the current entry are errors
+            case (JsError(err1), JsError(err2)) => JsError(err1 ++ err2)
+          }
+        }
+      } yield {
+        var map = new TileMap()
+        for (entry <- entries) {
+          map = map.add(entry._1, entry._2, entry._3)
+        }
+        val result = map.deepClone()
+        result
+      }
+    }
   }
 }
 

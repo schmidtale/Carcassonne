@@ -5,6 +5,7 @@ import carcassonne.model.gameDataComponent.gameDataBaseImplementation.*
 import carcassonne.util.State
 
 import scala.collection.immutable.Queue
+import scala.xml.Elem
 
 
 class GameDataStub(val map: TileMap = TileMap(),
@@ -27,4 +28,8 @@ extends GameDataTrait {
   
   override def deepClone(): GameDataStub = this
 
+  def toXML: Elem = {
+    <GameData>
+    </GameData>
+  }
 }

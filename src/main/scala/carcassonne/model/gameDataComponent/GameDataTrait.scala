@@ -5,6 +5,7 @@ import carcassonne.model.gameDataComponent.gameDataBaseImplementation.{Color, In
 import carcassonne.util.{Prototype, State}
 
 import scala.collection.immutable.{Queue, SortedMap}
+import scala.xml.Elem
 
 trait GameDataTrait extends Prototype[GameDataTrait] {
   val map: TileMapTrait
@@ -19,6 +20,7 @@ trait GameDataTrait extends Prototype[GameDataTrait] {
   def withTurn(newTurn: Int) : GameDataTrait
   def withMap(newMap: TileMapTrait): GameDataTrait
   def currentTile(): TileTrait
+  def toXML: Elem
 }
 
 trait TileTrait {

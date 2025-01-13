@@ -1,11 +1,12 @@
 package carcassonne.model
 
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Color.*
-import carcassonne.model.gameDataComponent.gameDataBaseImplementation.{GameData, PlayerState, Tile}
+import carcassonne.model.gameDataComponent.gameDataBaseImplementation.{GameData, PlayerState, Tile, TileStack}
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.Json
 
+import scala.collection.immutable.Queue
 import scala.xml.Elem
 
 class GameDataSpec extends AnyWordSpec {
@@ -54,7 +55,7 @@ class GameDataSpec extends AnyWordSpec {
       var game = GameData()
       val clone = game.deepClone()
       assert(game.equals(clone))
-      
+
       game = GameData()
       assert(game != clone)
     }
@@ -90,15 +91,22 @@ class GameDataSpec extends AnyWordSpec {
     }
     "let players be convertible to XML" in {
       val player = new PlayerState()
-      // Create an instance of PrettyPrinter with the desired settings
       val xmlOutput = player.toXML
       val expectedXml: Elem =
         <playerState>
-          <meepleCount>{7}</meepleCount>
-          <color>{blue}</color>
-          <points>{0}</points>
+          <meepleCount>
+            {7}
+          </meepleCount>
+          <color>
+            {blue}
+          </color>
+          <points>
+            {0}
+          </points>
         </playerState>
-      assert(expectedXml.equals(expectedXml))
+      val normalizedXmlOutput = xmlOutput.toString.replaceAll("\\s+", "")
+      val normalizedExpectedXml = expectedXml.toString.replaceAll("\\s+", "")
+      assert(normalizedXmlOutput.equals(normalizedExpectedXml))
     }
     "let players be constructable from XML" in {
       val player = new PlayerState()
@@ -127,6 +135,131 @@ class GameDataSpec extends AnyWordSpec {
       )
       val playerFromJson = json.as[PlayerState]
       assert(playerFromJson.equals(expectedPlayer))
+    }
+    "be convertible to XML" in {
+      var gameData = GameData(stack = Queue(TileStack().startingTile))
+      gameData = gameData.initialState()
+      val xmlOutput = gameData.toXML
+      val expectedXml: Elem =
+        <GameData>
+          {gameData.map.toXML}<stack>
+          <tile>
+            <name>
+              D
+            </name>
+            <monastery>
+              false
+            </monastery>
+            <townConnection>
+              false
+            </townConnection>
+            <borders>
+              <border>
+                town
+              </border> <border>
+              road
+            </border> <border>
+              pasture
+            </border> <border>
+              road
+            </border>
+            </borders>
+            <liegeman>
+              <type>
+                none
+              </type>
+              <position>
+                nowhere
+              </position>
+            </liegeman>
+            <coatOfArms>
+              false
+            </coatOfArms>
+            <rotation>
+              3
+            </rotation>
+          </tile>
+        </stack>
+          <players>
+            <playerState>
+              <meepleCount>7</meepleCount>
+              <color>blue</color>
+              <points>0</points>
+            </playerState>
+            <playerState>
+              <meepleCount>7</meepleCount>
+              <color>red</color>
+              <points>0</points>
+            </playerState>
+          </players>
+          <turn>0</turn>
+          <state>MenuState</state>
+        </GameData>
+      val normalizedXmlOutput = xmlOutput.toString.replaceAll("\\s+", "")
+      val normalizedExpectedXml = expectedXml.toString.replaceAll("\\s+", "")
+      assert(normalizedXmlOutput.equals(normalizedExpectedXml))
+    }
+    "be constructable from XML" in {
+      var gameData = GameData(stack = Queue(TileStack().startingTile))
+      gameData = gameData.initialState()
+      val xmlOutput = gameData.toXML
+      val expectedXml: Elem =
+        <GameData>
+          {gameData.map.toXML}<stack>
+          <tile>
+            <name>
+              D
+            </name>
+            <monastery>
+              false
+            </monastery>
+            <townConnection>
+              false
+            </townConnection>
+            <borders>
+              <border>
+                town
+              </border> <border>
+              road
+            </border> <border>
+              pasture
+            </border> <border>
+              road
+            </border>
+            </borders>
+            <liegeman>
+              <type>
+                none
+              </type>
+              <position>
+                nowhere
+              </position>
+            </liegeman>
+            <coatOfArms>
+              false
+            </coatOfArms>
+            <rotation>
+              3
+            </rotation>
+          </tile>
+        </stack>
+          <players>
+            <playerState>
+              <meepleCount>7</meepleCount>
+              <color>blue</color>
+              <points>0</points>
+            </playerState>
+            <playerState>
+              <meepleCount>7</meepleCount>
+              <color>red</color>
+              <points>0</points>
+            </playerState>
+          </players>
+          <turn>0</turn>
+          <state>MenuState</state>
+        </GameData>
+      val XMLGameData = gameData.fromXML(expectedXml)
+      assert(gameData.equals(XMLGameData))
     }
   }
 }

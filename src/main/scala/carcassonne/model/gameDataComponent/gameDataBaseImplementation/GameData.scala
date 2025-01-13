@@ -23,7 +23,7 @@ class GameData(val map: TileMap = TileMap(),
   }
 
   def currentTile(): Tile = {
-    if(turn < stack.size) {
+    if (turn < stack.size) {
       return stack(turn)
     }
     TileStack().defaultTile
@@ -37,11 +37,11 @@ class GameData(val map: TileMap = TileMap(),
     new GameData(newMap.asInstanceOf[TileMap], stack, players, turn, state)
   }
 
-  def withState(newState: State) : GameData = {
+  def withState(newState: State): GameData = {
     new GameData(map, stack, players, turn, newState)
   }
-  
-  def withTurn(newTurn: Int) : GameData = {
+
+  def withTurn(newTurn: Int): GameData = {
     new GameData(map, stack, players, newTurn, state)
   }
 
@@ -68,6 +68,56 @@ class GameData(val map: TileMap = TileMap(),
     val gameData = GameData(this.map, this.stack, this.players, this.turn)
     gameData
   }
+
+  def toXML: Elem = {
+    <GameData>
+      {map.toXML}<stack>
+      {stack.map(tile => {
+        tile.toXML
+      }
+      )}
+    </stack>
+      <players>
+        {players.map(player => player.toXML)}
+      </players>
+      <turn>
+        {turn}
+      </turn>
+      <state>
+        {state.toString}
+      </state>
+    </GameData>
+  }
+
+  def fromXML(node: scala.xml.Node): GameData = {
+    val mapNode = (node \ "tileMap").head
+    val map = TileMap().fromXML(mapNode)
+
+    val stackNodes = (node \ "stack" \ "tile")
+    val stack = Queue(stackNodes.map(tileNode => Tile().fromXML(tileNode)): _*)
+
+    val playerNodes = (node \ "players" \ "playerState")
+    val players = Queue(playerNodes.map(playerNode => PlayerState().fromXML(playerNode)): _*)
+
+    val turn = (node \ "turn").text.trim.toInt
+
+    val stateString = (node \ "state").text.trim
+    val state = stateString match {
+      case "MenuState" => MenuState
+      case "PlacingTileState" => PlacingTileState
+      case "PlacingLiegemanState" => PlacingLiegemanState
+      case "ReviewState" => ReviewState
+      case _ => throw new IllegalArgumentException(s"Unknown state: $stateString")
+    }
+
+    new GameData(
+      map,
+      stack,
+      players,
+      turn,
+      state
+    )
+  }
 }
 
 class PlayerState(val meepleCount: Int = 7, val color: Color = blue, val points: Int = 0) extends PlayerTrait {
@@ -89,9 +139,15 @@ class PlayerState(val meepleCount: Int = 7, val color: Color = blue, val points:
 
   def toXML: Elem = {
     <playerState>
-      <meepleCount>{meepleCount}</meepleCount>
-      <color>{color}</color>
-      <points>{points}</points>
+      <meepleCount>
+        {meepleCount}
+      </meepleCount>
+      <color>
+        {color}
+      </color>
+      <points>
+        {points}
+      </points>
     </playerState>
   }
 
@@ -109,7 +165,9 @@ class PlayerState(val meepleCount: Int = 7, val color: Color = blue, val points:
 }
 
 object PlayerState {
+
   import play.api.libs.json._
+
   implicit val colorWrites: Writes[Color] = Writes[Color](c => JsString(c.toString))
   implicit val colorReads: Reads[Color] = Reads[Color](json => json.validate[String].map(Color.valueOf))
 

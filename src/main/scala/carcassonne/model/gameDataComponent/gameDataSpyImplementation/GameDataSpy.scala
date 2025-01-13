@@ -5,6 +5,7 @@ import carcassonne.model.gameDataComponent.gameDataBaseImplementation.*
 import carcassonne.util.State
 
 import scala.collection.immutable.Queue
+import scala.xml.Elem
 
 
 class GameDataSpy(val map: TileMap = TileMap(),
@@ -54,5 +55,10 @@ class GameDataSpy(val map: TileMap = TileMap(),
     deepCloneCalls += 1
     this
   }
+
+  def toXML: Elem = {
+    <GameData>
+    </GameData>
+  } 
 
 }
