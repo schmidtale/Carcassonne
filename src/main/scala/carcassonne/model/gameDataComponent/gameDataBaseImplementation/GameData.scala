@@ -120,6 +120,53 @@ class GameData(val map: TileMap = TileMap(),
   }
 }
 
+object GameData {
+
+  import play.api.libs.json._
+
+  implicit val gameDataWrites: Writes[GameData] = new Writes[GameData] {
+    def writes(gameData: GameData): JsObject = Json.obj(
+      "GameData" -> Json.obj(
+        "map" -> Json.toJson(gameData.map),
+        "stack" -> gameData.stack,
+        "players" -> gameData.players,
+        "turn" -> gameData.turn,
+        "state" -> gameData.state.toString
+      )
+    )
+  }
+
+  implicit val gameDataReads: Reads[GameData] = new Reads[GameData] {
+    def reads(json: JsValue): JsResult[GameData] = {
+      (json \ "GameData").validate[JsObject].flatMap { gameDataJson =>
+        for {
+          map <- (gameDataJson \ "map").validate[TileMap]
+          stack <- (gameDataJson \ "stack").validate[Seq[Tile]].map(Queue(_: _*))
+          players <- (gameDataJson \ "players").validate[Seq[PlayerState]].map(Queue(_: _*))
+          turn <- (gameDataJson \ "turn").validate[Int]
+          stateString <- (gameDataJson \ "state").validate[String]
+        } yield {
+          val state = stateString match {
+            case "MenuState" => MenuState
+            case "PlacingTileState" => PlacingTileState
+            case "PlacingLiegemanState" => PlacingLiegemanState
+            case "ReviewState" => ReviewState
+            case _ => throw new IllegalArgumentException(s"Unknown state: $stateString")
+          }
+          new GameData(
+            map,
+            stack,
+            players,
+            turn,
+            state
+          )
+        }
+      }
+    }
+  }
+}
+
+
 class PlayerState(val meepleCount: Int = 7, val color: Color = blue, val points: Int = 0) extends PlayerTrait {
   def this(color: Color) = {
     this(7, color, 0)

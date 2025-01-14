@@ -1,7 +1,7 @@
 package carcassonne.model
 
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Color.*
-import carcassonne.model.gameDataComponent.gameDataBaseImplementation.{GameData, PlayerState, Tile, TileStack}
+import carcassonne.model.gameDataComponent.gameDataBaseImplementation.{GameData, MenuState, PlayerState, Tile, TileStack}
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.Json
@@ -17,7 +17,6 @@ class GameDataSpec extends AnyWordSpec {
       val game1 = GameData(turn = 1)
       assert(game1.activePlayer().equals(red))
     }
-    // TODO test randomly failed once
     "return a different reference to current tile based on the turn" in {
       assert(game.currentTile().isInstanceOf[Tile])
       val gameTurn1 = GameData(turn = 20)
@@ -260,6 +259,36 @@ class GameDataSpec extends AnyWordSpec {
         </GameData>
       val XMLGameData = gameData.fromXML(expectedXml)
       assert(gameData.equals(XMLGameData))
+    }
+    "be convertible to JSON" in {
+      var gameData = GameData(stack = Queue(TileStack().startingTile))
+      gameData = gameData.initialState()
+      val jsonOutput = Json.toJson(gameData)
+      val expectedJson = Json.obj(
+        "GameData" -> Json.obj(
+          "map" -> Json.toJson(gameData.map),
+          "stack" -> Json.toJson(gameData.stack),
+          "players" -> Json.toJson(gameData.players),
+          "turn" -> 0,
+          "state" -> "MenuState"
+        )
+      )
+      assert(jsonOutput.equals(expectedJson))
+    }
+    "be constructable from JSON" in {
+      var gameData = GameData(stack = Queue(TileStack().startingTile))
+      gameData = gameData.initialState()
+      val json = Json.obj(
+        "GameData" -> Json.obj(
+          "map" -> Json.toJson(gameData.map),
+          "stack" -> Json.toJson(gameData.stack),
+          "players" -> Json.toJson(gameData.players),
+          "turn" -> 0,
+          "state" -> "MenuState"
+        )
+      )
+      val gameDataFromJson = json.as[GameData]
+      assert(gameDataFromJson.equals(gameData))
     }
   }
 }
