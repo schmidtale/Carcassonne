@@ -15,10 +15,6 @@ object Carcassonne {
     private val gui = new GUI(using controller)
     private val tui = new TextUI(using controller, textProvider)
 
-    // TODO remove example usage of fileIO
-    val fileIO: FileIOTrait = summon[FileIOTrait]
-    fileIO.save(controller.gameData)
-
     new JFXPanel(); // this will prepare JavaFX toolkit and environment
 
     @main

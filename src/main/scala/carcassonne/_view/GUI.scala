@@ -12,17 +12,17 @@ import org.apache.batik.transcoder.{TranscoderInput, TranscoderOutput}
 import scalafx.application.{JFXApp3, Platform}
 import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.Scene
-import scalafx.scene.control.{Button, Tooltip}
+import scalafx.scene.control.{Button, Menu, MenuBar, MenuItem, Tooltip}
 import scalafx.stage.Screen
 import scalafx.scene.image.{Image, ImageView}
-import scalafx.scene.input.{KeyCode, KeyEvent}
+import scalafx.scene.input.{KeyCode, KeyCombination, KeyEvent}
 import scalafx.scene.layout.{Background, BackgroundFill, BorderPane, CornerRadii, GridPane, Pane, StackPane, VBox}
 import scalafx.scene.paint.Color.*
 import scalafx.scene.paint
 import scalafx.scene.text.{Font, Text}
 import scalafx.Includes.*
-
 import carcassonne.CarcassonneModule.given_ControllerTrait
+import scalafx.event.ActionEvent
 
 // Function to convert enum Color to scalafx Color
 def getColorFromEnum(playerColor: Color): scalafx.scene.paint.Color = {
@@ -88,6 +88,39 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
       scene = new Scene {
         fill = Black
         root = new BorderPane {
+          top = new MenuBar {
+            menus = Seq(
+              new Menu("File") {
+                items = Seq(
+                  new MenuItem("New") {
+                    accelerator = KeyCombination.keyCombination("Ctrl+N")
+                    onAction = (e: ActionEvent) => {
+                      tabletop.resetGameData()
+                    }
+                  },
+                  new MenuItem("Save") {
+                    accelerator = KeyCombination.keyCombination("Ctrl+S")
+                    onAction = (e: ActionEvent) => {
+                      tabletop.save()
+                    }
+                  },
+                  new MenuItem("Load") {
+                    accelerator = KeyCombination.keyCombination("Ctrl+L")
+                    onAction = (e: ActionEvent) => {
+                      tabletop.load()
+                    }
+                  },
+                new MenuItem("Quit") {
+                  accelerator = KeyCombination.keyCombination("Ctrl+Q")
+                  onAction = (e: ActionEvent) => {
+                    Platform.exit()
+                    System.exit(0)
+                  }
+                }
+                )
+              }
+            )
+          }
           left = new VBox {
             style = s"-fx-background-color:black"
             // add imageView for next Card and Button for rotation on top
