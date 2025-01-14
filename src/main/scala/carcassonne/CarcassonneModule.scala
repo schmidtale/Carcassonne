@@ -1,5 +1,7 @@
 package carcassonne
 
+import carcassonne.model.fileIoComponent.FileIOTrait
+import carcassonne.model.fileIoComponent.fileIoJSONImpl.FileIO
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Color.{black, blue, green, red, yellow}
 import controller.controllerComponent.ControllerTrait
 import controller.controllerComponent.controllerBaseImplementation.Tabletop
@@ -15,4 +17,5 @@ object CarcassonneModule {
   given PlayerTrait = PlayerState()
   given TextProviderTrait = TextProvider()
   given ControllerTrait = Tabletop()
+  given FileIOTrait = FileIO()
 }

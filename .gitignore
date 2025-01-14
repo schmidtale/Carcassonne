@@ -49,3 +49,5 @@ yourgame.log
 
 # Exclude all sbt history files but not .history3
 !/.history3
+/gameData.json
+/gameData.xml

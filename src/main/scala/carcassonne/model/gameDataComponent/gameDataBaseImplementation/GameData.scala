@@ -3,6 +3,7 @@ package carcassonne.model.gameDataComponent.gameDataBaseImplementation
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Color.*
 import carcassonne.model.gameDataComponent.*
 import carcassonne.util.{Prototype, State}
+import play.api.libs.json.{Reads, Writes}
 
 import scala.collection.immutable.Queue
 import scala.util.Random
@@ -118,10 +119,20 @@ class GameData(val map: TileMap = TileMap(),
       state
     )
   }
+
+  override def reads: Reads[GameDataTrait] = {
+    GameData.gameDataReads.map(_.asInstanceOf[GameDataTrait])
+  }
+
+  override def writes: Writes[GameDataTrait] = {
+    GameData.gameDataWrites.contramap[GameDataTrait] {
+      case gameData: GameData => gameData 
+      case _ => throw new IllegalArgumentException("Unsupported GameDataTrait instance")
+    }
+  }
 }
 
 object GameData {
-
   import play.api.libs.json._
 
   implicit val gameDataWrites: Writes[GameData] = new Writes[GameData] {

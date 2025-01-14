@@ -3,9 +3,10 @@ package carcassonne.model.gameDataComponent.gameDataStubImplementation
 import carcassonne.model.gameDataComponent.*
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.*
 import carcassonne.util.State
+import play.api.libs.json.{Reads, Writes}
 
 import scala.collection.immutable.Queue
-import scala.xml.Elem
+import scala.xml.{Elem, Node}
 
 
 class GameDataStub(val map: TileMap = TileMap(),
@@ -31,5 +32,17 @@ extends GameDataTrait {
   def toXML: Elem = {
     <GameData>
     </GameData>
+  }
+
+  def fromXML(node: Node): GameDataTrait = {
+    new GameData()
+  }
+
+  override def reads: Reads[GameDataTrait] = {
+    null.asInstanceOf[Reads[GameDataTrait]]
+  }
+
+  override def writes: Writes[GameDataTrait] = {
+    null.asInstanceOf[Writes[GameDataTrait]]
   }
 }
