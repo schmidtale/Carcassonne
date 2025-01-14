@@ -93,24 +93,44 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
               new Menu("File") {
                 items = Seq(
                   new MenuItem("New") {
+                    graphic = new ImageView(new Image(getClass.getClassLoader.getResource("new_icon.png").toString)) {
+                      fitWidth = 16
+                      fitHeight = 16
+                      preserveRatio = true
+                    }
                     accelerator = KeyCombination.keyCombination("Ctrl+N")
                     onAction = (e: ActionEvent) => {
                       tabletop.resetGameData()
                     }
                   },
                   new MenuItem("Save") {
+                    graphic = new ImageView(new Image(getClass.getClassLoader.getResource("save_icon.png").toString)) {
+                      fitWidth = 16
+                      fitHeight = 16
+                      preserveRatio = true
+                    }
                     accelerator = KeyCombination.keyCombination("Ctrl+S")
                     onAction = (e: ActionEvent) => {
                       tabletop.save()
                     }
                   },
                   new MenuItem("Load") {
+                    graphic = new ImageView(new Image(getClass.getClassLoader.getResource("load_icon.png").toString)) {
+                      fitWidth = 16
+                      fitHeight = 16
+                      preserveRatio = true
+                    }
                     accelerator = KeyCombination.keyCombination("Ctrl+L")
                     onAction = (e: ActionEvent) => {
                       tabletop.load()
                     }
                   },
                 new MenuItem("Quit") {
+                  graphic = new ImageView(new Image(getClass.getClassLoader.getResource("quit_icon.png").toString)) {
+                    fitWidth = 16
+                    fitHeight = 16
+                    preserveRatio = true
+                  }
                   accelerator = KeyCombination.keyCombination("Ctrl+Q")
                   onAction = (e: ActionEvent) => {
                     Platform.exit()
