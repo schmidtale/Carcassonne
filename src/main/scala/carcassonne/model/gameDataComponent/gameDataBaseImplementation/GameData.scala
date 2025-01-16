@@ -12,6 +12,13 @@ import scala.xml.Elem
 enum Color:
   case blue, red, green, yellow, black
 
+val stateMap: Map[String, State] = Map(
+  "MenuState" -> MenuState,
+  "PlacingTileState" -> PlacingTileState,
+  "PlacingLiegemanState" -> PlacingLiegemanState,
+  "ReviewState" -> ReviewState
+)
+
 class GameData(val map: TileMap = TileMap(),
                val stack: Queue[Tile] = Random.shuffle(TileStack().construct()),
                val players: Queue[PlayerState] = Queue(PlayerState(blue), PlayerState(red)),
@@ -103,13 +110,7 @@ class GameData(val map: TileMap = TileMap(),
     val turn = (node \ "turn").text.trim.toInt
 
     val stateString = (node \ "state").text.trim
-    val state = stateString match {
-      case "MenuState" => MenuState
-      case "PlacingTileState" => PlacingTileState
-      case "PlacingLiegemanState" => PlacingLiegemanState
-      case "ReviewState" => ReviewState
-      case _ => throw new IllegalArgumentException(s"Unknown state: $stateString")
-    }
+    val state = stateMap.getOrElse(stateString, throw new IllegalArgumentException(s"Unknown state: $stateString"))
 
     new GameData(
       map,
@@ -125,14 +126,12 @@ class GameData(val map: TileMap = TileMap(),
   }
 
   override def writes: Writes[GameDataTrait] = {
-    GameData.gameDataWrites.contramap[GameDataTrait] {
-      case gameData: GameData => gameData 
-      case _ => throw new IllegalArgumentException("Unsupported GameDataTrait instance")
-    }
+    GameData.gameDataWrites.asInstanceOf[Writes[GameDataTrait]]
   }
 }
 
 object GameData {
+
   import play.api.libs.json._
 
   implicit val gameDataWrites: Writes[GameData] = new Writes[GameData] {
@@ -157,13 +156,7 @@ object GameData {
           turn <- (gameDataJson \ "turn").validate[Int]
           stateString <- (gameDataJson \ "state").validate[String]
         } yield {
-          val state = stateString match {
-            case "MenuState" => MenuState
-            case "PlacingTileState" => PlacingTileState
-            case "PlacingLiegemanState" => PlacingLiegemanState
-            case "ReviewState" => ReviewState
-            case _ => throw new IllegalArgumentException(s"Unknown state: $stateString")
-          }
+          val state = stateMap.getOrElse(stateString, throw new IllegalArgumentException(s"Unknown state: $stateString"))
           new GameData(
             map,
             stack,
