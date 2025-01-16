@@ -21,6 +21,14 @@ class TextProvider extends TextProviderTrait {
       case ('|', _, _, _, _, _, _) => '\n'
       case ('*', _, _, _, _, _, _) => '*'
 
+      /* opposing town edges with connection inner cases */
+      case ('i', BorderType.town, _, BorderType.town, _, true, false) => 'B'
+      case ('k', BorderType.town, _, BorderType.town, _, true, false) => 'B'
+      case ('M', BorderType.town, _, BorderType.town, _, true, false) => 'B'
+      case ('j', _, BorderType.town, _, BorderType.town, true, false) => 'B'
+      case ('l', _, BorderType.town, _, BorderType.town, true, false) => 'B'
+      case ('M', _, BorderType.town, _, BorderType.town, true, false) => 'B'
+
       /* border tile cases and inner roads */
       case ('a', BorderType.town, _, _, _, _, _) => 'B'
       case ('a', BorderType.pasture, _, _, _, _, _) => '.'
@@ -82,10 +90,10 @@ class TextProvider extends TextProviderTrait {
       case ('M', _, BorderType.road, _, BorderType.road, _, _) => 'H'
       case ('M', BorderType.road, _, BorderType.road, _, _, _) => 'H'
 
-      /* once all special cases are handled remaining inner letters can become grass */
+      /* once all special cases are handled, remaining inner letters can become grass */
       case ('e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'M', _, _, _, _, _, _) => '.'
 
-      /* print # to indicate missed cases */
+      /* do not change spaces in any case */
       case (' ', _, _, _, _, _, _) => ' '
 
       /* print # to indicate missed cases */
