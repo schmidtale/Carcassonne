@@ -20,7 +20,6 @@ class TurnCommand(index1: Index, index2: Index, tile: TileTrait, tabletop: Table
     memento = tabletop.gameData.deepClone()
     // Execute turn logic e.g. turn counter, card not placeable, update player state
     val newMap = tabletop.gameData.map.add(index1, index2, Some(tile))
-    // TODO constructor in gamedata that replaces increment and withmap
     tabletop.incrementTurn()
     tabletop.gameData = tabletop.gameData.withMap(newMap)
   }

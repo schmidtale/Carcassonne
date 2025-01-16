@@ -2,7 +2,7 @@ package carcassonne.controller
 
 import carcassonne.CarcassonneModule.given_GameDataTrait
 import carcassonne.controller.controllerComponent.controllerBaseImplementation.Tabletop
-import carcassonne.model.gameDataComponent.GameDataTrait
+import carcassonne.model.gameDataComponent.{GameDataTrait, TileTrait}
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.{GameData, Index, PlacingLiegemanState, PlacingTileState, ReviewState, Tile, TileMap, TileStack}
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
@@ -33,12 +33,10 @@ class TabletopSpec extends AnyWordSpec {
       val tileFromMap = tabletop.gameData.map.data((Index(0), Index(0)))
       assert(tileFromMap == emptyTile)
     }
-    // TODO fix
-//    "return its internal TileStack" in {
-//      val stack = tabletop.tileStack()
-//      val stack2 = tileStack.construct()
-//      assert(stack == stack2 )
-//    }
+    "return its internal TileStack" in {
+      val stack = tabletop.tileStack()
+      assert(stack.isInstanceOf[Queue[TileTrait]] )
+    }
     "return a starting tile" in {
       val starting_tile = tabletop.startingTile()
       assert(starting_tile == tileStack.startingTile)
@@ -86,7 +84,6 @@ class TabletopSpec extends AnyWordSpec {
       tabletop.addTileToMap(Index(2), Index(2), startingTile)
       tabletop.changeState(ReviewState)
       assert(tabletop.gameData.state == ReviewState)
-      // TODO Check for review state, adding should not be possible anymore
       tabletop.addTileToMap(Index(3), Index(3), startingTile)
     }
   }

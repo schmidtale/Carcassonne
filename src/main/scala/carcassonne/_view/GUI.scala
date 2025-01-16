@@ -382,7 +382,6 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
         for (row <- 0 to 14) {
           for (column <- 0 to 14) {
             tabletop.gameData.map.data.get(Index(row), Index(column)).flatten match {
-              // TODO use partially applied functions
               case Some(tile) =>
                 Option(tileImages(row)(column)).foreach { ImageView =>
                   tileImages(row)(column).image = getTileImage(tile.name) // Update the corresponding image view
