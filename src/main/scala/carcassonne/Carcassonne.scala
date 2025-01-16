@@ -5,7 +5,6 @@ import javafx.embed.swing.JFXPanel
 import util.MusicPlayer
 import carcassonne.CarcassonneModule.given
 import carcassonne.controller.controllerComponent.ControllerTrait
-import carcassonne.model.fileIoComponent.FileIOTrait
 import carcassonne.model.gameDataComponent.TextProviderTrait
 
 object Carcassonne {

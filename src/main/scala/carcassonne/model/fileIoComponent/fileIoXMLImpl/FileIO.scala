@@ -4,14 +4,22 @@ import carcassonne.CarcassonneModule.given
 import carcassonne.model.fileIoComponent.FileIOTrait
 import carcassonne.model.gameDataComponent.GameDataTrait
 
+import scala.util.Try
 import scala.xml.{Elem, PrettyPrinter}
 
 class FileIO extends FileIOTrait{
   val gameData: GameDataTrait = summon[GameDataTrait]
 
   override def load: GameDataTrait = {
-    val file = scala.xml.XML.loadFile("gameData.xml")
-    gameData.fromXML(file)
+    Try {
+      val file = scala.xml.XML.loadFile("gameData.xml")
+      gameData.fromXML(file)
+    } match {
+      case scala.util.Success(gameData) => gameData
+      case scala.util.Failure(exception) =>
+        println(s"Error loading game data: ${exception.getMessage}")
+        gameData
+    }
   }
 
   override def save(gameData: GameDataTrait): Unit = {
