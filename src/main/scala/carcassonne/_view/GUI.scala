@@ -92,13 +92,13 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
             menus = Seq(
               new Menu("File") {
                 items = Seq(
-                  new MenuItem("New") {
+                  new MenuItem("Reset") {
                     graphic = new ImageView(new Image(getClass.getClassLoader.getResource("new_icon.png").toString)) {
                       fitWidth = 16
                       fitHeight = 16
                       preserveRatio = true
                     }
-                    accelerator = KeyCombination.keyCombination("Ctrl+N")
+                    accelerator = KeyCombination.keyCombination("Ctrl+R")
                     onAction = (e: ActionEvent) => {
                       tabletop.resetGameData()
                     }
