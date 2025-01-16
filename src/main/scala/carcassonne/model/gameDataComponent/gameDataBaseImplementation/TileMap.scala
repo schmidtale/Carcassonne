@@ -124,8 +124,8 @@ object TileMap {
         case ((index1, index2), Some(tile)) =>
           Json.obj(
             "position" -> Json.obj(
-              "x" -> index1.value,
-              "y" -> index2.value
+              "x" -> index1,
+              "y" -> index2
             ),
             "tile" -> Json.toJson(tile)
           )

@@ -39,10 +39,33 @@ extends GameDataTrait {
   }
 
   override def reads: Reads[GameDataTrait] = {
-    null.asInstanceOf[Reads[GameDataTrait]]
+    GameDataSpy.gameDataStubReads.map(_.asInstanceOf[GameDataTrait])
   }
 
   override def writes: Writes[GameDataTrait] = {
-    null.asInstanceOf[Writes[GameDataTrait]]
+    GameDataSpy.gameDataStubWrites.contramap[GameDataTrait] {
+      case gameDataStub: GameDataStub => gameDataStub
+    }
+  }
+}
+
+object GameDataSpy {
+
+  import play.api.libs.json._
+
+  implicit val gameDataStubWrites: Writes[GameDataStub] = new Writes[GameDataStub] {
+    def writes(gameDataStub: GameDataStub): JsObject = Json.obj(
+      "GameDataStub" -> "GameDataStub"
+    )
+  }
+
+  implicit val gameDataStubReads: Reads[GameDataStub] = new Reads[GameDataStub] {
+    def reads(json: JsValue): JsResult[GameDataStub] = {
+      for {
+        GameDataStub <- (json \ "GameDataStub").validate[String]
+      } yield {
+        new GameDataStub()
+      }
+    }
   }
 }

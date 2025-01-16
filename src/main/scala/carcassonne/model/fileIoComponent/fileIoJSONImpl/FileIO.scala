@@ -3,7 +3,6 @@ package carcassonne.model.fileIoComponent.fileIoJSONImpl
 import carcassonne.CarcassonneModule.given
 import carcassonne.model.fileIoComponent.FileIOTrait
 import carcassonne.model.gameDataComponent.GameDataTrait
-import carcassonne.model.gameDataComponent.gameDataBaseImplementation.GameData
 import play.api.libs.json.{JsValue, Json}
 import scala.io.Source
 
