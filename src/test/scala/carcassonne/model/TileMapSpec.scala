@@ -3,8 +3,10 @@ package carcassonne.model
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.{Index, Tile, TileMap, TileStack}
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
+import play.api.libs.json.Json
 
 import scala.collection.immutable.SortedMap
+import scala.xml.Elem
 
 class TileMapSpec extends AnyWordSpec {
   private val map = TileMap()
@@ -65,28 +67,216 @@ class TileMapSpec extends AnyWordSpec {
     "return the same hashcode for equal indices" in {
       assert(idx.hashCode() == Index(0).hashCode())
     }
+    "be convertible to XML" in {
+      var tileMap = new TileMap()
+      tileMap = tileMap.add(Index(0), Index(0), Some(TileStack().startingTile))
+      tileMap = tileMap.add(Index(1), Index(0), Some(TileStack().startingTile))
+      // Create an instance of PrettyPrinter with the desired settings
+      val xmlOutput = tileMap.toXML
+      val expectedXml: Elem =
+        <tileMap>
+          <entry>
+            <position>
+              <x>
+                0
+              </x>
+              <y>
+                0
+              </y>
+            </position> <tile>
+            <name>
+              D
+            </name>
+            <monastery>
+              false
+            </monastery>
+            <townConnection>
+              false
+            </townConnection>
+            <borders>
+              <border>
+                town
+              </border> <border>
+              road
+            </border> <border>
+              pasture
+            </border> <border>
+              road
+            </border>
+            </borders>
+            <liegeman>
+              <type>
+                none
+              </type>
+              <position>
+                nowhere
+              </position>
+            </liegeman>
+            <coatOfArms>
+              false
+            </coatOfArms>
+            <rotation>
+              3
+            </rotation>
+          </tile>
+          </entry>
+          <entry>
+            <position>
+              <x>
+                1
+              </x>
+              <y>
+                0
+              </y>
+            </position> <tile>
+            <name>
+              D
+            </name>
+            <monastery>
+              false
+            </monastery>
+            <townConnection>
+              false
+            </townConnection>
+            <borders>
+              <border>
+                town
+              </border> <border>
+              road
+            </border> <border>
+              pasture
+            </border> <border>
+              road
+            </border>
+            </borders>
+            <liegeman>
+              <type>
+                none
+              </type>
+              <position>
+                nowhere
+              </position>
+            </liegeman>
+            <coatOfArms>
+              false
+            </coatOfArms>
+            <rotation>
+              3
+            </rotation>
+          </tile>
+          </entry>
+        </tileMap>
+      val normalizedXmlOutput = xmlOutput.toString.replaceAll("\\s+", "")
+      val normalizedExpectedXml = expectedXml.toString.replaceAll("\\s+", "")
+      assert(normalizedXmlOutput.equals(normalizedExpectedXml))
+    }
+    "be constructable from XML" in {
+      var tileMap = new TileMap()
+      tileMap = tileMap.add(Index(0), Index(0), Some(TileStack().startingTile))
+      val XML = tileMap.toXML
+      println(XML)
+      val XMLMap = tileMap.fromXML(XML)
+      assert(tileMap.data.equals(XMLMap.data))
+    }
+    "be convertible to JSON" in {
+      var tileMap = new TileMap()
+      tileMap = tileMap.add(Index(0), Index(0), Some(TileStack().startingTile))
+      tileMap = tileMap.add(Index(1), Index(0), Some(TileStack().startingTile))
+
+      val jsonOutput = Json.toJson(tileMap)
+      val expectedJson = Json.obj(
+        "tileMap" -> Json.obj(
+          "entries" -> Json.arr(
+            Json.obj(
+              "position" -> Json.obj(
+                "x" -> 0,
+                "y" -> 0
+              ),
+              "tile" -> Json.obj(
+                "name" -> "D",
+                "monastery" -> false,
+                "townConnection" -> false,
+                "borders" -> Json.arr("town", "road", "pasture", "road"),
+                "liegeman" -> Json.obj(
+                  "type" -> "none",
+                  "position" -> "nowhere"
+                ),
+                "coatOfArms" -> false,
+                "rotation" -> 3
+              )
+            ),
+            Json.obj(
+              "position" -> Json.obj(
+                "x" -> 1,
+                "y" -> 0
+              ),
+              "tile" -> Json.obj(
+                "name" -> "D",
+                "monastery" -> false,
+                "townConnection" -> false,
+                "borders" -> Json.arr("town", "road", "pasture", "road"),
+                "liegeman" -> Json.obj(
+                  "type" -> "none",
+                  "position" -> "nowhere"
+                ),
+                "coatOfArms" -> false,
+                "rotation" -> 3
+              )
+            )
+          )
+        )
+      )
+      assert(jsonOutput.equals(expectedJson))
+    }
+    "be constructable from JSON" in {
+      var expectedTileMap = new TileMap()
+      expectedTileMap = expectedTileMap.add(Index(0), Index(0), Some(TileStack().startingTile))
+      expectedTileMap = expectedTileMap.add(Index(1), Index(0), Some(TileStack().startingTile))
+
+      val json = Json.obj(
+        "tileMap" -> Json.obj(
+          "entries" -> Json.arr(
+            Json.obj(
+              "position" -> Json.obj(
+                "x" -> 0,
+                "y" -> 0
+              ),
+              "tile" -> Json.obj(
+                "name" -> "D",
+                "monastery" -> false,
+                "townConnection" -> false,
+                "borders" -> Json.arr("town", "road", "pasture", "road"),
+                "liegeman" -> Json.obj(
+                  "type" -> "none",
+                  "position" -> "nowhere"
+                ),
+                "coatOfArms" -> false,
+                "rotation" -> 3
+              )
+            ),
+            Json.obj(
+              "position" -> Json.obj(
+                "x" -> 1,
+                "y" -> 0
+              ),
+              "tile" -> Json.obj(
+                "name" -> "D",
+                "monastery" -> false,
+                "townConnection" -> false,
+                "borders" -> Json.arr("town", "road", "pasture", "road"),
+                "liegeman" -> Json.obj(
+                  "type" -> "none",
+                  "position" -> "nowhere"
+                ),
+                "coatOfArms" -> false,
+                "rotation" -> 3
+              )
+            )
+          )
+        )
+      )
+      val tileMapFromJson = json.as[TileMap]
+      assert(tileMapFromJson.data.equals(expectedTileMap.data))
+    }
   }
 }
-
-// TODO Check String Output if possible, but big string is hard to test
-
-//    "construct 15*15 tabletop grid from an empty map" in {
-//      val expectedOutput = (
-//        "\n\n   0 0       0 1       0 2       0 3       0 4       0 5       0 6       0 7       0 8       0 9       0 a       0 b       0 c       0 d       0 e    \n\n\n" +
-//          "\n\n   1 0       1 1       1 2       1 3       1 4       1 5       1 6       1 7       1 8       1 9       1 a       1 b       1 c       1 d       1 e    \n\n\n" +
-//          "\n\n   2 0       2 1       2 2       2 3       2 4       2 5       2 6       2 7       2 8       2 9       2 a       2 b       2 c       2 d       2 e    \n\n\n" +
-//          "\n\n   3 0       3 1       3 2       3 3       3 4       3 5       3 6       3 7       3 8       3 9       3 a       3 b       3 c       3 d       3 e    \n\n\n" +
-//          "\n\n   4 0       4 1       4 2       4 3       4 4       4 5       4 6       4 7       4 8       4 9       4 a       4 b       4 c       4 d       4 e    \n\n\n" +
-//          "\n\n   5 0       5 1       5 2       5 3       5 4       5 5       5 6       5 7       5 8       5 9       5 a       5 b       5 c       5 d       5 e    \n\n\n" +
-//          "\n\n   6 0       6 1       6 2       6 3       6 4       6 5       6 6       6 7       6 8       6 9       6 a       6 b       6 c       6 d       6 e    \n\n\n" +
-//          "\n\n   7 0       7 1       7 2       7 3       7 4       7 5       7 6       7 7       7 8       7 9       7 a       7 b       7 c       7 d       7 e    \n\n\n" +
-//          "\n\n   8 0       8 1       8 2       8 3       8 4       8 5       8 6       8 7       8 8       8 9       8 a       8 b       8 c       8 d       8 e    \n\n\n" +
-//          "\n\n   9 0       9 1       9 2       9 3       9 4       9 5       9 6       9 7       9 8       9 9       9 a       9 b       9 c       9 d       9 e    \n\n\n" +
-//          "\n\n   a 0       a 1       a 2       a 3       a 4       a 5       a 6       a 7       a 8       a 9       a a       a b       a c       a d       a e    \n\n\n" +
-//          "\n\n   b 0       b 1       b 2       b 3       b 4       b 5       b 6       b 7       b 8       b 9       b a       b b       b c       b d       b e    \n\n\n" +
-//          "\n\n   c 0       c 1       c 2       c 3       c 4       c 5       c 6       c 7       c 8       c 9       c a       c b       c c       c d       c e    \n\n\n" +
-//          "\n\n   d 0       d 1       d 2       d 3       d 4       d 5       d 6       d 7       d 8       d 9       d a       d b       d c       d d       d e    \n\n\n" +
-//          "\n\n   e 0       e 1       e 2       e 3       e 4       e 5       e 6       e 7       e 8       e 9       e a       e b       e c       e d       e e    \n\n\n"
-//        )
-//      assert (tabletop.constructTabletopFromMap(emptyMap) == expectedOutput)
-//    }

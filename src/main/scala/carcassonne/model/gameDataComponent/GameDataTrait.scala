@@ -3,8 +3,10 @@ package carcassonne.model.gameDataComponent
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Index
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.{Color, Index, Tile, TileMap}
 import carcassonne.util.{Prototype, State}
+import play.api.libs.json.{Reads, Writes}
 
 import scala.collection.immutable.{Queue, SortedMap}
+import scala.xml.Elem
 
 trait GameDataTrait extends Prototype[GameDataTrait] {
   val map: TileMapTrait
@@ -19,6 +21,11 @@ trait GameDataTrait extends Prototype[GameDataTrait] {
   def withTurn(newTurn: Int) : GameDataTrait
   def withMap(newMap: TileMapTrait): GameDataTrait
   def currentTile(): TileTrait
+  def toXML: Elem
+  def fromXML(node: scala.xml.Node): GameDataTrait
+
+  def reads: Reads[GameDataTrait]
+  def writes: Writes[GameDataTrait]
 }
 
 trait TileTrait {

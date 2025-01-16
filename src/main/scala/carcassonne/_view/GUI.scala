@@ -12,17 +12,17 @@ import org.apache.batik.transcoder.{TranscoderInput, TranscoderOutput}
 import scalafx.application.{JFXApp3, Platform}
 import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.Scene
-import scalafx.scene.control.{Button, Tooltip}
+import scalafx.scene.control.{Button, Menu, MenuBar, MenuItem, Tooltip}
 import scalafx.stage.Screen
 import scalafx.scene.image.{Image, ImageView}
-import scalafx.scene.input.{KeyCode, KeyEvent}
+import scalafx.scene.input.{KeyCode, KeyCombination, KeyEvent}
 import scalafx.scene.layout.{Background, BackgroundFill, BorderPane, CornerRadii, GridPane, Pane, StackPane, VBox}
 import scalafx.scene.paint.Color.*
 import scalafx.scene.paint
 import scalafx.scene.text.{Font, Text}
 import scalafx.Includes.*
-
 import carcassonne.CarcassonneModule.given_ControllerTrait
+import scalafx.event.ActionEvent
 
 // Function to convert enum Color to scalafx Color
 def getColorFromEnum(playerColor: Color): scalafx.scene.paint.Color = {
@@ -88,6 +88,59 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
       scene = new Scene {
         fill = Black
         root = new BorderPane {
+          top = new MenuBar {
+            menus = Seq(
+              new Menu("File") {
+                items = Seq(
+                  new MenuItem("Reset") {
+                    graphic = new ImageView(new Image(getClass.getClassLoader.getResource("new_icon.png").toString)) {
+                      fitWidth = 16
+                      fitHeight = 16
+                      preserveRatio = true
+                    }
+                    accelerator = KeyCombination.keyCombination("Ctrl+R")
+                    onAction = (e: ActionEvent) => {
+                      tabletop.resetGameData()
+                    }
+                  },
+                  new MenuItem("Save") {
+                    graphic = new ImageView(new Image(getClass.getClassLoader.getResource("save_icon.png").toString)) {
+                      fitWidth = 16
+                      fitHeight = 16
+                      preserveRatio = true
+                    }
+                    accelerator = KeyCombination.keyCombination("Ctrl+S")
+                    onAction = (e: ActionEvent) => {
+                      tabletop.save()
+                    }
+                  },
+                  new MenuItem("Load") {
+                    graphic = new ImageView(new Image(getClass.getClassLoader.getResource("load_icon.png").toString)) {
+                      fitWidth = 16
+                      fitHeight = 16
+                      preserveRatio = true
+                    }
+                    accelerator = KeyCombination.keyCombination("Ctrl+L")
+                    onAction = (e: ActionEvent) => {
+                      tabletop.load()
+                    }
+                  },
+                new MenuItem("Quit") {
+                  graphic = new ImageView(new Image(getClass.getClassLoader.getResource("quit_icon.png").toString)) {
+                    fitWidth = 16
+                    fitHeight = 16
+                    preserveRatio = true
+                  }
+                  accelerator = KeyCombination.keyCombination("Ctrl+Q")
+                  onAction = (e: ActionEvent) => {
+                    Platform.exit()
+                    System.exit(0)
+                  }
+                }
+                )
+              }
+            )
+          }
           left = new VBox {
             style = s"-fx-background-color:black"
             // add imageView for next Card and Button for rotation on top
@@ -329,7 +382,6 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
         for (row <- 0 to 14) {
           for (column <- 0 to 14) {
             tabletop.gameData.map.data.get(Index(row), Index(column)).flatten match {
-              // TODO use partially applied functions
               case Some(tile) =>
                 Option(tileImages(row)(column)).foreach { ImageView =>
                   tileImages(row)(column).image = getTileImage(tile.name) // Update the corresponding image view

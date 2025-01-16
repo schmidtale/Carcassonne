@@ -12,4 +12,7 @@ trait ControllerTrait extends Observable {
   def redo() : Unit
   def addCurrentTile(index1: Index, index2: Index, rotation: Int): Unit
   def constructTabletopFromMap(): String
+
+  def save(): Unit
+  def load(): Unit
 }

@@ -25,35 +25,13 @@ class TextUISpec extends AnyWordSpec {
 
 
   "The TextUI" should {
-    "print the current tabletop map via update() to the console" in {
-      /** which it reliably does unless tested. The test used to work, now it does so no longer.
-       * Unfortunately, I do not dare to add a parameter, since we need the method as is for the Observer-pattern.*/
-//      val originalOut = System.out
-//      val outContent = new ByteArrayOutputStream()
-//      System.setOut(new PrintStream(outContent))
-//
-//      try {
-//        tabletop.initialMap()
-//        textUI.update()
-//        System.out.flush()
-//        println("Constructed Tabletop Map: " + tabletop.constructTabletopFromMap())
-//
-//        val expectedOutput = tabletop.constructTabletopFromMap()
-//        assert(outContent.toString == expectedOutput)
-//      } finally {
-//        System.setOut(originalOut)
-//      }
-      textUI.update()
-    }
-    // TODO test with gameData
-//    "add a tile to the selected place and return the new mapping" in {
-//      textUI.updateMap(true, Index(0), Index(0), tile2)
-//      assert(tabletop.constructTabletopFromMap().startsWith("* B B B *"))
-//      assert(tabletop.constructTabletopFromMap().contains("B . . . ."))
-//      textUI.updateMap(false, Index(0), Index(1), tile2)
-//      assert(tabletop.constructTabletopFromMap().contains("* B B B *          "))
-//      //                                                               ^empty slot
-//  }
+    "add a tile to the selected place and return the new mapping" in {
+      val tabletop = new Tabletop()
+      val anotherTextUI = new TextUI(using tabletop)
+      anotherTextUI.updateMap(true, Index(0), Index(0), 0)
+      assert(tabletop.constructTabletopFromMap().startsWith("*"))
+      assert(tabletop.constructTabletopFromMap().contains("* . . . *"))
+  }
     "convert a user's command into placement information" in {
         val input1 = "0 5 14"
         val input2 = "3 15 2" // Invalid input
@@ -61,12 +39,16 @@ class TextUISpec extends AnyWordSpec {
         val input4 = "n" // new game
         val input5 = "z" // undo
         val input6 = "y" // redo
+        val input7 = "s" // save
+        val input8 = "l" // load
         assert(textUI.readPlacement(input1) == (true, 0, Index(5), Index(14)))
         assert(textUI.readPlacement(input2) == (false, 0, Index(0), Index(0)))
         assert(textUI.readPlacement(input3) == (false, 0, Index(0), Index(0)))
         assert(textUI.readPlacement(input4) == (false, 0, Index(0), Index(0)))
         assert(textUI.readPlacement(input5) == (false, 0, Index(0), Index(0)))
         assert(textUI.readPlacement(input6) == (false, 0, Index(0), Index(0)))
+        assert(textUI.readPlacement(input7) == (false, 0, Index(0), Index(0)))
+        assert(textUI.readPlacement(input8) == (false, 0, Index(0), Index(0)))
     }
     "return an Int equal to (exampleTurn + 1)" in {
       val exampleTurn = 5
@@ -118,6 +100,16 @@ class TextUISpec extends AnyWordSpec {
       given tabletop: ControllerTrait = tt
       val textUI = new TextUI()
       assert(textUI.exec(input) == exampleTurn)
+    }
+    "provide a review print for the end of the game" in {
+      /* simulate end of game: */
+      val endingGame = new Tabletop()
+      endingGame.gameData = GameData().withTurn(71)
+      val tui = new TextUI(using endingGame)
+      tui.update()
+    }
+    "print the current tabletop map via update() to the console" in {
+      textUI.update()
     }
   }
 }
