@@ -1,9 +1,7 @@
 package carcassonne.model.gameDataComponent.gameDataBaseImplementation
 
 import carcassonne.model.gameDataComponent.{TileMapTrait, TileTrait}
-import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Index
 import carcassonne.util.Prototype
-
 import scala.collection.immutable.SortedMap
 import scala.xml.Elem
 

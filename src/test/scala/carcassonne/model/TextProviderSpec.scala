@@ -50,7 +50,7 @@ class TextProviderSpec extends AnyWordSpec {
   val t17 = new Tile(monastery = false, false, Vector(pasture, road, road, pasture))
   val s17 = "* . . . *\n. . . . .\n. . H H H\n. . H . .\n* . H . *"
 
-  /* non existing tile t18 : */
+  /* non-existing tile t18 : */
   val t18 = new Tile(monastery = true, false, Vector(pasture, road, town, road))
   val s19 = "* . . . *\n. . . . .\nH H M H H\n. . H . .\n* B B B *"
 

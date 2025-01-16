@@ -1,7 +1,6 @@
 package carcassonne.model.gameDataComponent.gameDataBaseImplementation
 
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.BorderType.*
-
 import scala.collection.immutable.Queue
 
 class TileStack(val startingTile: Tile = new Tile(name = "D", borders = Vector(road, town, road, pasture)).rotate(3),

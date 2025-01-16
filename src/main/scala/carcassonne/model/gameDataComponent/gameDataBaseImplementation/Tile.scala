@@ -61,7 +61,7 @@ class Tile(val name: String = "default name", val monastery: Boolean = false, va
       case 3 => this.rotate.rotate.rotate
   }
 
-  // Rotated cards are different cards
+  /* A rotated tile is not equal to the original tile but is allowed to keep its name */
   override def equals(obj: Any): Boolean = {
     obj match {
       case that: Tile =>

@@ -2,7 +2,7 @@ package carcassonne.model.gameDataComponent.gameDataBaseImplementation
 
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Color.*
 import carcassonne.model.gameDataComponent.*
-import carcassonne.util.{Prototype, State}
+import carcassonne.util.State
 import play.api.libs.json.{Reads, Writes}
 
 import scala.collection.immutable.Queue
