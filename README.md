@@ -30,3 +30,6 @@ Placing tiles and liegemen meeples, players compete for points by completing cit
 - Model-View-Controller
 - Test coverage, striving for 100%
 - Flexibly exchangable components through Dependency Injection
+
+### Preview
+![carcasonne_gui](https://cdn.discordapp.com/attachments/766948978914099203/1329369787574255646/image.png?ex=678a1797&is=6788c617&hm=749c9ee7223714c9014ff25bf2272c98d91ee951cdda52783d6332316201bae1&)
