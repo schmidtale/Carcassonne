@@ -64,6 +64,12 @@ class TextUI(using tabletop: ControllerTrait, textProvider: TextProviderTrait) e
       case "y" =>
         tabletop.redo()
         (false, 0, Index(0), Index(0))
+      case "s" =>
+        tabletop.save()
+        (false, 0, Index(0), Index(0))
+      case "l" =>
+        tabletop.load()
+        (false, 0, Index(0), Index(0))
       case _ => line.split("\\s+").flatMap(part => Try(part.toInt).toOption).toList match {
         case rotation :: index1 :: index2 :: Nil if index1 >= 0 && index1 <= 14 && index2 >= 0 && index2 <= 14 =>
           (true, rotation, Index(index1), Index(index2))
