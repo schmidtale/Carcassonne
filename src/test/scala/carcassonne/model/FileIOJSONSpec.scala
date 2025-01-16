@@ -13,8 +13,8 @@ import scala.util.Using
 
 class FileIOJSONSpec extends AnyWordSpec {
   "FileIO" should {
-    val fileIO = new FileIO()
-    val testFile = new File("gameData.json")
+    val fileIO = new FileIO("testGameData.json")
+    val testFile = new File("testGameData.json")
     val gameData: GameDataTrait = summon[GameDataTrait]
 
     "save a GameData instance to a file" in {
@@ -38,6 +38,13 @@ class FileIOJSONSpec extends AnyWordSpec {
         testFile.delete()
       }
       testFile.exists() shouldBe false
+    }
+    "return given gameDataTrait if test file does not exist" in {
+      if (testFile.exists()) {
+        testFile.delete()
+      }
+      val loadedGameData = fileIO.load
+      assert(loadedGameData == gameData)
     }
   }
 }

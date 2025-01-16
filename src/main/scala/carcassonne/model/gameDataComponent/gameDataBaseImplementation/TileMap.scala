@@ -96,9 +96,7 @@ class TileMap( // Create a Map with keys 0 0 to 14 14 and None as values
       val x = (entry \ "position" \ "x").text.trim.toInt
       val y = (entry \ "position" \ "y").text.trim.toInt
 
-      val tileNode = (entry \ "tile").headOption.getOrElse(
-        throw new IllegalArgumentException("Missing <tile> node in entry")
-      )
+      val tileNode = (entry \ "tile").head
       val tile = Tile().fromXML(tileNode)
       (Index(x), Index(y), Some(tile))
     }

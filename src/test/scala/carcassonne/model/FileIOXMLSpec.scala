@@ -13,8 +13,8 @@ import scala.xml.{PrettyPrinter, XML}
 
 class FileIOXMLSpec extends AnyWordSpec {
   "FileIO" should {
-    val fileIO = new FileIO()
-    val testFile = new File("gameData.xml")
+    val fileIO = new FileIO("testGameData.xml")
+    val testFile = new File("testGameData.xml")
     val gameData: GameDataTrait = summon[GameDataTrait]
 
     "save a GameData instance to a file" in {
@@ -41,6 +41,13 @@ class FileIOXMLSpec extends AnyWordSpec {
         testFile.delete()
       }
       testFile.exists() shouldBe false
+    }
+    "return given gameDataTrait if test file does not exist" in {
+      if (testFile.exists()) {
+        testFile.delete()
+      }
+      val loadedGameData = fileIO.load
+      assert(loadedGameData == gameData)
     }
   }
 }
