@@ -6,6 +6,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "carcassonne",
     coverageEnabled := true,
+    coverageExcludedPackages := ".*carcassonne;.*_view.*",
   )
   
 libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.19"
