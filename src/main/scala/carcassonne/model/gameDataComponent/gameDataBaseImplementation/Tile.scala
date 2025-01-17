@@ -119,7 +119,7 @@ class Tile(val name: String = "default name", val monastery: Boolean = false, va
   }
 
   def fromXML(node: scala.xml.Node): Tile = {
-    val name = (node \ "name").text
+    val name = (node \ "name").text.trim
     val monastery = (node \ "monastery").text.trim.toBoolean
     val townConnection = (node \ "townConnection").text.trim.toBoolean
     val borders = (node \ "borders" \ "border").map(border => BorderType.valueOf(border.text.trim)).toVector
