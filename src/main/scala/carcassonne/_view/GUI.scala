@@ -63,7 +63,7 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
     /* Initialize tile cache */
     tileCache = Map("background" -> backgroundTile) ++
       (for (tileName <- List(
-        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X"
+        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x"
       )) yield {
         tileName -> new Image(
           s"tile-$tileName.png"
@@ -452,6 +452,6 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
 
   // Function to get the image from the cache
   private def getTileImage(tileName: String): Image = {
-    tileCache.getOrElse(tileName, new Image("default_tile.png"))
+    tileCache.getOrElse(tileName.toLowerCase(), new Image("default_tile.png"))
   }
 }
