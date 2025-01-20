@@ -41,3 +41,4 @@ Compile / run / javaOptions ++= Seq(
 
 enablePlugins(ScoverageSbtPlugin)
 enablePlugins(CoverallsPlugin)
+Compile / run / mainClass := Some("carcassonne.Carcassonne")

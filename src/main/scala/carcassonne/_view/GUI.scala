@@ -54,7 +54,7 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
     viewWidth = Screen.primary.visualBounds.width
 
     val backgroundTile = new Image(
-      getClass.getClassLoader.getResource("background_tile.png").toString,
+      "/background_tile.png",
       requestedWidth = viewWidth / 16,
       requestedHeight = viewHeight / 16,
       preserveRatio = true,
@@ -66,7 +66,7 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
         "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X"
       )) yield {
         tileName -> new Image(
-          getClass.getClassLoader.getResource(s"tile-$tileName.png").toString,
+          s"tile-$tileName.png"
         )
       }).toMap
 
@@ -76,7 +76,7 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
       height = viewHeight
       resizable = false
 
-      val taskbar_icon = new Image(getClass.getClassLoader.getResource("icon.png").toString)
+      val taskbar_icon = new Image("icon.png")
       icons.add(taskbar_icon)
       scene = new Scene {
         fill = Black
@@ -86,7 +86,7 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
               new Menu("File") {
                 items = Seq(
                   new MenuItem("Reset") {
-                    graphic = new ImageView(new Image(getClass.getClassLoader.getResource("new_icon.png").toString)) {
+                    graphic = new ImageView(new Image("new_icon.png")) {
                       fitWidth = 16
                       fitHeight = 16
                       preserveRatio = true
@@ -97,7 +97,7 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
                     }
                   },
                   new MenuItem("Save") {
-                    graphic = new ImageView(new Image(getClass.getClassLoader.getResource("save_icon.png").toString)) {
+                    graphic = new ImageView(new Image("save_icon.png")) {
                       fitWidth = 16
                       fitHeight = 16
                       preserveRatio = true
@@ -108,7 +108,7 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
                     }
                   },
                   new MenuItem("Load") {
-                    graphic = new ImageView(new Image(getClass.getClassLoader.getResource("load_icon.png").toString)) {
+                    graphic = new ImageView(new Image("load_icon.png")) {
                       fitWidth = 16
                       fitHeight = 16
                       preserveRatio = true
@@ -119,7 +119,7 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
                     }
                   },
                   new MenuItem("Quit") {
-                    graphic = new ImageView(new Image(getClass.getClassLoader.getResource("quit_icon.png").toString)) {
+                    graphic = new ImageView(new Image("quit_icon.png")) {
                       fitWidth = 16
                       fitHeight = 16
                       preserveRatio = true
@@ -170,7 +170,7 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
               style = "-fx-background-color: #FF6347; -fx-text-fill: white;" // Red background, white text
               onAction = _ => tabletop.undo()
               // Set the image for the button
-              graphic = new ImageView(new Image(getClass.getClassLoader.getResource("undo_button.png").toString)) {
+              graphic = new ImageView(new Image("undo_button.png")) {
                 fitWidth = 20
                 fitHeight = 20
                 preserveRatio = true
@@ -184,7 +184,7 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
               style = "-fx-background-color: #4682B4; -fx-text-fill: white;" // Blue background, white text
               onAction = _ => tabletop.redo()
 
-              graphic = new ImageView(new Image(getClass.getClassLoader.getResource("redo_button.png").toString)) {
+              graphic = new ImageView(new Image("redo_button.png")) {
                 fitWidth = 20
                 fitHeight = 20
                 preserveRatio = true
@@ -215,35 +215,35 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
                 background = new Background(Array(new BackgroundFill(White, CornerRadii.Empty, Insets.Empty)))
                 val imageView = label match {
                   case "Peasant" =>
-                    val image = new Image(getClass.getClassLoader.getResource("peasant_button.png").toString)
+                    val image = new Image("peasant_button.png")
                     new ImageView(image) {
                       fitWidth = 60
                       fitHeight = 60
                       preserveRatio = true
                     }
                   case "Knight" =>
-                    val image = new Image(getClass.getClassLoader.getResource("knight_button.png").toString)
+                    val image = new Image("knight_button.png")
                     new ImageView(image) {
                       fitWidth = 60
                       fitHeight = 60
                       preserveRatio = true
                     }
                   case "Monk" =>
-                    val image = new Image(getClass.getClassLoader.getResource("monk_button.png").toString)
+                    val image = new Image("monk_button.png")
                     new ImageView(image) {
                       fitWidth = 60
                       fitHeight = 60
                       preserveRatio = true
                     }
                   case "Waylayer" =>
-                    val image = new Image(getClass.getClassLoader.getResource("waylayer_button.png").toString)
+                    val image = new Image("waylayer_button.png")
                     new ImageView(image) {
                       fitWidth = 60
                       fitHeight = 60
                       preserveRatio = true
                     }
                   case _ =>
-                    new ImageView(new Image(getClass.getClassLoader.getResource("default_tile.png").toString)) {
+                    new ImageView(new Image("default_tile.png")) {
                       fitWidth = 60
                       fitHeight = 60
                       preserveRatio = true
@@ -266,7 +266,7 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
           }
           center = new StackPane {
             // Create a grid (15x15) of StackPanes with ImageViews and transparent buttons on top
-            val initialCardImage = new Image(getClass.getClassLoader.getResource("background_tile.png").toString)
+            val initialCardImage = new Image("background_tile.png")
             // for fieldGridPane
             for (row <- 0 until 15) {
               for (column <- 0 until 15) {
@@ -452,6 +452,6 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
 
   // Function to get the image from the cache
   private def getTileImage(tileName: String): Image = {
-    tileCache.getOrElse(tileName, new Image(getClass.getClassLoader.getResource("default_tile.png").toString))
+    tileCache.getOrElse(tileName, new Image("default_tile.png"))
   }
 }
