@@ -27,7 +27,7 @@ RUN /bin/bash -c "\
 ENV JAVA_HOME=/root/.sdkman/candidates/java/23.0.1-open
 
 # Clone the Git repository
-RUN git clone https://github.com/schmidtale/Carcassonne.git /app
+RUN git clone -b 13_docker https://github.com/schmidtale/Carcassonne.git /app
 
 # Set the working directory
 WORKDIR /app
