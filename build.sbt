@@ -8,16 +8,16 @@ lazy val root = (project in file("."))
     coverageEnabled := true,
     coverageExcludedPackages := ".*carcassonne;.*_view.*",
   )
-  
-libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.19"
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.19" % "test"
-libraryDependencies += "javazoom" % "jlayer" % "1.0.1"
-libraryDependencies += "org.scalafx" %% "scalafx" % "20.0.0-R31"
+
 libraryDependencies ++= Seq(
   "org.apache.xmlgraphics" % "batik-transcoder" % "1.17",
   "org.apache.xmlgraphics" % "batik-codec" % "1.17",
   "org.scala-lang.modules" %% "scala-xml" % "2.3.0",
-  "org.playframework" %% "play-json" % "3.0.4"
+  "org.playframework" %% "play-json" % "3.0.4",
+  "org.scalactic" %% "scalactic" % "3.2.19",
+  "org.scalatest" %% "scalatest" % "3.2.19" % "test",
+  "javazoom" % "jlayer" % "1.0.1",
+  "org.scalafx" %% "scalafx" % "20.0.0-R31"
 )
 
 libraryDependencies ++= {
