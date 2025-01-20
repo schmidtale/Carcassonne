@@ -19,8 +19,8 @@ object Carcassonne {
 
   @main
   def main(): Unit = {
-    val loopPlayer = MusicPlayer("gameplayLoop")
-    loopPlayer.play()
+    //val loopPlayer = MusicPlayer("gameplayLoop")
+    //loopPlayer.play()
 
     new Thread(() => {
       gui.main(Array.empty)

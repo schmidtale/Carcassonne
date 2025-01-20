@@ -31,8 +31,8 @@ class TextUI(using tabletop: ControllerTrait, textProvider: TextProviderTrait) e
       updateMap(placementInfo._1, placementInfo._3, placementInfo._4, placementInfo._2)
       // TODO if placement correct and legal move and legal liegeman placement
 
-      val roundFinishedPlayer = MusicPlayer("TownJingle")
-      roundFinishedPlayer.play()
+      //val roundFinishedPlayer = MusicPlayer("TownJingle")
+      //roundFinishedPlayer.play()
       tabletop.gameData.turn
     }
     else {
