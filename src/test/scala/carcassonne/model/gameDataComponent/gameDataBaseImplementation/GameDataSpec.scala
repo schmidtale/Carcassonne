@@ -1,14 +1,14 @@
-package carcassonne.model
+package carcassonne.model.gameDataComponent.gameDataBaseImplementation
 
 import carcassonne.model.gameDataComponent.GameDataTrait
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Color.*
-import carcassonne.model.gameDataComponent.gameDataBaseImplementation.{GameData, MenuState, PlayerState, Tile, TileStack}
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
-import play.api.libs.json.{Json, __}
 
 import scala.collection.immutable.Queue
 import scala.xml.Elem
+
+import play.api.libs.json.Json
 
 class GameDataSpec extends AnyWordSpec {
   "A GameData instance" should {
@@ -292,7 +292,7 @@ class GameDataSpec extends AnyWordSpec {
       val gameData: GameDataTrait = new GameData(stack = Queue(TileStack().startingTile)).initialState()
       val json = Json.obj(
         "GameData" -> Json.obj(
-          "map" -> Json.obj(  // Map object (can represent TileMap)
+          "map" -> Json.obj( // Map object (can represent TileMap)
             "tileMap" -> Json.obj(
               "entries" -> Json.arr(
                 Json.obj(

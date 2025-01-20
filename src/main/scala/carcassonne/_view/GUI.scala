@@ -1,37 +1,30 @@
 package carcassonne._view
 
-import carcassonne.util.Observer
 import carcassonne.controller.controllerComponent.ControllerTrait
-import javafx.embed.swing.SwingFXUtils
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.{Color, Index}
+import carcassonne.util.Observer
 
-import java.io.File
-import java.awt.image.BufferedImage
-import org.apache.batik.transcoder.image.ImageTranscoder
-import org.apache.batik.transcoder.{TranscoderInput, TranscoderOutput}
+import scalafx.Includes.*
 import scalafx.application.{JFXApp3, Platform}
+import scalafx.event.ActionEvent
 import scalafx.geometry.{Insets, Pos}
-import scalafx.scene.Scene
-import scalafx.scene.control.{Button, Menu, MenuBar, MenuItem, Tooltip}
-import scalafx.stage.Screen
+import scalafx.scene.control.*
 import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.input.{KeyCode, KeyCombination, KeyEvent}
-import scalafx.scene.layout.{Background, BackgroundFill, BorderPane, CornerRadii, GridPane, Pane, StackPane, VBox}
+import scalafx.scene.layout.*
+import scalafx.scene.{Scene, paint}
 import scalafx.scene.paint.Color.*
-import scalafx.scene.paint
 import scalafx.scene.text.{Font, Text}
-import scalafx.Includes.*
-import carcassonne.CarcassonneModule.given_ControllerTrait
-import scalafx.event.ActionEvent
+import scalafx.stage.Screen
 
 // Function to convert enum Color to scalafx Color
 def getColorFromEnum(playerColor: Color): scalafx.scene.paint.Color = {
   playerColor match {
-    case Color.blue => scalafx.scene.paint.Color.rgb(56,58,107)
-    case Color.red => scalafx.scene.paint.Color.rgb(203,31,115)
-    case Color.green => scalafx.scene.paint.Color.rgb(224,58,60)
-    case Color.yellow => scalafx.scene.paint.Color.rgb(234,109,61)
-    case Color.black => scalafx.scene.paint.Color.rgb(252,199,45)
+    case Color.blue => scalafx.scene.paint.Color.rgb(56, 58, 107)
+    case Color.red => scalafx.scene.paint.Color.rgb(203, 31, 115)
+    case Color.green => scalafx.scene.paint.Color.rgb(224, 58, 60)
+    case Color.yellow => scalafx.scene.paint.Color.rgb(234, 109, 61)
+    case Color.black => scalafx.scene.paint.Color.rgb(252, 199, 45)
   }
 }
 
@@ -125,18 +118,18 @@ class GUI(using tabletop: ControllerTrait) extends JFXApp3 with Observer {
                       tabletop.load()
                     }
                   },
-                new MenuItem("Quit") {
-                  graphic = new ImageView(new Image(getClass.getClassLoader.getResource("quit_icon.png").toString)) {
-                    fitWidth = 16
-                    fitHeight = 16
-                    preserveRatio = true
+                  new MenuItem("Quit") {
+                    graphic = new ImageView(new Image(getClass.getClassLoader.getResource("quit_icon.png").toString)) {
+                      fitWidth = 16
+                      fitHeight = 16
+                      preserveRatio = true
+                    }
+                    accelerator = KeyCombination.keyCombination("Ctrl+Q")
+                    onAction = (e: ActionEvent) => {
+                      Platform.exit()
+                      System.exit(0)
+                    }
                   }
-                  accelerator = KeyCombination.keyCombination("Ctrl+Q")
-                  onAction = (e: ActionEvent) => {
-                    Platform.exit()
-                    System.exit(0)
-                  }
-                }
                 )
               }
             )

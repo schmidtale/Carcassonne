@@ -1,9 +1,9 @@
-package carcassonne.model
+package carcassonne.model.gameDataComponent.gameDataBaseImplementation
 
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.BorderType.*
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.LiegemanPosition.north
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.LiegemanType.knight
-import carcassonne.model.gameDataComponent.gameDataBaseImplementation.{TextProvider, Tile}
+
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -75,19 +75,19 @@ class TextProviderSpec extends AnyWordSpec {
       assert(textProvider.toText(t16) == s16)
       assert(textProvider.toText(t17) == s17)
     }
-    
+
     "translate the data of a tile to Strings used by the TUI" in {
-      assert(textProvider.line(tile2,0) == "* B B B *")
-      assert(textProvider.line(tile2,1) == "B B . . .")
-      assert(textProvider.line(tile2,2) == "B . . . .")
-      assert(textProvider.line(tile2,3) == "B . . . .")
-      assert(textProvider.line(tile2,4) == "* . . . *")
+      assert(textProvider.line(tile2, 0) == "* B B B *")
+      assert(textProvider.line(tile2, 1) == "B B . . .")
+      assert(textProvider.line(tile2, 2) == "B . . . .")
+      assert(textProvider.line(tile2, 3) == "B . . . .")
+      assert(textProvider.line(tile2, 4) == "* . . . *")
     }
 
     "replace unknown chars with # char" in {
       assert(". + .".map(char => textProvider.replaceChar(char, t1)) == "# # #")
     }
-    
+
   }
 
 }

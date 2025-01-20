@@ -1,16 +1,13 @@
 package carcassonne._view
 
-import carcassonne.model.gameDataComponent.TextProviderTrait
 import carcassonne.controller.controllerComponent.ControllerTrait
+import carcassonne.model.gameDataComponent.TextProviderTrait
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Index
 import carcassonne.util.{MusicPlayer, Observer}
 
 import java.io.InputStream
 import scala.io.Source
 import scala.util.Try
-
-import carcassonne.CarcassonneModule.given_ControllerTrait
-import carcassonne.CarcassonneModule.given_TextProviderTrait
 
 class TextUI(using tabletop: ControllerTrait, textProvider: TextProviderTrait) extends Observer {
   tabletop.add(this)
@@ -39,7 +36,7 @@ class TextUI(using tabletop: ControllerTrait, textProvider: TextProviderTrait) e
       tabletop.gameData.turn
     }
     else {
-     tabletop.gameData.turn
+      tabletop.gameData.turn
     }
   }
 

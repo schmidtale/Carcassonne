@@ -6,6 +6,7 @@ import carcassonne.util.Command
 
 class TurnCommand(index1: Index, index2: Index, tile: TileTrait, tabletop: Tabletop) extends Command {
   private var memento: GameDataTrait = tabletop.gameData
+
   // Modifies GameData, simulating progress of a turn
   override def doStep(): Unit = {
 

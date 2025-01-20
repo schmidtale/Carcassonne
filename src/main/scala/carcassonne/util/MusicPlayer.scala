@@ -2,8 +2,7 @@ package carcassonne.util
 
 import javazoom.jl.player.Player
 
-import java.io.{BufferedInputStream, FileInputStream}
-import scala.annotation.tailrec
+import java.io.BufferedInputStream
 
 class MusicPlayer(resourcePath: String, val shouldLoop: Boolean) {
   @volatile private var isLooping = true

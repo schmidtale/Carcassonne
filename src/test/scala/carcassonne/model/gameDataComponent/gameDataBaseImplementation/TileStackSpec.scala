@@ -1,10 +1,8 @@
-package carcassonne.model
+package carcassonne.model.gameDataComponent.gameDataBaseImplementation
 
-import carcassonne.model.gameDataComponent.gameDataBaseImplementation.{Tile, TileStack}
 import org.scalatest.wordspec.AnyWordSpec
 
 import scala.collection.immutable.Queue
-
 
 class TileStackSpec extends AnyWordSpec {
 

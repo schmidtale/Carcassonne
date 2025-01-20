@@ -1,13 +1,13 @@
-package carcassonne.controller
+package carcassonne.controller.controllerComponent.controllerBaseImplementation
 
 import carcassonne.CarcassonneModule.given_GameDataTrait
-import carcassonne.controller.controllerComponent.controllerBaseImplementation.Tabletop
+import carcassonne.model.gameDataComponent.gameDataBaseImplementation.*
 import carcassonne.model.gameDataComponent.{GameDataTrait, TileTrait}
-import carcassonne.model.gameDataComponent.gameDataBaseImplementation.{GameData, Index, PlacingLiegemanState, PlacingTileState, ReviewState, Tile, TileMap, TileStack}
-import org.scalatest.matchers.should.Matchers.*
-import org.scalatest.wordspec.AnyWordSpec
 
 import scala.collection.immutable.Queue
+
+import org.scalatest.matchers.should.Matchers.*
+import org.scalatest.wordspec.AnyWordSpec
 
 class TabletopSpec extends AnyWordSpec {
   val tabletop = new Tabletop()
@@ -35,7 +35,7 @@ class TabletopSpec extends AnyWordSpec {
     }
     "return its internal TileStack" in {
       val stack = tabletop.tileStack()
-      assert(stack.isInstanceOf[Queue[TileTrait]] )
+      assert(stack.isInstanceOf[Queue[TileTrait]])
     }
     "return a starting tile" in {
       val starting_tile = tabletop.startingTile()
@@ -58,14 +58,18 @@ class TabletopSpec extends AnyWordSpec {
     }
     "not undo a command if there is nothing to undo" in {
       val gd = GameData().initialState()
+
       given gameData: GameDataTrait = gd
+
       val tabletop = new Tabletop()
       tabletop.undo()
       assert(tabletop.gameData.equals(gd))
     }
     "not redo a command if there is nothing to redo" in {
       val gd = GameData().initialState()
+
       given gameData: GameDataTrait = gd
+
       val tabletop = new Tabletop()
       tabletop.redo()
       assert(tabletop.gameData.equals(gd))

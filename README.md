@@ -33,4 +33,4 @@ Placing tiles and liegemen meeples, players compete for points by completing cit
 
 ### Preview
 ![carcasonne_gui_start](https://cdn.discordapp.com/attachments/766948978914099203/1329369787574255646/image.png?ex=678a1797&is=6788c617&hm=749c9ee7223714c9014ff25bf2272c98d91ee951cdda52783d6332316201bae1&)
-![carcasonne_gui_placed_tiles](https://cdn.discordapp.com/attachments/766948978914099203/1329371559130959905/image.png?ex=678c137e&is=678ac1fe&hm=0ef8b128450e8f0fa7c0dc42dcc68f11997856043702eddf6c05bd9bb6cb2c4a&)
+![carcasonne_gui_placed_tiles](https://cdn.discordapp.com/attachments/766948978914099203/1329371559130959905/image.png?ex=678a193e&is=6788c7be&hm=506b6d3591baf4454e282d53119ef779d39b9be4b0539e0582a2efbd626a48e6&)

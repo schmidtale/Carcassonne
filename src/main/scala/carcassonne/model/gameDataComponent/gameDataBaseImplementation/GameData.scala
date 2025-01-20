@@ -1,13 +1,14 @@
 package carcassonne.model.gameDataComponent.gameDataBaseImplementation
 
-import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Color.*
 import carcassonne.model.gameDataComponent.*
+import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Color.*
 import carcassonne.util.State
-import play.api.libs.json.{Reads, Writes}
 
 import scala.collection.immutable.Queue
 import scala.util.Random
 import scala.xml.Elem
+
+import play.api.libs.json.{Reads, Writes}
 
 enum Color:
   case blue, red, green, yellow, black
@@ -132,7 +133,7 @@ class GameData(val map: TileMap = TileMap(),
 
 object GameData {
 
-  import play.api.libs.json._
+  import play.api.libs.json.*
 
   implicit val gameDataWrites: Writes[GameData] = new Writes[GameData] {
     def writes(gameData: GameData): JsObject = Json.obj(
@@ -217,7 +218,7 @@ class PlayerState(val meepleCount: Int = 7, val color: Color = blue, val points:
 
 object PlayerState {
 
-  import play.api.libs.json._
+  import play.api.libs.json.*
 
   implicit val colorWrites: Writes[Color] = Writes[Color](c => JsString(c.toString))
   implicit val colorReads: Reads[Color] = Reads[Color](json => json.validate[String].map(Color.valueOf))

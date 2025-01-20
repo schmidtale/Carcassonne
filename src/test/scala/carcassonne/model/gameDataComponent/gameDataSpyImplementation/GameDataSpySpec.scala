@@ -1,14 +1,13 @@
-package carcassonne.model
+package carcassonne.model.gameDataComponent.gameDataSpyImplementation
 
 import carcassonne.model.gameDataComponent.GameDataTrait
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.PlacingTileState
-import carcassonne.model.gameDataComponent.gameDataSpyImplementation.GameDataSpy
+
+import scala.xml.Node
+
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.Json
-import carcassonne.model.gameDataComponent.gameDataSpyImplementation.GameDataSpy.*
-
-import scala.xml.Node
 
 class GameDataSpySpec extends AnyWordSpec {
   "A GameDataSpy" should {

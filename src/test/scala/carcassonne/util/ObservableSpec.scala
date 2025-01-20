@@ -2,11 +2,12 @@ package carcassonne.util
 
 import org.scalatest.wordspec.AnyWordSpec
 
-
 class ObservableSpec extends AnyWordSpec {
   class TestObserver() extends Observer {
     var updated = false
+
     def isUpdated: Boolean = updated
+
     override def update(): Unit = updated = true
   }
 

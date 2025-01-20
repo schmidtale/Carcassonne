@@ -1,5 +1,13 @@
 package carcassonne.model.gameDataComponent.gameDataBaseImplementation
 
+import carcassonne.model.gameDataComponent.*
+import carcassonne.model.gameDataComponent.gameDataBaseImplementation.BorderType.*
+import carcassonne.model.gameDataComponent.gameDataBaseImplementation.LiegemanPosition.*
+import carcassonne.model.gameDataComponent.gameDataBaseImplementation.LiegemanType.*
+import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Orientation.*
+
+import scala.xml.Elem
+
 enum Orientation:
   case northern, eastern, southern, western
 
@@ -14,14 +22,6 @@ enum LiegemanType:
 
 enum LiegemanPosition:
   case nowhere, north, east, south, west, middle, northWest, northEast, southEast, southWest
-
-import carcassonne.model.gameDataComponent.gameDataBaseImplementation.BorderType.*
-import carcassonne.model.gameDataComponent.gameDataBaseImplementation.LiegemanPosition.*
-import carcassonne.model.gameDataComponent.gameDataBaseImplementation.LiegemanType.*
-import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Orientation.*
-import carcassonne.model.gameDataComponent.*
-
-import scala.xml.Elem
 
 class Tile(val name: String = "default name", val monastery: Boolean = false, val townConnection: Boolean = false, val borders: Vector[BorderType] = Vector.empty,
            val liegeman: (LiegemanType, LiegemanPosition) = (none, nowhere), val coatOfArms: Boolean = false, val rotation: Int = 0) extends TileTrait {
@@ -142,7 +142,8 @@ class Tile(val name: String = "default name", val monastery: Boolean = false, va
 }
 
 object Tile {
-  import play.api.libs.json._
+
+  import play.api.libs.json.*
 
   implicit val borderTypeWrites: Writes[BorderType] = Writes[BorderType](bt => JsString(bt.toString))
   implicit val liegemanTypeWrites: Writes[LiegemanType] = Writes[LiegemanType](lt => JsString(lt.toString))
