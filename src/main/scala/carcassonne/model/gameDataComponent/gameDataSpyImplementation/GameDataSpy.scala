@@ -3,11 +3,11 @@ package carcassonne.model.gameDataComponent.gameDataSpyImplementation
 import carcassonne.model.gameDataComponent.*
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.*
 import carcassonne.util.State
-import play.api.libs.json.{Reads, Writes}
 
 import scala.collection.immutable.Queue
 import scala.xml.{Elem, Node}
 
+import play.api.libs.json.{Reads, Writes}
 
 class GameDataSpy(val map: TileMap = TileMap(),
                   val stack: Queue[Tile] = TileStack().construct(),
@@ -88,7 +88,7 @@ class GameDataSpy(val map: TileMap = TileMap(),
 
 object GameDataSpy {
 
-  import play.api.libs.json._
+  import play.api.libs.json.*
 
   implicit val gameDataSpyWrites: Writes[GameDataSpy] = new Writes[GameDataSpy] {
     def writes(gameDataSpy: GameDataSpy): JsObject = Json.obj(

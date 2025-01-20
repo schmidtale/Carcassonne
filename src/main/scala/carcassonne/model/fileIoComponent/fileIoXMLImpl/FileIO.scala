@@ -7,7 +7,7 @@ import carcassonne.model.gameDataComponent.GameDataTrait
 import scala.util.Try
 import scala.xml.{Elem, PrettyPrinter}
 
-class FileIO(val fileName: String = "gameData.xml") extends FileIOTrait{
+class FileIO(val fileName: String = "gameData.xml") extends FileIOTrait {
   val gameData: GameDataTrait = summon[GameDataTrait]
 
   override def load: GameDataTrait = {

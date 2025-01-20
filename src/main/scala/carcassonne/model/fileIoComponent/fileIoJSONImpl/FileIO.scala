@@ -3,6 +3,7 @@ package carcassonne.model.fileIoComponent.fileIoJSONImpl
 import carcassonne.CarcassonneModule.given
 import carcassonne.model.fileIoComponent.FileIOTrait
 import carcassonne.model.gameDataComponent.GameDataTrait
+
 import play.api.libs.json
 import play.api.libs.json.{JsValue, Json}
 
@@ -25,7 +26,7 @@ class FileIO(val fileName: String = "gameData.json") extends FileIOTrait {
   }
 
   override def save(gameData: GameDataTrait): Unit = {
-    import java.io._
+    import java.io.*
     val pw = new PrintWriter(new File(fileName))
     pw.write(Json.prettyPrint(Json.toJson(gameData)(gameData.writes)))
     pw.close()

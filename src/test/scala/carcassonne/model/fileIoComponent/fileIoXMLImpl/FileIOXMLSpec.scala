@@ -1,20 +1,19 @@
-package carcassonne.model
+package carcassonne.model.fileIoComponent.fileIoXMLImpl
 
 import carcassonne.CarcassonneModule.given
-import carcassonne.model.fileIoComponent.fileIoJSONImpl.FileIO
 import carcassonne.model.gameDataComponent.GameDataTrait
-import org.scalatest.matchers.should.Matchers.{shouldBe, shouldEqual}
+import org.scalatest.matchers.should.Matchers.shouldBe
 import org.scalatest.wordspec.AnyWordSpec
-import play.api.libs.json.{Json, Reads, Writes}
 
 import java.io.File
 import scala.io.Source
 import scala.util.Using
+import scala.xml.{PrettyPrinter, XML}
 
-class FileIOJSONSpec extends AnyWordSpec {
+class FileIOXMLSpec extends AnyWordSpec {
   "FileIO" should {
-    val fileIO = new FileIO("testGameData.json")
-    val testFile = new File("testGameData.json")
+    val fileIO = new FileIO("testGameData.xml")
+    val testFile = new File("testGameData.xml")
     val gameData: GameDataTrait = summon[GameDataTrait]
 
     "save a GameData instance to a file" in {
@@ -23,17 +22,20 @@ class FileIOJSONSpec extends AnyWordSpec {
       assert(testFile.exists())
 
       val content = Using(Source.fromFile(testFile))(_.mkString).get
-      val json = Json.parse(content)
+      val xml = XML.loadString(content)
 
-      assert(json == Json.toJson(gameData)(gameData.writes))
+      val prettyPrinter = new PrettyPrinter(80, 2)
+      val prettyXmlFromFile: String = prettyPrinter.format(xml)
+      val prettyXmlFromGameData: String = prettyPrinter.format(gameData.toXML)
+
+      assert(prettyXmlFromFile.equals(prettyXmlFromGameData))
     }
     "load a GameData instance from a file" in {
+      fileIO.save(gameData)
       val loadedGameData = fileIO.load
-
       assert(loadedGameData.equals(gameData))
     }
     "clean up the test file" in {
-      // Ensure the test file is deleted after the tests
       if (testFile.exists()) {
         testFile.delete()
       }

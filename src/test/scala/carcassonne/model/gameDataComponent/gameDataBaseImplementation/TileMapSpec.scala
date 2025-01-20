@@ -1,6 +1,5 @@
-package carcassonne.model
+package carcassonne.model.gameDataComponent.gameDataBaseImplementation
 
-import carcassonne.model.gameDataComponent.gameDataBaseImplementation.{Index, Tile, TileMap, TileStack}
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.Json

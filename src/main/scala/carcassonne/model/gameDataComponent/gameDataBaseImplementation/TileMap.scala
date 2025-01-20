@@ -2,6 +2,7 @@ package carcassonne.model.gameDataComponent.gameDataBaseImplementation
 
 import carcassonne.model.gameDataComponent.{TileMapTrait, TileTrait}
 import carcassonne.util.Prototype
+
 import scala.collection.immutable.SortedMap
 import scala.xml.Elem
 
@@ -109,7 +110,7 @@ class TileMap( // Create a Map with keys 0 0 to 14 14 and None as values
 
 object TileMap {
 
-  import play.api.libs.json._
+  import play.api.libs.json.*
 
   implicit val indexWrites: Writes[Index] = (index: Index) => Json.toJson(index.value)
 
@@ -138,15 +139,15 @@ object TileMap {
   implicit val tileMapReads: Reads[TileMap] = new Reads[TileMap] {
     def reads(json: JsValue): JsResult[TileMap] = {
       for {
-        entries <- (json \ "tileMap" \ "entries").validate[Seq[JsObject]].flatMap { entrySeq  =>
+        entries <- (json \ "tileMap" \ "entries").validate[Seq[JsObject]].flatMap { entrySeq =>
           val parsedEntries = entrySeq.map { entry =>
-              for {
-                x <- (entry \ "position" \ "x").validate[Int]
-                y <- (entry \ "position" \ "y").validate[Int]
-                tile <- (entry \ "tile").validate[Tile]
-              } yield {
-                (Index(x), Index(y), Some(tile))
-              }
+            for {
+              x <- (entry \ "position" \ "x").validate[Int]
+              y <- (entry \ "position" \ "y").validate[Int]
+              tile <- (entry \ "tile").validate[Tile]
+            } yield {
+              (Index(x), Index(y), Some(tile))
+            }
           }
           // Collect all results into a single JsResult
           parsedEntries.foldLeft(JsSuccess(Seq.empty[(Index, Index, Option[Tile])]): JsResult[Seq[(Index, Index, Option[Tile])]]) {

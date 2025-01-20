@@ -1,13 +1,13 @@
-package carcassonne.model
+package carcassonne.model.gameDataComponent.gameDataStubImplementation
 
 import carcassonne.model.gameDataComponent.GameDataTrait
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.PlacingTileState
+
+import scala.xml.Node
+
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.Json
-import carcassonne.model.gameDataComponent.gameDataStubImplementation.GameDataStub
-
-import scala.xml.Node
 
 class GameDataStubSpec extends AnyWordSpec {
   "A GameDataStub" should {

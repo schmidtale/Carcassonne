@@ -21,6 +21,4 @@ def test(): Int = {
   printf("\n asdf_jklö")
   val ret: Int = 0
   ret
-  val ret : Int = 0
-  ret
 }

@@ -1,16 +1,13 @@
 package carcassonne.controller.controllerComponent.controllerBaseImplementation
 
+import carcassonne.CarcassonneModule.given_FileIOTrait
 import carcassonne.controller.controllerComponent.ControllerTrait
-import carcassonne.controller.controllerComponent.controllerBaseImplementation.TurnCommand
+import carcassonne.model.fileIoComponent.FileIOTrait
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Index
 import carcassonne.model.gameDataComponent.{GameDataTrait, TileTrait}
 import carcassonne.util.{State, UndoManager}
 
 import scala.collection.immutable.Queue
-import carcassonne.CarcassonneModule.given_GameDataTrait
-import carcassonne.CarcassonneModule.given_FileIOTrait
-import carcassonne.model.fileIoComponent.FileIOTrait
-
 
 class Tabletop(using var gameData: GameDataTrait) extends ControllerTrait {
   private val undoManager = new UndoManager
@@ -19,6 +16,7 @@ class Tabletop(using var gameData: GameDataTrait) extends ControllerTrait {
   def tileStack(): Queue[TileTrait] = {
     gameData.stack
   }
+
   def startingTile(): TileTrait = {
     gameData.startingTile()
   }
@@ -26,7 +24,7 @@ class Tabletop(using var gameData: GameDataTrait) extends ControllerTrait {
   def constructTabletopFromMap(): String = {
     gameData.map.toString
   }
-  
+
 
   // Add Tile:
   // val newCard = Tile(...)
@@ -45,12 +43,12 @@ class Tabletop(using var gameData: GameDataTrait) extends ControllerTrait {
     notifyObservers()
   }
 
-  def undo() : Unit = {
+  def undo(): Unit = {
     undoManager.undoStep()
     notifyObservers()
   }
 
-  def redo() : Unit = {
+  def redo(): Unit = {
     undoManager.redoStep()
     notifyObservers()
   }
@@ -58,13 +56,13 @@ class Tabletop(using var gameData: GameDataTrait) extends ControllerTrait {
   def changeState(state: State): Unit = {
     gameData = gameData.withState(state)
   }
-  
+
   def incrementTurn(): Int = {
     gameData = gameData.withTurn(gameData.turn + 1)
     gameData.turn
   }
 
-  def save() : Unit = {
+  def save(): Unit = {
     fileIO.save(gameData)
     notifyObservers()
   }

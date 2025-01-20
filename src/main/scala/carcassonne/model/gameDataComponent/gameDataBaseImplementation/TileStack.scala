@@ -1,10 +1,11 @@
 package carcassonne.model.gameDataComponent.gameDataBaseImplementation
 
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.BorderType.*
+
 import scala.collection.immutable.Queue
 
 class TileStack(val startingTile: Tile = new Tile(name = "D", borders = Vector(road, town, road, pasture)).rotate(3),
-               val defaultTile: Tile = new Tile(name = "", borders = Vector(pasture, pasture, pasture, pasture))) {
+                val defaultTile: Tile = new Tile(name = "", borders = Vector(pasture, pasture, pasture, pasture))) {
   // Create all Carcassonne Cards A-X
   // Reference: https://brettspiele-report.de/images/carcassonne/Spielanleitung_Carcassonne.pdf
   private val Tile_A = new Tile(name = "A", monastery = true, borders = Vector(pasture, pasture, road, pasture))
@@ -34,7 +35,7 @@ class TileStack(val startingTile: Tile = new Tile(name = "D", borders = Vector(r
   private val Tile_X = new Tile(name = "X", borders = Vector(road, road, road, road))
 
   // Return deck of all cards as queue
-  def construct() : Queue[Tile] = {
+  def construct(): Queue[Tile] = {
     val Deck = Queue.empty.enqueueAll(Seq.fill(2)(Tile_A) ++ Seq.fill(4)(Tile_B) ++ Seq.fill(1)(Tile_C) ++
       Seq.fill(3)(Tile_D) ++ Seq.fill(5)(Tile_E) ++ Seq.fill(2)(Tile_F) ++ Seq.fill(1)(Tile_G) ++ Seq.fill(3)(Tile_H) ++
       Seq.fill(2)(Tile_I) ++ Seq.fill(3)(Tile_J) ++ Seq.fill(3)(Tile_K) ++ Seq.fill(3)(Tile_L) ++ Seq.fill(2)(Tile_M) ++

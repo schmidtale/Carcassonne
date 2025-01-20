@@ -1,17 +1,15 @@
-package carcassonne.model
+package carcassonne.model.gameDataComponent.gameDataBaseImplementation
 
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.BorderType.*
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.LiegemanPosition.*
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.LiegemanType.*
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Orientation.*
-import carcassonne.model.gameDataComponent.gameDataBaseImplementation.{TextProvider, Tile}
+
+import scala.xml.Elem
+
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
-import play.api.libs.json.Json
-import play.api.libs.json._
-
-
-import scala.xml.{Elem, PrettyPrinter}
+import play.api.libs.json.*
 
 class TileSpec extends AnyWordSpec {
   val tile = new Tile(borders = Vector(road, town, road, pasture))
