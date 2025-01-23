@@ -1,6 +1,5 @@
 package carcassonne.controller.controllerComponent.controllerBaseImplementation
 
-import carcassonne.CarcassonneModule.given_FileIOTrait
 import carcassonne.controller.controllerComponent.ControllerTrait
 import carcassonne.model.fileIoComponent.FileIOTrait
 import carcassonne.model.gameDataComponent.gameDataBaseImplementation.Index
@@ -9,9 +8,8 @@ import carcassonne.util.{State, UndoManager}
 
 import scala.collection.immutable.Queue
 
-class Tabletop(using var gameData: GameDataTrait) extends ControllerTrait {
+class Tabletop(using var gameData: GameDataTrait, val fileIO: FileIOTrait) extends ControllerTrait {
   private val undoManager = new UndoManager
-  val fileIO: FileIOTrait = summon[FileIOTrait]
 
   def tileStack(): Queue[TileTrait] = {
     gameData.stack
